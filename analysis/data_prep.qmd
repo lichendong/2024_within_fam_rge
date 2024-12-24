@@ -1,0 +1,46 @@
+---
+title: "Add Health Data Preparation for Within-Family Analysis of rGE"
+author: "LiChen Dong"
+date: "`r lubridate::today()`"
+format: 
+  html: 
+    embed-resources: true
+    toc: true 
+    toc_depth: 4
+editor_options: 
+  chunk_output_type: console
+---
+
+
+## Setup
+
+```{r}
+#| output: false # This tells R not to print the output of this code chunk
+
+options(conflicts.policy = "depends.ok")
+library(tidyverse)
+
+path_data <- "../data_local"
+```
+
+
+## Read in data 
+
+Add health waves
+
+```{r}
+load(here::here(path_data, "add_health_core.RData"))
+```
+
+Genetic ID
+
+```{r}
+gid <- data.table::fread(here::here(path_data, "AddHealth dbGap ID Link File.dat")) |> as_tibble()
+```
+
+Polygenic score
+
+```{r}
+
+```
+
