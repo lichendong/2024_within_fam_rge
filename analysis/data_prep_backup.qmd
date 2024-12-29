@@ -42,11 +42,8 @@ gid <- data.table::fread(here::here(path_data, "AddHealth dbGap ID Link File.dat
 ### Polygenic score and genetic PCs
 
 ```{r}
-#ext_pgs <- data.table::fread(here::here(path_data, "ADDHEXTPGS"))
-ext_pgs <- read_csv(here::here(path_data, "8.14.24_EXT_PGS_PRSCS.csv")) |>
-          mutate(EXT_PGS_PRSCS = scale(EXT_PGS_PRSCS)) |>
-          rename(EXT_PGS = EXT_PGS_PRSCS)
-#names(ext_pgs) <- c("GFAM", "GID", "EXT_PGS")
+ext_pgs <- data.table::fread(here::here(path_data, "ADDHEXTPGS"))
+names(ext_pgs) <- c("GFAM", "GID", "EXT_PGS")
 genetic_pc <- data.table::fread(here::here(path_data, "ADDHPCA"))
 names(genetic_pc) <- c("GFAM","GID",paste0("PC",1:20))
 
@@ -154,9 +151,16 @@ pr_parent <- Wave1 %>% select("AID",starts_with("PC34"),"PC44A") |>
                     PC34D = 6 - PC34D,
                     PC44A = 6 - PC44A)
 
-# psych::fa.parallel(pr_parent |> select(-AID), fm = "wls", fa = "fa", cor = "poly")
+psych::fa.parallel(pr_parent |> select(-AID), fm = "wls", fa = "fa", cor = "poly")
+psych::alpha(pr_parent |> select(-AID),check.keys=TRUE) |> suppressWarnings()
 
-#  lavaan::efa(pr_parent |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
+pr_parent$par_rel_parent <- 
+  psych::scoreItems(keys = list(par_rel_parent = c("PC34A","PC34B","PC34C",
+                                                   "PC34D","PC34E","PC44A")),
+                    pr_parent |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+pr_parent <- pr_parent |> select(AID, par_rel_parent)
 
 data <- data |> left_join(pr_parent)
 
@@ -172,9 +176,29 @@ pr_child <- Wave1 |> select(AID, H1WP9, H1WP10, H1PF1, H1PF2,
             mutate(across(H1WP9:H1PF25, ~ replace(.x, .x > 5, NA)),
                    across(starts_with("H1PF"), ~ 6 - .x))
 
-# psych::fa.parallel(pr_child |> select(H1WP9:H1PF25), fm = "wls", fa = "fa", cor = "poly")
+psych::fa.parallel(pr_child |> select(H1WP9:H1PF5), fm = "wls", fa = "fa", cor = "poly")
+psych::fa.parallel(pr_child |> select(H1WP13:H1PF25), fm = "wls", fa = "fa", cor = "poly")
 
-#  lavaan::efa(pr_child |> select(H1WP9:H1PF25) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
+pr_child$mum_rel_child <- 
+  psych::scoreItems(keys = list(mum_rel_child = c("H1WP9","H1WP10","H1PF1",
+                                                  "H1PF2","H1PF3","H1PF4",
+                                                  "H1PF5")),
+                    pr_child |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+pr_child$dad_rel_child <- 
+  psych::scoreItems(keys = list(dad_rel_child = c("H1WP13","H1WP14","H1PF23",
+                                                  "H1PF24","H1PF25")),
+                    pr_child |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+pr_child <- pr_child |> mutate(
+  par_rel_child = NA,
+  par_rel_child = if_else(mum_rel_child >= dad_rel_child | is.na(dad_rel_child), mum_rel_child, par_rel_child, missing = par_rel_child),
+  par_rel_child = if_else(dad_rel_child > mum_rel_child | is.na(mum_rel_child), dad_rel_child, par_rel_child, missing = par_rel_child),
+)
+
+pr_child <- pr_child |> select(AID, par_rel_child)
 
 data <- data |> left_join(pr_child)
 
@@ -186,7 +210,15 @@ data <- data |> left_join(pr_child)
 del_peer <- Wave1 |> select(AID, H1TO29, H1TO33, H1TO9, H1DS14) |> 
             mutate(across(H1TO29:H1DS14, ~ replace(.x, .x > 5, NA)),
                    across(H1TO29:H1DS14, ~ 4 - .x))
-# psych::fa.parallel(del_peer |> select(-AID), fm = "wls", fa = "fa", cor = "poly")
+psych::fa.parallel(del_peer |> select(-AID), fm = "wls", fa = "fa", cor = "poly")
+
+del_peer$del_peer <- 
+  psych::scoreItems(keys = list(del_peer = c("H1TO29","H1TO33",
+                                             "H1TO9","H1DS14")),
+                    del_peer |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+del_peer <- del_peer |> select(AID, del_peer)
 
 data <- data |> left_join(del_peer)
 
@@ -199,36 +231,71 @@ school_con <- Wave1 |> select(AID, H1ED19, H1ED20, H1ED22, H1ED23,
                               H1ED24, H1PR2) |> 
               mutate(across(H1ED19:H1PR2, ~ replace(.x, .x > 5, NA)),
                      across(starts_with("H1ED"), ~ 6 - .x))
+psych::fa.parallel(school_con |> select(-AID), fm = "wls", fa = "fa", cor = "poly")
 
-# psych::fa.parallel(school_con |> select(-AID), fm = "wls", fa = "fa", cor = "poly")
+school_con$school_con <- 
+  psych::scoreItems(keys = list(school_con = c("H1ED19", "H1ED20", "H1ED22",
+                                               "H1ED23", "H1ED24", "H1PR2")),
+                    school_con |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+school_con <- school_con |> select(AID, school_con)
 
 data <- data |> left_join(school_con)
 
 ```
 
-### ASB and SUB
+### ASB
 
 ```{r}
-asb_wave1 <- Wave1 |> select(AID, H1DS2, H1DS12, H1FV8, H1DS6, 
+asb_wave1 <- Wave1 |> select(AID, H1DS2, H1DS12, H1FV8, H1DS14, H1DS6, 
                              H1DS9, H1DS10, H1DS13, H1DS11, H1FV7, H1DS7) |> 
              mutate(across(H1DS2:H1DS7, ~ replace(.x , .x > 5, NA)),
-                    across(H1DS2:H1DS7, ~ replace(.x , .x > 0, 1)))
+                    across(H1DS2:H1DS7, ~ replace(.x , .x > 0, 1)),
+                    across(H1DS2:H1DS7, ~ scale(.x)))
     
 psych::alpha(asb_wave1 |> select(-AID),check.keys=TRUE) |> suppressWarnings()
 
-asb_wave3 <- Wave3 |> select(AID, H3DS1, H3DS5, H3DS18I, H3DS17, 
+asb_wave1$asb_wave1 <- 
+  psych::scoreItems(keys = list(asb_wave1 = c("H1DS2", "H1DS12", "H1FV8",
+                                              "H1DS14", "H1DS6", "H1DS9",
+                                              "H1DS10", "H1DS13", "H1DS11",
+                                              "H1FV7", "H1DS7")),
+                    asb_wave1 |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+asb_wave1 <- asb_wave1 |> select(AID, asb_wave1)
+
+asb_wave3 <- Wave3 |> select(AID, H3DS1, H3DS5, H3DS18I, H3DS7, H3DS17, 
                              H3DS2, H3DS3, H3DS6, H3DS4, H3DS18H, H3HR23) |> 
              mutate(H3DS17 = case_match(H3DS17, 0 ~ 0,
                                                 1:2 ~ 1,
                                                 3:4 ~ 2,
                                                 5:67 ~ 3)) |> 
              mutate(across(H3DS1:H3HR23, ~ replace(.x , .x > 5, NA)),
-                    across(H3DS1:H3HR23, ~ replace(.x , .x > 0, 1)))
+                    across(H3DS1:H3HR23, ~ replace(.x , .x > 0, 1)),
+                    across(H3DS1:H3HR23, ~ scale(.x)))
 
 psych::alpha(asb_wave3 |> select(-AID),check.keys=TRUE) |> suppressWarnings()
 
+asb_wave3$asb_wave3 <- 
+  psych::scoreItems(keys = list(asb_wave3 = c("H3DS1", "H3DS5", "H3DS18I",
+                                              "H3DS7", "H3DS17", "H3DS2", 
+                                              "H3DS3", "H3DS6", "H3DS4",
+                                              "H3DS18H", "H3HR23")),
+                    asb_wave3 |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+asb_wave3 <- asb_wave3 |> select(AID, asb_wave3)
+
 data <- data |> left_join(asb_wave1) |> left_join(asb_wave3)
 
+```
+
+
+### SUB
+
+```{r}
 sub_wave1 <- Wave1 |> select(AID, H1TO15, H1TO17, H1TO5, H1TO32, H1TO36, H1TO42) |> 
              mutate(H1TO15 = replace(H1TO15, H1TO15 == 97, 7),
                     H1TO15 = replace(H1TO15, H1TO15 >= 96, NA),
@@ -246,10 +313,18 @@ sub_wave1 <- Wave1 |> select(AID, H1TO15, H1TO17, H1TO5, H1TO32, H1TO36, H1TO42)
                     H1TO36 = replace(H1TO36, H1TO36 > 30, 30),
                     H1TO42 = replace(H1TO42, H1TO42 == 997, 0),
                     H1TO42 = replace(H1TO42, H1TO42 >= 996, NA),
-                    H1TO42 = replace(H1TO42, H1TO42 > 30, 30))
+                    H1TO42 = replace(H1TO42, H1TO42 > 30, 30),
+                    across(H1TO15:H1TO42, ~ scale(.x)))
 
 psych::alpha(sub_wave1 |> select(-AID),check.keys=TRUE) |> suppressWarnings()
 
+sub_wave1$sub_wave1 <- 
+  psych::scoreItems(keys = list(sub_wave1 = c("H1TO15", "H1TO17", "H1TO5", 
+                                              "H1TO32", "H1TO36", "H1TO42")),
+                    sub_wave1 |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+sub_wave1 <- sub_wave1 |> select(AID, sub_wave1)
 
 sub_wave3 <- Wave3 |> select(AID, H3TO38, H3TO40, H3TO7, H3TO110, H3TO113, H3TO119) |> 
              mutate(H3TO38 = replace(H3TO38, H3TO38 == 97, 0),
@@ -266,10 +341,18 @@ sub_wave3 <- Wave3 |> select(AID, H3TO38, H3TO40, H3TO7, H3TO110, H3TO113, H3TO1
                     H3TO113 = replace(H3TO113, H3TO113 > 30, 30),
                     H3TO119 = replace(H3TO119, H3TO119 == 997, 0),
                     H3TO119 = replace(H3TO119, H3TO119 >= 996, NA),
-                    H3TO119 = replace(H3TO119, H3TO119 > 30, 30))
-
+                    H3TO119 = replace(H3TO119, H3TO119 > 30, 30),
+                    across(H3TO38:H3TO119, ~ scale(.x)))
 
 psych::alpha(sub_wave3 |> select(-AID),check.keys=TRUE) |> suppressWarnings()
+
+sub_wave3$sub_wave3 <- 
+  psych::scoreItems(keys = list(sub_wave3 = c("H3TO38", "H3TO40", "H3TO7", 
+                                              "H3TO110", "H3TO113", "H3TO119")),
+                    sub_wave3 |> select(-AID),impute="none")$scores |>
+  as.vector() |> scale()
+
+sub_wave3 <- sub_wave3 |> select(AID, sub_wave3)
 
 data <- data |> left_join(sub_wave1) |> left_join(sub_wave3)
 
@@ -296,15 +379,13 @@ cov_parent <- Wave1 |> select(AID, PA1, PA2, PA10,
                      PC12 = replace(PC12, PC12 == 6, NA),
                      PC17 = replace(PC17, PC17 == 96, NA),
                      PC32 = replace(PC32, PC32 == 6, NA)) |> 
-              rename(par_age = PA2, par_sex = PA1, 
-                     par_marry = PA10, bad_temper = PC32)
+              rename(par_age = PA1, par_sex = PA2, 
+                     par_marry = PA10)
 
-#  lavaan::efa(cov_parent |> select(-AID, -par_age, -par_sex, -par_marry, -PC32) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
+lavaan::efa(cov_parent |> select(-AID, -par_age, -par_sex, -par_marry, -PC32) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
 
 psych::alpha(cov_parent |> select(PA61,PA62, PB22), check.keys=TRUE)
 psych::alpha(cov_parent |> select(PC10:PC17), check.keys=TRUE)
-
-data <- data |> left_join(cov_parent)
 
 ```
 
@@ -317,11 +398,8 @@ cov_child <- Wave1 |> select(AID, H1WP1:H1WP7,
               mutate(across(!AID, ~ replace(.x, .x > 5, NA))) 
 
 
-# cov_child |> select(-AID) |> psych::fa.parallel(fm = "wls", fa = "fa", cor = "poly")
-#  lavaan::efa(cov_child |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:3, rotation = "oblimin") |> summary()
-
-data <- data |> left_join(cov_child)
-
+cov_child |> select(-AID) |> psych::fa.parallel(fm = "wls", fa = "fa", cor = "poly")
+lavaan::efa(cov_child |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:3, rotation = "oblimin") |> summary()
 ```
 
 
@@ -330,219 +408,47 @@ data <- data |> left_join(cov_child)
 ```{r}
 pgs_pc <- pgs_pc |> mutate(
   EXT_PGS = lm(EXT_PGS ~ PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + 
-                         PC8 + PC9 + PC10,
+                         PC8 + PC9 + PC10 + PC11 + PC12 + PC13 + PC14 + 
+                         PC15 + PC16 + PC17 + PC18 + PC19 + PC20,
                data = pgs_pc, na.action = "na.exclude") %>% residuals())
 ```
 
 
-## Full sample data
+## Form data
 
-Phenotypic variables only for FA
+Join all variables
 
 ```{r}
-data <- gid |> select(AID, FAMID) |> 
-        mutate(across(everything(), as.character)) |> 
-        left_join(data)
-
-write.table(data,file = here::here(path_data, "withinfamrGE_addh_full_sample_for_fa.csv"),sep = ",", na = ".",row.names = F,col.names  = F)
-
-data |> skimr::skim()
-names(data) |> cat()
-
+data <- pgs_pc |> left_join(ancestry) |> left_join(data)
 ```
 
-## Read in factor scores
+## Select European ancestry individuals
 
 ```{r}
-fs_1 <- data.table::fread("withinfamrGE_factor_score_part1") |>
-        select(V29:V34) |> 
-        rename(AID = V29, par_rel_parent = V30, mum_rel_child = V31,
-               dad_rel_child = V32, del_peer = V33, school_con = V34) |> 
-        mutate(par_rel_child = NA,
-               par_rel_child = 
-                 if_else(mum_rel_child > dad_rel_child | is.na(dad_rel_child),
-                         mum_rel_child, par_rel_child, 
-                         missing = par_rel_child),
-               par_rel_child = 
-                 if_else(dad_rel_child > mum_rel_child | is.na(mum_rel_child),
-                         dad_rel_child, par_rel_child, 
-                         missing = par_rel_child)) |> 
-        select(-mum_rel_child, -dad_rel_child) |> 
-        relocate(par_rel_child, .after = par_rel_parent)
-
-fs_2 <- data.table::fread("withinfamrGE_factor_score_part2") |>
-        select(V21:V23) |> 
-        rename(AID = V21, asb_wave1 = V22, asb_wave3 = V23)
-
-fs_3 <- data.table::fread("withinfamrGE_factor_score_part3") |>
-        select(V7:V8) |> 
-        rename(AID = V7, sub_wave1 = V8)
-
-fs_4 <- data.table::fread("withinfamrGE_factor_score_part4") |>
-        select(V7:V8) |> 
-        rename(AID = V7, sub_wave3 = V8)
-
-fs_5 <- data.table::fread("withinfamrGE_factor_score_part5") |>
-        select(V4:V5) |> 
-        rename(AID = V4, par_sub = V5)
-
-fs_6 <- data.table::fread("withinfamrGE_factor_score_part6") |>
-        select(V14:V16) |> 
-        rename(AID = V14, autonomy = V15, par_involvement = V16)
-
-fs_all <- fs_1 |> left_join(fs_2) |> left_join(fs_3) |> 
-                  left_join(fs_4) |> left_join(fs_5) |> 
-                  left_join(fs_6) |> mutate(AID = as.character(AID))
+data <- data |> filter(ANCESTRY == "eur")
 ```
 
 
-## Within family data
-
-### Joining data
+## Select all individuals in families
 
 ```{r}
-data_within <- pgs_pc |> select(-starts_with("PC")) |> left_join(ancestry) |> 
-               left_join(data |> select(AID, sex, age_1, age_3, white,
-                                        african, native, asian, other,
-                                        hispanic, income, par_ed, par_age,
-                                        par_sex, par_marry, bad_temper)) |>
-               left_join(fs_all)
+fam_id <- table(data$FAMID) |> names()
+fam_id <- fam_id[which(table(data$FAMID) > 1)]
 
-data_within |> skimr::skim()
-
-data_within |> select(where(is.numeric), -starts_with("PC"), -ends_with("ID")) |> cor(use = "pair") |> corrplot::corrplot.mixed()
+data <- data |> filter(FAMID %in% fam_id)
 ```
 
-
-### Select all individuals in families
+## Descriptives
 
 ```{r}
-fam_id <- table(data_within$FAMID) |> names()
-fam_id <- fam_id[which(table(data_within$FAMID) > 1)]
-
-data_within <- data_within |> filter(FAMID %in% fam_id)
+skimr::skim(data)
 ```
-
-
-### Select same ancestry families
-
-```{r}
-#data_within <- data_within |> filter(ANCESTRY == "eur")
-
-Mode <- function(x) {
-  ux <- unique(x)
-  ux[which.max(tabulate(match(x, ux)))]
-}
-
-famid_na_ancestry <- data_within |> group_by(FAMID) |> 
-  summarise(fam_ancestry = Mode(ANCESTRY)) |> 
-  filter(is.na(fam_ancestry)) |> 
-  pull(FAMID) 
-
-data_within <- data_within |> filter(!FAMID %in% famid_na_ancestry)
-
-data_within |> filter(FAMID %in% famid_na_ancestry) |> print(n = 1000)
-
-famid_ancestry <- data_within |> group_by(FAMID) |> 
-  summarise(fam_ancestry = Mode(ANCESTRY))
-
-famid_inconsistent <- data_within |> left_join(famid_ancestry) |> 
-  filter(ANCESTRY != fam_ancestry) |> pull(FAMID)
-
-data_within |> filter(FAMID %in% famid_inconsistent) |> arrange(FAMID) |> print(n = 100)
-
-data_within <- data_within |> filter(!FAMID %in% famid_inconsistent)
-```
-
-### Descriptives
-
-```{r}
-skimr::skim(data_within)
-length(unique(data_within$FAMID))
-mean(data_within$age_1, na.rm = T)
-sd(data_within$age_1, na.rm = T)
-mean(data_within$age_3, na.rm = T)
-sd(data_within$age_3, na.rm = T)
-mean(data_within$income, na.rm = T)
-sd(data_within$income, na.rm = T)
-mean(data_within$par_age, na.rm = T)
-sd(data_within$par_age, na.rm = T)
-
-mean(data_within$par_rel_parent, na.rm = T)
-sd(data_within$par_rel_parent, na.rm = T)
-mean(data_within$par_rel_child, na.rm = T)
-sd(data_within$par_rel_child, na.rm = T)
-mean(data_within$del_peer, na.rm = T)
-sd(data_within$del_peer, na.rm = T)
-mean(data_within$school_con, na.rm = T)
-sd(data_within$school_con, na.rm = T)
-
-mean(data_within$asb_wave1, na.rm = T)
-sd(data_within$asb_wave1, na.rm = T)
-mean(data_within$asb_wave3, na.rm = T)
-sd(data_within$asb_wave3, na.rm = T)
-mean(data_within$sub_wave1, na.rm = T)
-sd(data_within$sub_wave1, na.rm = T)
-mean(data_within$sub_wave3, na.rm = T)
-sd(data_within$sub_wave3, na.rm = T)
-
-mean(data_within$par_sub, na.rm = T)
-sd(data_within$par_sub, na.rm = T)
-
-table(data_within$sex)
-table(data_within$ANCESTRY)
-table(data_within$par_ed)
-table(data_within$par_sex)
-table(data_within$par_marry)
-
-
-VCA::anovaVCA(age_1 ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(age_3 ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(par_age ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(par_sex ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(par_marry ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(par_sub ~ FAMID, Data = data_within |> as.data.frame())
-
-VCA::anovaVCA(sex ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(ANCESTRY ~ FAMID, Data = data_within |> mutate(ANCESTRY = ANCESTRY |> factor() |> as.numeric()) |>  as.data.frame())
-
-VCA::anovaVCA(EXT_PGS ~ FAMID, Data = data_within |> mutate(ANCESTRY = ANCESTRY |> factor() |> as.numeric()) |>  as.data.frame())
-
-
-VCA::anovaVCA(par_rel_parent ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(par_rel_child ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(del_peer ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(school_con ~ FAMID, Data = data_within |> as.data.frame())
-
-
-VCA::anovaVCA(asb_wave1 ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(asb_wave3 ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(sub_wave1 ~ FAMID, Data = data_within |> as.data.frame())
-VCA::anovaVCA(sub_wave3 ~ FAMID, Data = data_within |> as.data.frame())
-
-```
-
 
 ## Write data to csv for analysis
 
-Change ancestry to numeric coding for Mplus variable definition
-
 ```{r}
-data_within <- data_within |> 
-               mutate(ANCESTRY = factor(ANCESTRY, 
-                                        c("eur", "afr", "eas", "his"),
-                                        1:4)) |> 
-               group_by(FAMID) |> 
-               mutate(ANCESTRY = Mode(ANCESTRY)) |> 
-               ungroup()
+write.table(data,file = here::here(path_data, "withinfamrGE_addh.csv"),sep = ",", na = ".",row.names = F,col.names  = F)
+
+names(data) |> cat()
 ```
-
-Write data
-
-```{r}
-write.table(data_within,file = here::here(path_data, "withinfamrGE_addh.csv"),sep = ",", na = ".",row.names = F,col.names  = F)
-
-names(data_within) |> cat()
-```
-
 

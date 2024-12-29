@@ -1,0 +1,92 @@
+VERSION 1.1.0
+INPUT
+TITLE:
+
+        Causal rGE on differential parenting;
+
+DATA:
+        FILE IS "c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv";
+VARIABLE:
+        Names are AID FAM sex age_1 age_3
+        white african native asian other hispanic
+        income par_ed
+        PC34A PC34B PC34C PC34D PC34E PC44A
+        H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+        H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+        H1TO29 H1TO33 H1TO9 H1DS14
+        H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+        H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+        H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+        H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+        H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+        H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+        H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+        par_age par_sex par_marry
+        PA61 PA62 PB22
+        PC10 PC11 PC12 PC17
+        PC32
+        H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+        H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+        usevariables are FAM
+        H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+        H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+        ;
+        IDVARIABLE = AID;
+        CATEGORICAL ARE
+        H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+        H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+        ;
+        CLUSTER IS FAM;
+        Missing are .;
+ANALYSIS:
+        TYPE = COMPLEX;
+        ESTIMATOR=WLSMV;
+OUTPUT:
+ TECH1 TECH8 MODINDICES;
+SAVEDATA:
+FILE IS withinfamrGE_factor_score_part6;
+SAVE = FSCORES;
+PLOT:
+ TYPE = PLOT3;
+MODEL:
+        f12 BY H1WP1* H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7;
+        f13 BY H1WP17F* H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+        [f12-f13@0];
+        f12-f13@1;
+INPUT_END
+2
+0
+0
+0
+WLSMV
+1
+GENERAL
+0
+13
+2
+0
+h1wp1 h1wp2 h1wp3 h1wp4 h1wp5 h1wp6 h1wp7 h1wp17f h1wp17g h1wp17h h1wp18f h1wp18g h1wp18h f12 f13
+1
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0
+0
+2
+f12
+h1wp1 h1wp2 h1wp3 h1wp4 h1wp5 h1wp6 h1wp7
+f13
+h1wp17f h1wp17g h1wp17h h1wp18f h1wp18g h1wp18h
+1 1 f12 h1wp1    0.439    0.017
+1 1 f12 h1wp2    0.550    0.016
+1 1 f12 h1wp3    0.686    0.016
+1 1 f12 h1wp4    0.752    0.013
+1 1 f12 h1wp5    0.724    0.013
+1 1 f12 h1wp6    0.571    0.014
+1 1 f12 h1wp7    0.610    0.015
+1 1 f13 h1wp17f    0.463    0.014
+1 1 f13 h1wp17g    0.528    0.014
+1 1 f13 h1wp17h    0.723    0.013
+1 1 f13 h1wp18f    0.466    0.018
+1 1 f13 h1wp18g    0.608    0.016
+1 1 f13 h1wp18h    0.730    0.014
+2 1 f13 f12    0.022    0.017
+5 1 f12    1.000    0.000
+5 1 f13    1.000    0.000

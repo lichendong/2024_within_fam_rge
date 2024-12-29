@@ -1,0 +1,134 @@
+VERSION 1.1.0
+INPUT
+TITLE:
+
+        Causal rGE on differential parenting;
+
+DATA:
+        FILE IS "c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv";
+VARIABLE:
+        Names are AID FAM sex age_1 age_3
+        white african native asian other hispanic
+        income par_ed
+        PC34A PC34B PC34C PC34D PC34E PC44A
+        H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+        H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+        H1TO29 H1TO33 H1TO9 H1DS14
+        H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+        H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+        H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+        H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+        H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+        H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+        H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+        par_age par_sex par_marry
+        PA61 PA62 PB22
+        PC10 PC11 PC12 PC17
+        PC32
+        H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+        H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+        usevariables are FAM
+        PC34A PC34B PC34C PC34D PC34E PC44A
+        H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+        H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+        H1TO29 H1TO33 H1TO9 H1DS14
+        H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+        ;
+        IDVARIABLE = AID;
+        CATEGORICAL ARE PC34A PC34B PC34C
+        PC34D PC34E PC44A
+        H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+        H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+        H1TO29 H1TO33 H1TO9 H1DS14
+        H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+        ;
+        CLUSTER IS FAM;
+        Missing are .;
+ANALYSIS:
+        TYPE = COMPLEX;
+        ESTIMATOR=WLSMV;
+OUTPUT:
+ TECH1 TECH8;
+SAVEDATA:
+FILE IS withinfamrGE_factor_score_part1;
+SAVE = FSCORES;
+PLOT:
+ TYPE = PLOT3;
+MODEL:
+        f1 BY PC34A* PC34B PC34C PC34D PC34E PC44A;
+        f2 BY H1WP9* H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5;
+        f3 BY H1WP13* H1WP14 H1PF23 H1PF24 H1PF25;
+        f4 BY H1TO29* H1TO33 H1TO9 H1DS14;
+        f5 BY H1ED19* H1ED20 H1ED22 H1ED23 H1ED24 H1PR2;
+        [f1-f5@0];
+        f1-f5@1;
+INPUT_END
+2
+0
+0
+0
+WLSMV
+1
+GENERAL
+0
+28
+5
+0
+pc34a pc34b pc34c pc34d pc34e pc44a h1wp9 h1wp10 h1pf1 h1pf2 h1pf3 h1pf4 h1pf5 h1wp13 h1wp14 h1pf23 h1pf24 h1pf25 h1to29 h1to33 h1to9 h1ds14 h1ed19 h1ed20 h1ed22 h1ed23 h1ed24 h1pr2 f1 f2 f3 f4 f5
+1
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0
+0
+5
+f1
+pc34a pc34b pc34c pc34d pc34e pc44a
+f2
+h1wp9 h1wp10 h1pf1 h1pf2 h1pf3 h1pf4 h1pf5
+f3
+h1wp13 h1wp14 h1pf23 h1pf24 h1pf25
+f4
+h1to29 h1to33 h1to9 h1ds14
+f5
+h1ed19 h1ed20 h1ed22 h1ed23 h1ed24 h1pr2
+1 1 f1 pc34a    0.750    0.008
+1 1 f1 pc34b    0.625    0.010
+1 1 f1 pc34c    0.477    0.011
+1 1 f1 pc34d    0.716    0.010
+1 1 f1 pc34e    0.372    0.015
+1 1 f1 pc44a    0.739    0.010
+1 1 f2 h1wp9    0.808    0.006
+1 1 f2 h1wp10    0.769    0.010
+1 1 f2 h1pf1    0.789    0.006
+1 1 f2 h1pf2    0.562    0.009
+1 1 f2 h1pf3    0.695    0.007
+1 1 f2 h1pf4    0.893    0.003
+1 1 f2 h1pf5    0.940    0.003
+1 1 f3 h1wp13    0.842    0.005
+1 1 f3 h1wp14    0.798    0.009
+1 1 f3 h1pf23    0.849    0.005
+1 1 f3 h1pf24    0.897    0.003
+1 1 f3 h1pf25    0.942    0.003
+1 1 f4 h1to29    0.790    0.009
+1 1 f4 h1to33    0.849    0.009
+1 1 f4 h1to9    0.751    0.009
+1 1 f4 h1ds14    0.434    0.016
+1 1 f5 h1ed19    0.688    0.007
+1 1 f5 h1ed20    0.799    0.006
+1 1 f5 h1ed22    0.743    0.007
+1 1 f5 h1ed23    0.587    0.009
+1 1 f5 h1ed24    0.542    0.009
+1 1 f5 h1pr2    0.588    0.009
+2 1 f2 f1    0.447    0.012
+2 1 f3 f1    0.319    0.016
+2 1 f3 f2    0.596    0.010
+2 1 f4 f1    0.314    0.014
+2 1 f4 f2    0.225    0.013
+2 1 f4 f3    0.263    0.015
+2 1 f5 f1    0.243    0.013
+2 1 f5 f2    0.357    0.011
+2 1 f5 f3    0.390    0.012
+2 1 f5 f4    0.323    0.012
+5 1 f1    1.000    0.000
+5 1 f2    1.000    0.000
+5 1 f3    1.000    0.000
+5 1 f4    1.000    0.000
+5 1 f5    1.000    0.000

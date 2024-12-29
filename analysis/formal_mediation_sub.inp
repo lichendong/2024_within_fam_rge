@@ -1,0 +1,250 @@
+TITLE:    
+        Causal rGE on differential parenting;
+
+DATA:   
+        FILE IS "c:\Repo\data_local\withinfamrGE_addh.csv";
+
+
+
+
+VARIABLE:
+        Names are AID FAM GPAIRID GID GFAM 
+        pgs ANCESTRY sex age_1 age_3 
+        white african native asian other hispanic 
+        income par_ed par_age 
+        par_sex par_marry 
+        bad_temper pr_parent pr_child del_peer scho_con
+        asb_1 asb_3 sub_1 sub_3 
+        par_sub autonomy par_involv;
+
+        usevariables are FAM
+         pgs sex age_1 !age_3
+         pr_parent pr_child del_peer scho_con
+         sub_1 sub_3
+         pgs_m sex_m age_1_m !age_3_m
+         income_m par_ed_m
+         afr eas his;
+                
+        CLUSTER IS FAM;
+        
+        WITHIN ARE
+         pgs sex age_1 !age_3
+         ;
+
+        BETWEEN ARE 
+        pgs_m sex_m age_1_m !age_3_m
+        income_m par_ed_m
+        afr eas his;
+    
+
+        Missing are .;
+
+
+DEFINE:
+        afr = 0;
+        eas = 0;
+        his = 0;
+        IF(ANCESTRY EQ 2)THEN afr = 1;
+        IF(ANCESTRY EQ 3)THEN eas = 1;
+        IF(ANCESTRY EQ 4)THEN his = 1;
+        income = log(income + 1);
+        pgs_m = CLUSTER_MEAN(pgs);
+        sex_m = CLUSTER_MEAN(sex);
+        age_1_m = CLUSTER_MEAN(age_1);
+        !age_3_m = CLUSTER_MEAN(age_3);
+        income_m = CLUSTER_MEAN(income);
+        par_ed_m = CLUSTER_MEAN(par_ed);
+        CENTER pgs sex age_1(GROUPMEAN); 
+        !CENTER age_3(GROUPMEAN);
+
+ANALYSIS:
+
+        TYPE = TWOLEVEL RANDOM;
+        ESTIMATOR = BAYES;
+        !ESTIMATOR=WLSM;
+        !BOOTSTRAP = 20000;
+        PROC = 10;
+        CHAINS = 10;
+        FBITERATIONS= 20000;
+        BSEED = 1234;
+        STVALUES = PERTURBED;
+        KOLMOGOROV = 500;
+
+MODEL:
+        
+        %WITHIN%
+        
+        pr_parent pr_child del_peer scho_con ON sex age_1;
+        sub_1 ON sex age_1;
+        sub_3 ON sex age_1;
+        [pgs sex age_1 @0];
+        
+        sub_1 ON pgs(a1w);
+
+        pr_parent ON sub_1(b1w_parent);
+        pr_child ON sub_1(b1w_child);
+        del_peer ON sub_1(b1w_peer);
+        scho_con ON sub_1(b1w_scho);
+   
+        sub_3 ON pr_parent(c1w_parent);
+
+        sub_3 ON pr_child(c1w_child);
+
+        sub_3 ON del_peer(c1w_peer);
+
+        sub_3 ON scho_con(c1w_scho);
+
+        pr_parent ON pgs(dw_parent);
+        pr_child ON pgs(dw_child);
+        del_peer ON pgs(dw_peer);
+        scho_con ON pgs(dw_scho);
+
+        sub_3 ON sub_1(e1w_sub);
+        !asb_3 ON sub_1(e1w_sub);
+        !sub_3 ON asb_1(e2w_asb);
+
+        sub_3 ON pgs(f1w);
+
+
+        pr_parent pr_child del_peer scho_con;
+
+        pr_parent WITH pr_child del_peer scho_con;
+        pr_child WITH del_peer scho_con;
+        del_peer WITH scho_con;
+        
+        sub_1 sub_3;
+        pgs sex age_1;
+        pgs sex age_1 WITH pgs sex age_1;
+
+        %BETWEEN%
+        pr_parent pr_child ON sex_m age_1_m income_m par_ed_m afr eas his;
+        del_peer scho_con ON sex_m age_1_m income_m par_ed_m afr eas his;
+        sub_1 ON sex_m age_1_m income_m par_ed_m afr eas his;
+        sub_3 ON sex_m age_1_m income_m par_ed_m afr eas his;
+
+
+        sub_1 ON pgs_m(a1b);
+
+        pr_parent ON sub_1(b1b_parent);
+        pr_child ON sub_1(b1b_child);
+        del_peer ON sub_1(b1b_peer);
+        scho_con ON sub_1(b1b_scho);
+   
+        sub_3 ON pr_parent(c1b_parent);
+
+        sub_3 ON pr_child(c1b_child);
+
+        sub_3 ON del_peer(c1b_peer);
+
+        sub_3 ON scho_con(c1b_scho);
+
+        pr_parent ON pgs_m(db_parent);
+        pr_child ON pgs_m(db_child);
+        del_peer ON pgs_m(db_peer);
+        scho_con ON pgs_m(db_scho);
+
+        sub_3 ON sub_1(e1b_sub);
+        !asb_3 ON sub_1(e1b_sub);
+        !sub_3 ON asb_1(e2b_asb);
+
+        sub_3 ON pgs_m(f1b);
+
+        pr_parent pr_child del_peer scho_con sub_1 sub_3;
+        pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+
+        pr_parent WITH pr_child del_peer scho_con;
+        pr_child WITH del_peer scho_con;
+        del_peer WITH scho_con;
+        
+        pgs_m sex_m WITH pgs_m sex_m age_1_m income_m par_ed_m;
+        age_1_m WITH pgs_m sex_m age_1_m income_m par_ed_m;
+        income_m par_ed_m WITH pgs_m sex_m age_1_m income_m par_ed_m;
+
+        afr eas his WITH pgs_m sex_m age_1_m income_m par_ed_m;
+        afr eas his WITH afr eas his;
+
+MODEL CONSTRAINT:
+
+NEW(iwa1parent iwa1child iwa1peer iwa1scho
+    tw1parent tw1child tw1peer tw1scho
+    piwa1parent piwa1child piwa1peer piwa1scho
+    
+    iwa2parent iwa2child iwa2peer iwa2scho
+    tw2parent tw2child tw2peer tw2scho
+    piwa2parent piwa2child piwa2peer piwa2scho
+    
+    iba1parent iba1child iba1peer iba1scho
+    tb1parent tb1child tb1peer tb1scho
+    piba1parent piba1child piba1peer piba1scho
+    
+    iba2parent iba2child iba2peer iba2scho
+    tb2parent tb2child tb2peer tb2scho
+    piba2parent piba2child piba2peer piba2scho);
+    
+    iwa1parent = a1w*b1w_parent; 
+    iwa1child = a1w*b1w_child;
+    iwa1peer = a1w*b1w_peer ;
+    iwa1scho = a1w*b1w_scho;
+
+    tw1parent = dw_parent + a1w*b1w_parent;
+    tw1child = dw_child + a1w*b1w_child;
+    tw1peer = dw_peer + a1w*b1w_peer;
+    tw1scho = dw_scho + a1w*b1w_scho;
+
+    piwa1parent = iwa1parent/tw1parent;
+    piwa1child = iwa1child/tw1child;
+    piwa1peer = iwa1peer/tw1peer;
+    piwa1scho = iwa1scho/tw1scho;
+
+    iwa2parent = tw1parent*c1w_parent;
+    iwa2child = tw1child*c1w_child;
+    iwa2peer = tw1peer*c1w_peer;
+    iwa2scho = tw1scho*c1w_scho;
+
+    tw2parent = f1w + tw1parent*c1w_parent;
+    tw2child = f1w + tw1child*c1w_child;
+    tw2peer = f1w + tw1peer*c1w_peer;
+    tw2scho = f1w + tw1scho*c1w_scho;
+
+    piwa2parent = iwa2parent/tw2parent;
+    piwa2child = iwa2child/tw2child;
+    piwa2peer = iwa2peer/tw2peer;
+    piwa2scho = iwa2scho/tw2scho;
+
+
+
+    iba1parent = a1b*b1b_parent; 
+    iba1child = a1b*b1b_child;
+    iba1peer = a1b*b1b_peer ;
+    iba1scho = a1b*b1b_scho;
+
+    tb1parent = db_parent + a1b*b1b_parent;
+    tb1child = db_child + a1b*b1b_child;
+    tb1peer = db_peer + a1b*b1b_peer;
+    tb1scho = db_scho + a1b*b1b_scho;
+
+    piba1parent = iba1parent/tb1parent;
+    piba1child = iba1child/tb1child;
+    piba1peer = iba1peer/tb1peer;
+    piba1scho = iba1scho/tb1scho;
+
+    iba2parent = tb1parent*c1b_parent;
+    iba2child = tb1child*c1b_child;
+    iba2peer = tb1peer*c1b_peer;
+    iba2scho = tb1scho*c1b_scho;
+
+    tb2parent = f1b + tb1parent*c1b_parent;
+    tb2child = f1b + tb1child*c1b_child;
+    tb2peer = f1b + tb1peer*c1b_peer;
+    tb2scho = f1b + tb1scho*c1b_scho;
+
+    piba2parent = iba2parent/tb2parent;
+    piba2child = iba2child/tb2child;
+    piba2peer = iba2peer/tb2peer;
+    piba2scho = iba2scho/tb2scho;
+
+OUTPUT: TECH1 TECH8 CINTERVAL;
+PLOT: TYPE = PLOT2;
+!SAVEDATA:
+  !BPARAMETERS = bayes.pars;
+

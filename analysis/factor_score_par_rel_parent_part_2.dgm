@@ -1,0 +1,118 @@
+VERSION 1.1.0
+INPUT
+TITLE:
+
+        Causal rGE on differential parenting;
+
+DATA:
+        FILE IS "c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv";
+VARIABLE:
+        Names are AID FAM sex age_1 age_3
+        white african native asian other hispanic
+        income par_ed
+        PC34A PC34B PC34C PC34D PC34E PC44A
+        H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+        H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+        H1TO29 H1TO33 H1TO9 H1DS14
+        H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+        H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+        H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+        H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+        H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+        H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+        H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+        par_age par_sex par_marry
+        PA61 PA62 PB22
+        PC10 PC11 PC12 PC17
+        PC32
+        H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+        H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+        usevariables are FAM
+        H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+        H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+        H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+        H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+        ;
+        IDVARIABLE = AID;
+        CATEGORICAL ARE
+        H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+        H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+        H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+        H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+        ;
+        CLUSTER IS FAM;
+        Missing are .;
+ANALYSIS:
+        TYPE = COMPLEX;
+        ESTIMATOR=WLSMV;
+OUTPUT:
+ TECH1 TECH8 MODINDICES;
+SAVEDATA:
+FILE IS withinfamrGE_factor_score_part2;
+SAVE = FSCORES;
+PLOT:
+ TYPE = PLOT3;
+MODEL:
+        f6 BY H1DS2* H1DS12 H1FV8 H1DS6 H1DS9
+        H1DS10 H1DS13 H1DS11 H1FV7 H1DS7;
+        f7 BY H3DS1* H3DS5 H3DS18I H3DS17 H3DS2
+        H3DS3 H3DS6 H3DS4 H3DS18H H3HR23;
+        H1DS2 H1DS12 H1FV8 H1DS6 PWITH H3DS1 H3DS5 H3DS18I H3DS17;
+        H1DS9 H1DS10 H1DS13 H1DS11 PWITH H3DS2 H3DS3 H3DS6 H3DS4;
+        H1FV7 H1DS7 PWITH H3DS18H H3HR23;
+        [f6-f7@0];
+        f6-f7@1;
+INPUT_END
+2
+0
+0
+0
+WLSMV
+1
+GENERAL
+0
+20
+2
+0
+h1ds2 h1ds12 h1fv8 h1ds6 h1ds9 h1ds10 h1ds13 h1ds11 h1fv7 h1ds7 h3ds1 h3ds5 h3ds18i h3ds17 h3ds2 h3ds3 h3ds6 h3ds4 h3ds18h h3hr23 f6 f7
+1
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0
+0
+2
+f6
+h1ds2 h1ds12 h1fv8 h1ds6 h1ds9 h1ds10 h1ds13 h1ds11 h1fv7 h1ds7
+f7
+h3ds1 h3ds5 h3ds18i h3ds17 h3ds2 h3ds3 h3ds6 h3ds4 h3ds18h h3hr23
+1 1 f6 h1ds2    0.688    0.013
+1 1 f6 h1ds12    0.718    0.015
+1 1 f6 h1fv8    0.861    0.019
+1 1 f6 h1ds6    0.621    0.014
+1 1 f6 h1ds9    0.814    0.014
+1 1 f6 h1ds10    0.814    0.014
+1 1 f6 h1ds13    0.719    0.013
+1 1 f6 h1ds11    0.756    0.016
+1 1 f6 h1fv7    0.818    0.014
+1 1 f6 h1ds7    0.464    0.020
+1 1 f7 h3ds1    0.670    0.020
+1 1 f7 h3ds5    0.671    0.021
+1 1 f7 h3ds18i    0.925    0.036
+1 1 f7 h3ds17    0.581    0.025
+1 1 f7 h3ds2    0.840    0.018
+1 1 f7 h3ds3    0.871    0.021
+1 1 f7 h3ds6    0.742    0.018
+1 1 f7 h3ds4    0.720    0.028
+1 1 f7 h3ds18h    0.788    0.031
+1 1 f7 h3hr23    0.358    0.029
+2 1 h1ds2 h3ds1    0.164    0.023
+2 1 h1ds12 h3ds5    0.179    0.027
+2 1 h1fv8 h3ds18i   -0.154    0.124
+2 1 h1ds6 h3ds17    0.199    0.027
+2 1 h1ds9 h3ds2   -0.023    0.039
+2 1 h1ds10 h3ds3    0.017    0.046
+2 1 h1ds13 h3ds6    0.094    0.025
+2 1 h1ds11 h3ds4    0.100    0.046
+2 1 h1fv7 h3ds18h    0.111    0.049
+2 1 h1ds7 h3hr23    0.570    0.021
+2 1 f7 f6    0.428    0.023
+5 1 f6    1.000    0.000
+5 1 f7    1.000    0.000

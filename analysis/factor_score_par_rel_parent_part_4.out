@@ -1,0 +1,813 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+12/26/2024   4:50 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+          Causal rGE on differential parenting;
+
+  DATA:
+          FILE IS "c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv";
+
+  VARIABLE:
+          Names are AID FAM sex age_1 age_3
+          white african native asian other hispanic
+          income par_ed
+          PC34A PC34B PC34C PC34D PC34E PC44A
+          H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          H1TO29 H1TO33 H1TO9 H1DS14
+          H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+          H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+          par_age par_sex par_marry
+          PA61 PA62 PB22
+          PC10 PC11 PC12 PC17
+          PC32
+          H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+
+          usevariables are FAM
+          !PC34A PC34B PC34C PC34D PC34E PC44A
+          !H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          !H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          !H1TO29 H1TO33 H1TO9 H1DS14
+          !H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          !H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          !H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          !H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+          H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+          !PA61 PA62 PB22
+          !PC10 PC11 PC12 PC17
+          !H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          !H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+          ;
+
+          IDVARIABLE = AID;
+
+          CATEGORICAL ARE
+          !PC34A PC34B PC34C PC34D PC34E PC44A
+          !H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          !H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          !H1TO29 H1TO33 H1TO9 H1DS14
+          !H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          !H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          !H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          !PC10 PC11 PC12 PC17
+          !H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          !H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+          ;
+
+          COUNT ARE
+          !H1TO15 (bi) H1TO17 (bi) H1TO5 (bi) H1TO32 (bi)
+          !H1TO36 (bi) H1TO42 (bi)
+          H3TO38 (i) H3TO40 (i)
+          H3TO7 (i) H3TO110 (i) H3TO113 (i) H3TO119 (i)
+          !PA61 (bi) PA62 (bi) PB22 (bi)
+          ;
+
+          CLUSTER IS FAM;
+
+          Missing are .;
+
+  DEFINE:
+
+
+  ANALYSIS:
+
+          TYPE = COMPLEX;
+          !ESTIMATOR = BAYES;
+          ESTIMATOR=MLR;
+          !BOOTSTRAP = 20000;
+          !FBITERATIONS= 20000;
+  MODEL:
+
+          !f1 BY PC34A* PC34B PC34C PC34D PC34E PC44A;
+          !f2 BY H1WP9* H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5;
+          !f3 BY H1WP13* H1WP14 H1PF23 H1PF24 H1PF25;
+          !f4 BY H1TO29* H1TO33 H1TO9 H1DS14;
+          !f5 BY H1ED19* H1ED20 H1ED22 H1ED23 H1ED24 H1PR2;
+          !f6 BY H1DS2* H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7;
+          !f7 BY H3DS1* H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23;
+
+
+          !f8 BY H1TO15* H1TO17 H1TO5 H1TO32 H1TO36 H1TO42;
+          f9 BY H3TO38* H3TO40 H3TO7 H3TO110 H3TO113 H3TO119;
+          !f10 BY PA61* PA62 PB22;
+
+          !f11 BY PC10* PC11 PC12 PC17;
+          !f12 BY H1WP1* H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7;
+          !f13 BY H1WP17F* H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+
+          [f9@0];
+          f9@1;
+
+
+  MODEL CONSTRAINT:
+
+  OUTPUT: TECH1 TECH8 MODINDICES;
+  PLOT: TYPE = PLOT3;
+
+  SAVEDATA:
+  FILE IS withinfamrGE_factor_score_part4;
+
+  SAVE = FSCORES;
+
+
+
+
+*** WARNING in OUTPUT command
+  MODINDICES option is not available for ALGORITHM=INTEGRATION.
+  Request for MODINDICES is ignored.
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  1598
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+Causal rGE on differential parenting;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        8376
+
+Number of dependent variables                                    6
+Number of independent variables                                  0
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Count
+   H3TO38      H3TO40      H3TO7       H3TO110     H3TO113     H3TO119
+
+Continuous latent variables
+   F9
+
+Variables with special functions
+
+  Cluster variable      FAM
+  ID variable           AID
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            1
+  Adaptive quadrature                                           ON
+Cholesky                                                        ON
+
+Input data file(s)
+  c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters        7536
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+COUNT PROPORTION OF ZERO, MINIMUM AND MAXIMUM VALUES
+
+      H3TO38      0.262         0         6
+      H3TO40      0.512         0         6
+      H3TO7       0.662         0        30
+      H3TO110     0.776         0        30
+      H3TO113     0.968         0        30
+      H3TO119     0.956         0        30
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       18
+
+Loglikelihood
+
+          H0 Value                      -60782.198
+          H0 Scaling Correction Factor      3.1215
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                  121600.397
+          Bayesian (BIC)                121726.993
+          Sample-Size Adjusted BIC      121669.792
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit for the Count Outcomes**
+
+          Pearson Chi-Square
+
+          Value                          13234.430
+          Degrees of Freedom                 46376
+          P-Value                           1.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                           5690.928
+          Degrees of Freedom                 46376
+          P-Value                           1.0000
+
+** Of the 101592 cells in the frequency table, 261
+   were deleted in the calculation of chi-square due to extreme values.
+
+** Large values were truncated at 5.
+
+Chi-Square Test for MCAR under the Unrestricted Latent Class Indicator Model
+for the Count Outcomes
+
+          Pearson Chi-Square
+
+          Value                            438.032
+          Degrees of Freedom                 54920
+          P-Value                           1.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                            216.754
+          Degrees of Freedom                 54920
+          P-Value                           1.0000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F9       BY
+    H3TO38             0.293      0.034      8.600      0.000
+    H3TO40             0.523      0.067      7.785      0.000
+    H3TO7              0.351      0.029     11.928      0.000
+    H3TO110            2.717      0.160     16.966      0.000
+    H3TO113            3.842      0.566      6.787      0.000
+    H3TO119            4.872      0.489      9.963      0.000
+
+ Means
+    F9                 0.000      0.000    999.000    999.000
+    H3TO38#1          -1.528      0.072    -21.098      0.000
+    H3TO40#1          -0.575      0.099     -5.830      0.000
+    H3TO7#1            0.671      0.024     28.117      0.000
+    H3TO110#1          0.473      0.100      4.743      0.000
+    H3TO113#1          2.214      0.152     14.566      0.000
+    H3TO119#1          1.750      0.127     13.803      0.000
+
+ Intercepts
+    H3TO38             0.936      0.024     39.288      0.000
+    H3TO40             0.478      0.067      7.097      0.000
+    H3TO7              3.018      0.024    124.079      0.000
+    H3TO110           -0.085      0.254     -0.333      0.739
+    H3TO113           -2.835      0.717     -3.955      0.000
+    H3TO119           -3.789      0.664     -5.709      0.000
+
+ Variances
+    F9                 1.000      0.000    999.000    999.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.746E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              H3TO38#1      H3TO38        H3TO40#1      H3TO40        H3TO7#1
+              ________      ________      ________      ________      ________
+ 1                  1             2             3             4             5
+
+
+           NU
+              H3TO7         H3TO110#      H3TO110       H3TO113#      H3TO113
+              ________      ________      ________      ________      ________
+ 1                  6             7             8             9            10
+
+
+           NU
+              H3TO119#      H3TO119
+              ________      ________
+ 1                 11            12
+
+
+           LAMBDA
+              F9
+              ________
+ H3TO38#1           0
+ H3TO38            13
+ H3TO40#1           0
+ H3TO40            14
+ H3TO7#1            0
+ H3TO7             15
+ H3TO110#           0
+ H3TO110           16
+ H3TO113#           0
+ H3TO113           17
+ H3TO119#           0
+ H3TO119           18
+
+
+           THETA
+              H3TO38#1      H3TO38        H3TO40#1      H3TO40        H3TO7#1
+              ________      ________      ________      ________      ________
+ H3TO38#1           0
+ H3TO38             0             0
+ H3TO40#1           0             0             0
+ H3TO40             0             0             0             0
+ H3TO7#1            0             0             0             0             0
+ H3TO7              0             0             0             0             0
+ H3TO110#           0             0             0             0             0
+ H3TO110            0             0             0             0             0
+ H3TO113#           0             0             0             0             0
+ H3TO113            0             0             0             0             0
+ H3TO119#           0             0             0             0             0
+ H3TO119            0             0             0             0             0
+
+
+           THETA
+              H3TO7         H3TO110#      H3TO110       H3TO113#      H3TO113
+              ________      ________      ________      ________      ________
+ H3TO7              0
+ H3TO110#           0             0
+ H3TO110            0             0             0
+ H3TO113#           0             0             0             0
+ H3TO113            0             0             0             0             0
+ H3TO119#           0             0             0             0             0
+ H3TO119            0             0             0             0             0
+
+
+           THETA
+              H3TO119#      H3TO119
+              ________      ________
+ H3TO119#           0
+ H3TO119            0             0
+
+
+           ALPHA
+              F9
+              ________
+ 1                  0
+
+
+           BETA
+              F9
+              ________
+ F9                 0
+
+
+           PSI
+              F9
+              ________
+ F9                 0
+
+
+     STARTING VALUES
+
+
+           NU
+              H3TO38#1      H3TO38        H3TO40#1      H3TO40        H3TO7#1
+              ________      ________      ________      ________      ________
+ 1             -1.909         0.952        -0.776         0.802        -0.370
+
+
+           NU
+              H3TO7         H3TO110#      H3TO110       H3TO113#      H3TO113
+              ________      ________      ________      ________      ________
+ 1              3.303        -0.132         3.105        -0.012         2.468
+
+
+           NU
+              H3TO119#      H3TO119
+              ________      ________
+ 1             -0.014         2.788
+
+
+           LAMBDA
+              F9
+              ________
+ H3TO38#1       0.000
+ H3TO38         1.000
+ H3TO40#1       0.000
+ H3TO40         1.000
+ H3TO7#1        0.000
+ H3TO7          1.000
+ H3TO110#       0.000
+ H3TO110        1.000
+ H3TO113#       0.000
+ H3TO113        1.000
+ H3TO119#       0.000
+ H3TO119        1.000
+
+
+           THETA
+              H3TO38#1      H3TO38        H3TO40#1      H3TO40        H3TO7#1
+              ________      ________      ________      ________      ________
+ H3TO38#1       0.000
+ H3TO38         0.000         0.000
+ H3TO40#1       0.000         0.000         0.000
+ H3TO40         0.000         0.000         0.000         0.000
+ H3TO7#1        0.000         0.000         0.000         0.000         0.000
+ H3TO7          0.000         0.000         0.000         0.000         0.000
+ H3TO110#       0.000         0.000         0.000         0.000         0.000
+ H3TO110        0.000         0.000         0.000         0.000         0.000
+ H3TO113#       0.000         0.000         0.000         0.000         0.000
+ H3TO113        0.000         0.000         0.000         0.000         0.000
+ H3TO119#       0.000         0.000         0.000         0.000         0.000
+ H3TO119        0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              H3TO7         H3TO110#      H3TO110       H3TO113#      H3TO113
+              ________      ________      ________      ________      ________
+ H3TO7          0.000
+ H3TO110#       0.000         0.000
+ H3TO110        0.000         0.000         0.000
+ H3TO113#       0.000         0.000         0.000         0.000
+ H3TO113        0.000         0.000         0.000         0.000         0.000
+ H3TO119#       0.000         0.000         0.000         0.000         0.000
+ H3TO119        0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              H3TO119#      H3TO119
+              ________      ________
+ H3TO119#       0.000
+ H3TO119        0.000         0.000
+
+
+           ALPHA
+              F9
+              ________
+ 1              0.000
+
+
+           BETA
+              F9
+              ________
+ F9             0.000
+
+
+           PSI
+              F9
+              ________
+ F9             1.000
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.82279669D+05    0.0000000    0.0000000  EM
+              2 -0.76182409D+05 6097.2593212    0.0741041  FS
+              3 -0.71367820D+05 4814.5890831    0.0631982  FS
+              4 -0.63805913D+05 7561.9073759    0.1059568  EM
+              5 -0.62311031D+05 1494.8818140    0.0234286  EM
+              6 -0.61873892D+05  437.1392821    0.0070154  EM
+              7 -0.61717588D+05  156.3037985    0.0025262  EM
+              8 -0.61645784D+05   71.8038460    0.0011634  EM
+              9 -0.61605214D+05   40.5705293    0.0006581  EM
+             10 -0.61577868D+05   27.3453752    0.0004439  EM
+             11 -0.61556717D+05   21.1511192    0.0003435  EM
+             12 -0.61538825D+05   17.8918440    0.0002907  EM
+             13 -0.61522789D+05   16.0357596    0.0002606  EM
+             14 -0.61507879D+05   14.9100306    0.0002423  EM
+             15 -0.61493699D+05   14.1807068    0.0002306  EM
+             16 -0.61480024D+05   13.6747393    0.0002224  EM
+             17 -0.61466724D+05   13.2995947    0.0002163  EM
+             18 -0.61453721D+05   13.0035352    0.0002116  EM
+             19 -0.61440965D+05   12.7558376    0.0002076  EM
+             20 -0.61428428D+05   12.5369383    0.0002040  EM
+             21 -0.61416095D+05   12.3334907    0.0002008  EM
+             22 -0.61403959D+05   12.1358700    0.0001976  EM
+             23 -0.61392022D+05   11.9369170    0.0001944  EM
+             24 -0.61380290D+05   11.7313302    0.0001911  EM
+             25 -0.61368775D+05   11.5153869    0.0001876  EM
+             26 -0.61357488D+05   11.2868259    0.0001839  EM
+             27 -0.61346443D+05   11.0447750    0.0001800  EM
+             28 -0.61335654D+05   10.7896685    0.0001759  EM
+             29 -0.61325131D+05   10.5231108    0.0001716  EM
+             30 -0.61314883D+05   10.2476801    0.0001671  EM
+             31 -0.61304916D+05    9.9666816    0.0001625  EM
+             32 -0.61295232D+05    9.6838698    0.0001580  EM
+             33 -0.61285829D+05    9.4031653    0.0001534  EM
+             34 -0.61276701D+05    9.1283849    0.0001489  EM
+             35 -0.61267838D+05    8.8629981    0.0001446  EM
+             36 -0.61259228D+05    8.6099259    0.0001405  EM
+             37 -0.61250857D+05    8.3713940    0.0001367  EM
+             38 -0.61242708D+05    8.1488564    0.0001330  EM
+             39 -0.61234765D+05    7.9429952    0.0001297  EM
+             40 -0.61227011D+05    7.7537939    0.0001266  EM
+             41 -0.61219430D+05    7.5806650    0.0001238  EM
+             42 -0.61212008D+05    7.4226061    0.0001212  EM
+             43 -0.61204729D+05    7.2783578    0.0001189  EM
+             44 -0.61197583D+05    7.1465418    0.0001168  EM
+             45 -0.61190557D+05    7.0257688    0.0001148  EM
+             46 -0.61183642D+05    6.9147131    0.0001130  EM
+             47 -0.61176830D+05    6.8121577    0.0001113  EM
+             48 -0.61170113D+05    6.7170154    0.0001098  EM
+             49 -0.61163485D+05    6.6283333    0.0001084  EM
+             50 -0.61156936D+05    6.5490357    0.0001071  EM
+             51 -0.61150467D+05    6.4685903    0.0001058  EM
+             52 -0.61144074D+05    6.3928651    0.0001045  EM
+             53 -0.61137751D+05    6.3232889    0.0001034  EM
+             54 -0.61131494D+05    6.2566505    0.0001023  EM
+             55 -0.61125301D+05    6.1928976    0.0001013  EM
+             56 -0.61119170D+05    6.1316940    0.0001003  EM
+             57 -0.61113097D+05    6.0727060    0.0000994  EM
+             58 -0.61107081D+05    6.0156188    0.0000984  EM
+             59 -0.61101121D+05    5.9601300    0.0000975  EM
+             60 -0.61095215D+05    5.9059439    0.0000967  EM
+             61 -0.61089363D+05    5.8527672    0.0000958  EM
+             62 -0.60937049D+05  152.3140006    0.0024933  QN
+             63 -0.60910289D+05   26.7593147    0.0004391  EM
+             64 -0.60899577D+05   10.7119847    0.0001759  EM
+             65 -0.60892072D+05    7.5049592    0.0001232  EM
+             66 -0.60885893D+05    6.1793438    0.0001015  EM
+             67 -0.60880508D+05    5.3851831    0.0000884  EM
+             68 -0.60875706D+05    4.8020932    0.0000789  EM
+             69 -0.60871382D+05    4.3241183    0.0000710  EM
+             70 -0.60867470D+05    3.9111522    0.0000643  EM
+             71 -0.60863924D+05    3.5459288    0.0000583  EM
+             72 -0.60860704D+05    3.2199950    0.0000529  EM
+             73 -0.60857776D+05    2.9284783    0.0000481  EM
+             74 -0.60855108D+05    2.6680018    0.0000438  EM
+             75 -0.60852672D+05    2.4357977    0.0000400  EM
+             76 -0.60811961D+05   40.7114815    0.0006690  QN
+             77 -0.60805811D+05    6.1493374    0.0001011  EM
+             78 -0.60803165D+05    2.6461808    0.0000435  EM
+             79 -0.60801175D+05    1.9901413    0.0000327  EM
+             80 -0.60799540D+05    1.6345839    0.0000269  EM
+             81 -0.60798133D+05    1.4076630    0.0000232  EM
+             82 -0.60796892D+05    1.2409018    0.0000204  EM
+             83 -0.60795785D+05    1.1067945    0.0000182  EM
+             84 -0.60794792D+05    0.9935171    0.0000163  EM
+             85 -0.60793896D+05    0.8954030    0.0000147  EM
+             86 -0.60793087D+05    0.8093200    0.0000133  EM
+             87 -0.60792354D+05    0.7332563    0.0000121  EM
+             88 -0.60791688D+05    0.6657487    0.0000110  EM
+             89 -0.60791082D+05    0.6056425    0.0000100  EM
+             90 -0.60785894D+05    5.1881984    0.0000853  QN
+             91 -0.60784660D+05    1.2342380    0.0000203  EM
+             92 -0.60784169D+05    0.4903538    0.0000081  EM
+             93 -0.60783878D+05    0.2919048    0.0000048  EM
+             94 -0.60783683D+05    0.1942827    0.0000032  EM
+             95 -0.60783541D+05    0.1417799    0.0000023  EM
+             96 -0.60783430D+05    0.1115437    0.0000018  EM
+             97 -0.60783338D+05    0.0916706    0.0000015  EM
+             98 -0.60783257D+05    0.0810270    0.0000013  EM
+             99 -0.60783187D+05    0.0703860    0.0000012  EM
+            100 -0.60783124D+05    0.0630682    0.0000010  EM
+            101 -0.60783067D+05    0.0570135    0.0000009  EM
+            102 -0.60783015D+05    0.0518826    0.0000009  EM
+            103 -0.60782967D+05    0.0474381    0.0000008  EM
+            104 -0.60782924D+05    0.0435312    0.0000007  EM
+            105 -0.60782884D+05    0.0400617    0.0000007  EM
+            106 -0.60782847D+05    0.0369582    0.0000006  EM
+            107 -0.60782813D+05    0.0341674    0.0000006  EM
+            108 -0.60782781D+05    0.0316474    0.0000005  EM
+            109 -0.60782752D+05    0.0293647    0.0000005  EM
+            110 -0.60782724D+05    0.0272915    0.0000004  EM
+            111 -0.60782699D+05    0.0254043    0.0000004  EM
+            112 -0.60782675D+05    0.0236833    0.0000004  EM
+            113 -0.60782653D+05    0.0221110    0.0000004  EM
+            114 -0.60782633D+05    0.0206725    0.0000003  EM
+            115 -0.60782613D+05    0.0193544    0.0000003  EM
+            116 -0.60782595D+05    0.0181450    0.0000003  EM
+            117 -0.60782578D+05    0.0170340    0.0000003  EM
+            118 -0.60782562D+05    0.0160121    0.0000003  EM
+            119 -0.60782547D+05    0.0150710    0.0000002  EM
+            120 -0.60782533D+05    0.0142033    0.0000002  EM
+            121 -0.60782519D+05    0.0134023    0.0000002  EM
+            122 -0.60782507D+05    0.0126620    0.0000002  EM
+            123 -0.60782495D+05    0.0119771    0.0000002  EM
+            124 -0.60782483D+05    0.0113426    0.0000002  EM
+            125 -0.60782473D+05    0.0107542    0.0000002  EM
+            126 -0.60782462D+05    0.0102079    0.0000002  EM
+            127 -0.60782453D+05    0.0097001    0.0000002  EM
+            128 -0.60782443D+05    0.0092275    0.0000002  EM
+            129 -0.60782435D+05    0.0087873    0.0000001  EM
+            130 -0.60782426D+05    0.0083768    0.0000001  EM
+            131 -0.60782418D+05    0.0079935    0.0000001  EM
+            132 -0.60782411D+05    0.0076352    0.0000001  EM
+            133 -0.60782403D+05    0.0072999    0.0000001  EM
+            134 -0.60782396D+05    0.0069859    0.0000001  EM
+            135 -0.60782390D+05    0.0066914    0.0000001  EM
+            136 -0.60782383D+05    0.0064150    0.0000001  EM
+            137 -0.60782380D+05    0.0031052    0.0000001  QN
+            138 -0.60782377D+05    0.0029599    0.0000000  EM
+            139 -0.60782371D+05    0.0059997    0.0000001  EM
+            140 -0.60782366D+05    0.0056784    0.0000001  EM
+            141 -0.60782360D+05    0.0054656    0.0000001  EM
+            142 -0.60782355D+05    0.0052606    0.0000001  EM
+            143 -0.60782350D+05    0.0050671    0.0000001  EM
+            144 -0.60782345D+05    0.0048842    0.0000001  EM
+            145 -0.60782340D+05    0.0047112    0.0000001  EM
+            146 -0.60782336D+05    0.0045474    0.0000001  EM
+            147 -0.60782331D+05    0.0043922    0.0000001  EM
+            148 -0.60782327D+05    0.0042450    0.0000001  EM
+            149 -0.60782323D+05    0.0041053    0.0000001  EM
+            150 -0.60782319D+05    0.0039725    0.0000001  EM
+            151 -0.60782315D+05    0.0038462    0.0000001  EM
+            152 -0.60782311D+05    0.0037259    0.0000001  EM
+            153 -0.60782308D+05    0.0036114    0.0000001  EM
+            154 -0.60782304D+05    0.0035022    0.0000001  EM
+            155 -0.60782301D+05    0.0033980    0.0000001  EM
+            156 -0.60782298D+05    0.0032986    0.0000001  EM
+            157 -0.60782294D+05    0.0032035    0.0000001  EM
+            158 -0.60782291D+05    0.0031126    0.0000001  EM
+            159 -0.60782288D+05    0.0030256    0.0000000  EM
+            160 -0.60782285D+05    0.0029423    0.0000000  EM
+            161 -0.60782282D+05    0.0028624    0.0000000  EM
+            162 -0.60782280D+05    0.0027859    0.0000000  EM
+            163 -0.60782277D+05    0.0027124    0.0000000  EM
+            164 -0.60782274D+05    0.0026418    0.0000000  EM
+            165 -0.60782272D+05    0.0025740    0.0000000  EM
+            166 -0.60782269D+05    0.0025089    0.0000000  EM
+            167 -0.60782267D+05    0.0024462    0.0000000  EM
+            168 -0.60782264D+05    0.0023858    0.0000000  EM
+            169 -0.60782262D+05    0.0023277    0.0000000  EM
+            170 -0.60782260D+05    0.0022716    0.0000000  EM
+            171 -0.60782257D+05    0.0022176    0.0000000  EM
+            172 -0.60782255D+05    0.0021655    0.0000000  EM
+            173 -0.60782253D+05    0.0021151    0.0000000  EM
+            174 -0.60782251D+05    0.0020665    0.0000000  EM
+            175 -0.60782249D+05    0.0020196    0.0000000  EM
+            176 -0.60782247D+05    0.0019741    0.0000000  EM
+            177 -0.60782245D+05    0.0019302    0.0000000  EM
+            178 -0.60782243D+05    0.0018877    0.0000000  EM
+            179 -0.60782242D+05    0.0018283    0.0000000  EM
+            180 -0.60782240D+05    0.0018242    0.0000000  EM
+            181 -0.60782238D+05    0.0017675    0.0000000  EM
+            182 -0.60782236D+05    0.0017309    0.0000000  EM
+            183 -0.60782234D+05    0.0016944    0.0000000  EM
+            184 -0.60782233D+05    0.0016591    0.0000000  EM
+            185 -0.60782231D+05    0.0016248    0.0000000  EM
+            186 -0.60782230D+05    0.0015915    0.0000000  EM
+            187 -0.60782228D+05    0.0015591    0.0000000  EM
+            188 -0.60782227D+05    0.0015277    0.0000000  EM
+            189 -0.60782225D+05    0.0014971    0.0000000  EM
+            190 -0.60782224D+05    0.0014674    0.0000000  EM
+            191 -0.60782222D+05    0.0014385    0.0000000  EM
+            192 -0.60782221D+05    0.0014104    0.0000000  EM
+            193 -0.60782219D+05    0.0013830    0.0000000  EM
+            194 -0.60782218D+05    0.0013563    0.0000000  EM
+            195 -0.60782217D+05    0.0013303    0.0000000  EM
+            196 -0.60782215D+05    0.0013050    0.0000000  EM
+            197 -0.60782214D+05    0.0012803    0.0000000  EM
+            198 -0.60782213D+05    0.0012562    0.0000000  EM
+            199 -0.60782212D+05    0.0012328    0.0000000  EM
+            200 -0.60782210D+05    0.0012099    0.0000000  EM
+            201 -0.60782209D+05    0.0011875    0.0000000  EM
+            202 -0.60782208D+05    0.0011657    0.0000000  EM
+            203 -0.60782207D+05    0.0011444    0.0000000  EM
+            204 -0.60782206D+05    0.0011236    0.0000000  EM
+            205 -0.60782205D+05    0.0011032    0.0000000  EM
+            206 -0.60782204D+05    0.0010834    0.0000000  EM
+            207 -0.60782202D+05    0.0010639    0.0000000  EM
+            208 -0.60782201D+05    0.0010450    0.0000000  EM
+            209 -0.60782200D+05    0.0010264    0.0000000  EM
+            210 -0.60782199D+05    0.0010083    0.0000000  EM
+            211 -0.60782198D+05    0.0009905    0.0000000  EM
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              F9            F9_SE
+              ________      ________
+ 1              0.002         0.624
+
+
+           Covariances
+              F9            F9_SE
+              ________      ________
+ F9             0.519
+ F9_SE         -0.160         0.091
+
+
+           Correlations
+              F9            F9_SE
+              ________      ________
+ F9             1.000
+ F9_SE         -0.735         1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values, estimated factor scores)
+  Scatterplots (sample values, estimated factor scores)
+  Sample proportions and estimated probabilities
+  Latent variable distribution plots
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    withinfamrGE_factor_score_part4
+
+  Order and format of variables
+
+    H3TO38         F10.3
+    H3TO40         F10.3
+    H3TO7          F10.3
+    H3TO110        F10.3
+    H3TO113        F10.3
+    H3TO119        F10.3
+    AID            I9
+    F9             F10.3
+    F9_SE          F10.3
+    FAM            I9
+
+  Save file format
+    6F10.3 I9 2F10.3 I9
+
+  Save file record length    10000
+
+
+DIAGRAM INFORMATION
+
+  Use View Diagram under the Diagram menu in the Mplus Editor to view the diagram.
+  If running Mplus from the Mplus Diagrammer, the diagram opens automatically.
+
+  Diagram output
+    c:\repo\2024_within_fam_rge\analysis\factor_score_par_rel_parent_part_4.dgm
+
+     Beginning Time:  16:50:31
+        Ending Time:  16:51:20
+       Elapsed Time:  00:00:49
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

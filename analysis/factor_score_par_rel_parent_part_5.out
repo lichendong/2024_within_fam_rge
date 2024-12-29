@@ -1,0 +1,545 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+12/26/2024   4:54 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+          Causal rGE on differential parenting;
+
+  DATA:
+          FILE IS "c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv";
+
+  VARIABLE:
+          Names are AID FAM sex age_1 age_3
+          white african native asian other hispanic
+          income par_ed
+          PC34A PC34B PC34C PC34D PC34E PC44A
+          H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          H1TO29 H1TO33 H1TO9 H1DS14
+          H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+          H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+          par_age par_sex par_marry
+          PA61 PA62 PB22
+          PC10 PC11 PC12 PC17
+          PC32
+          H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+
+          usevariables are FAM
+          !PC34A PC34B PC34C PC34D PC34E PC44A
+          !H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          !H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          !H1TO29 H1TO33 H1TO9 H1DS14
+          !H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          !H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          !H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          !H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+          !H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+          PA61 PA62 PB22
+          !PC10 PC11 PC12 PC17
+          !H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          !H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+          ;
+
+          IDVARIABLE = AID;
+
+          CATEGORICAL ARE
+          !PC34A PC34B PC34C PC34D PC34E PC44A
+          !H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          !H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          !H1TO29 H1TO33 H1TO9 H1DS14
+          !H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          !H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          !H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          !PC10 PC11 PC12 PC17
+          !H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          !H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+          ;
+
+          COUNT ARE
+          !H1TO15 (bi) H1TO17 (bi) H1TO5 (bi) H1TO32 (bi)
+          !H1TO36 (bi) H1TO42 (bi)
+          !H3TO38 (bi) H3TO40 (bi)
+          !H3TO7 (bi) H3TO110 (bi) H3TO113 (bi) H3TO119 (bi)
+          PA61 (i) PA62 (i) PB22 (i)
+          ;
+
+          CLUSTER IS FAM;
+
+          Missing are .;
+
+  DEFINE:
+
+
+  ANALYSIS:
+
+          TYPE = COMPLEX;
+          !ESTIMATOR = BAYES;
+          ESTIMATOR=MLR;
+          !BOOTSTRAP = 20000;
+          !FBITERATIONS= 20000;
+  MODEL:
+
+          !f1 BY PC34A* PC34B PC34C PC34D PC34E PC44A;
+          !f2 BY H1WP9* H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5;
+          !f3 BY H1WP13* H1WP14 H1PF23 H1PF24 H1PF25;
+          !f4 BY H1TO29* H1TO33 H1TO9 H1DS14;
+          !f5 BY H1ED19* H1ED20 H1ED22 H1ED23 H1ED24 H1PR2;
+          !f6 BY H1DS2* H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7;
+          !f7 BY H3DS1* H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23;
+
+
+          !f8 BY H1TO15* H1TO17 H1TO5 H1TO32 H1TO36 H1TO42;
+          !f9 BY H3TO38* H3TO40 H3TO7 H3TO110 H3TO113 H3TO119;
+          f10 BY PA61* PA62 PB22;
+
+          !f11 BY PC10* PC11 PC12 PC17;
+          !f12 BY H1WP1* H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7;
+          !f13 BY H1WP17F* H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+
+          [f10@0];
+          f10@1;
+
+
+  MODEL CONSTRAINT:
+
+  OUTPUT: TECH1 TECH8 MODINDICES;
+  PLOT: TYPE = PLOT3;
+
+  SAVEDATA:
+  FILE IS withinfamrGE_factor_score_part5;
+
+  SAVE = FSCORES;
+
+
+
+
+*** WARNING in OUTPUT command
+  MODINDICES option is not available for ALGORITHM=INTEGRATION.
+  Request for MODINDICES is ignored.
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  1267
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+Causal rGE on differential parenting;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        8707
+
+Number of dependent variables                                    3
+Number of independent variables                                  0
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Count
+   PA61        PA62        PB22
+
+Continuous latent variables
+   F10
+
+Variables with special functions
+
+  Cluster variable      FAM
+  ID variable           AID
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            1
+  Adaptive quadrature                                           ON
+Cholesky                                                        ON
+
+Input data file(s)
+  c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters        7804
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+COUNT PROPORTION OF ZERO, MINIMUM AND MAXIMUM VALUES
+
+      PA61        0.000         1         6
+      PA62        0.000         1         6
+      PB22        0.000         1         6
+
+
+     IN THE OPTIMIZATION, ONE OR MORE LOGIT SCALE PARAMETERS APPROACHED AND WERE
+     SET AT THE EXTREME VALUES.  EXTREME VALUES ARE -15.000 AND 15.000.
+     THE FOLLOWING PARAMETERS WERE SET AT THESE VALUES:
+     * MEAN OF PA61#1
+     * MEAN OF PA62#1
+     * MEAN OF PB22#1
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                        9
+
+Loglikelihood
+
+          H0 Value                      -35505.139
+          H0 Scaling Correction Factor      0.7767
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   71028.278
+          Bayesian (BIC)                 71091.925
+          Sample-Size Adjusted BIC       71063.325
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit for the Count Outcomes
+
+          Pearson Chi-Square
+
+          Value                           7585.758
+          Degrees of Freedom                   333
+          P-Value                           0.0000
+
+          Likelihood Ratio Chi-Square
+
+          Value                           3455.933
+          Degrees of Freedom                   333
+          P-Value                           0.0000
+
+Chi-Square Test for MCAR under the Unrestricted Latent Class Indicator Model
+for the Count Outcomes
+
+          Pearson Chi-Square
+
+          Value                            113.266
+          Degrees of Freedom                   162
+          P-Value                           0.9987
+
+          Likelihood Ratio Chi-Square
+
+          Value                            101.417
+          Degrees of Freedom                   162
+          P-Value                           0.9999
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F10      BY
+    PA61              -0.209      0.009    -22.426      0.000
+    PA62              -0.157      0.012    -13.028      0.000
+    PB22              -0.252      0.008    -31.945      0.000
+
+ Means
+    F10                0.000      0.000    999.000    999.000
+    PA61#1           -15.000      0.000    999.000    999.000
+    PA62#1           -15.000      0.000    999.000    999.000
+    PB22#1           -15.000      0.000    999.000    999.000
+
+ Intercepts
+    PA61               0.664      0.006    103.291      0.000
+    PA62               0.217      0.006     34.980      0.000
+    PB22               0.920      0.009    107.878      0.000
+
+ Variances
+    F10                1.000      0.000    999.000    999.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.532E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              PA61#1        PA61          PA62#1        PA62          PB22#1
+              ________      ________      ________      ________      ________
+ 1                  1             2             3             4             5
+
+
+           NU
+              PB22
+              ________
+ 1                  6
+
+
+           LAMBDA
+              F10
+              ________
+ PA61#1             0
+ PA61               7
+ PA62#1             0
+ PA62               8
+ PB22#1             0
+ PB22               9
+
+
+           THETA
+              PA61#1        PA61          PA62#1        PA62          PB22#1
+              ________      ________      ________      ________      ________
+ PA61#1             0
+ PA61               0             0
+ PA62#1             0             0             0
+ PA62               0             0             0             0
+ PB22#1             0             0             0             0             0
+ PB22               0             0             0             0             0
+
+
+           THETA
+              PB22
+              ________
+ PB22               0
+
+
+           ALPHA
+              F10
+              ________
+ 1                  0
+
+
+           BETA
+              F10
+              ________
+ F10                0
+
+
+           PSI
+              F10
+              ________
+ F10                0
+
+
+     STARTING VALUES
+
+
+           NU
+              PA61#1        PA61          PA62#1        PA62          PB22#1
+              ________      ________      ________      ________      ________
+ 1            -15.000         0.686       -15.000         0.230       -15.000
+
+
+           NU
+              PB22
+              ________
+ 1              0.952
+
+
+           LAMBDA
+              F10
+              ________
+ PA61#1         0.000
+ PA61           1.000
+ PA62#1         0.000
+ PA62           1.000
+ PB22#1         0.000
+ PB22           1.000
+
+
+           THETA
+              PA61#1        PA61          PA62#1        PA62          PB22#1
+              ________      ________      ________      ________      ________
+ PA61#1         0.000
+ PA61           0.000         0.000
+ PA62#1         0.000         0.000         0.000
+ PA62           0.000         0.000         0.000         0.000
+ PB22#1         0.000         0.000         0.000         0.000         0.000
+ PB22           0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PB22
+              ________
+ PB22           0.000
+
+
+           ALPHA
+              F10
+              ________
+ 1              0.000
+
+
+           BETA
+              F10
+              ________
+ F10            0.000
+
+
+           PSI
+              F10
+              ________
+ F10            1.000
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.39175191D+05    0.0000000    0.0000000  EM
+              2 -0.36827269D+05 2347.9215023    0.0599339  EM
+              3 -0.36711436D+05  115.8332994    0.0031453  FS
+              4 -0.35615609D+05 1095.8270379    0.0298497  EM
+              5 -0.35531252D+05   84.3570466    0.0023685  EM
+              6 -0.35513550D+05   17.7016416    0.0004982  EM
+              7 -0.35508205D+05    5.3448323    0.0001505  EM
+              8 -0.35506323D+05    1.8821941    0.0000530  EM
+              9 -0.35505612D+05    0.7117063    0.0000200  EM
+             10 -0.35505331D+05    0.2802063    0.0000079  EM
+             11 -0.35505218D+05    0.1131264    0.0000032  EM
+             12 -0.35505172D+05    0.0464058    0.0000013  EM
+             13 -0.35505153D+05    0.0192310    0.0000005  EM
+             14 -0.35505145D+05    0.0080221    0.0000002  EM
+             15 -0.35505141D+05    0.0033609    0.0000001  EM
+             16 -0.35505140D+05    0.0014123    0.0000000  EM
+             17 -0.35505139D+05    0.0005948    0.0000000  EM
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              F10           F10_SE
+              ________      ________
+ 1              0.000         0.901
+
+
+           Covariances
+              F10           F10_SE
+              ________      ________
+ F10            0.188
+ F10_SE         0.004         0.001
+
+
+           Correlations
+              F10           F10_SE
+              ________      ________
+ F10            1.000
+ F10_SE         0.305         1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values, estimated factor scores)
+  Scatterplots (sample values, estimated factor scores)
+  Sample proportions and estimated probabilities
+  Latent variable distribution plots
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    withinfamrGE_factor_score_part5
+
+  Order and format of variables
+
+    PA61           F10.3
+    PA62           F10.3
+    PB22           F10.3
+    AID            I9
+    F10            F10.3
+    F10_SE         F10.3
+    FAM            I9
+
+  Save file format
+    3F10.3 I9 2F10.3 I9
+
+  Save file record length    10000
+
+
+DIAGRAM INFORMATION
+
+  Use View Diagram under the Diagram menu in the Mplus Editor to view the diagram.
+  If running Mplus from the Mplus Diagrammer, the diagram opens automatically.
+
+  Diagram output
+    c:\repo\2024_within_fam_rge\analysis\factor_score_par_rel_parent_part_5.dgm
+
+     Beginning Time:  16:54:45
+        Ending Time:  16:54:46
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

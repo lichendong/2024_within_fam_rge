@@ -1,0 +1,81 @@
+VERSION 1.1.0
+INPUT
+TITLE:
+
+        Causal rGE on differential parenting;
+
+DATA:
+        FILE IS "c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv";
+VARIABLE:
+        Names are AID FAM sex age_1 age_3
+        white african native asian other hispanic
+        income par_ed
+        PC34A PC34B PC34C PC34D PC34E PC44A
+        H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+        H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+        H1TO29 H1TO33 H1TO9 H1DS14
+        H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+        H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+        H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+        H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+        H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+        H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+        H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+        par_age par_sex par_marry
+        PA61 PA62 PB22
+        PC10 PC11 PC12 PC17
+        PC32
+        H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+        H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+        usevariables are FAM
+        H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+        ;
+        IDVARIABLE = AID;
+        CATEGORICAL ARE
+        ;
+        COUNT ARE
+        H1TO15 (i) H1TO17 (i) H1TO5 (i) H1TO32 (i)
+        H1TO36 (i) H1TO42 (i)
+        ;
+        CLUSTER IS FAM;
+        Missing are .;
+ANALYSIS:
+        TYPE = COMPLEX;
+        ESTIMATOR=MLR;
+OUTPUT:
+ TECH1 TECH8 MODINDICES;
+SAVEDATA:
+FILE IS withinfamrGE_factor_score_part3;
+SAVE = FSCORES;
+PLOT:
+ TYPE = PLOT3;
+MODEL:
+        f8 BY H1TO15* H1TO17 H1TO5 H1TO32 H1TO36 H1TO42;
+        [f8@0];
+        f8@1;
+INPUT_END
+2
+0
+0
+0
+MLR
+1
+GENERAL
+0
+12
+1
+0
+h1to15#1 h1to15 h1to17#1 h1to17 h1to5#1 h1to5 h1to32#1 h1to32 h1to36#1 h1to36 h1to42#1 h1to42 f8
+1
+0 -1 0 -1 0 -1 0 -1 0 -1 0 -1 0
+0
+1
+f8
+h1to15 h1to17 h1to5 h1to32 h1to36 h1to42
+1 1 f8 h1to15    1.222    0.020
+1 1 f8 h1to17    1.944    0.035
+1 1 f8 h1to5    3.119    0.065
+1 1 f8 h1to32    6.698    0.273
+1 1 f8 h1to36   12.382    1.928
+1 1 f8 h1to42    8.375    0.743
+5 1 f8    1.000    0.000
