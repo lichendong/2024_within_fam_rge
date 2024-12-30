@@ -496,6 +496,21 @@ table(data_within$par_sex)
 table(data_within$par_marry)
 
 
+table(data_within$white)
+table(data_within$african)
+table(data_within$native)
+table(data_within$asian)
+table(data_within$other)
+table(data_within$hispanic)
+
+VCA::anovaVCA(white ~ FAMID, Data = data_within |> as.data.frame())
+VCA::anovaVCA(african ~ FAMID, Data = data_within |> as.data.frame())
+VCA::anovaVCA(native ~ FAMID, Data = data_within |> as.data.frame())
+VCA::anovaVCA(asian ~ FAMID, Data = data_within |> as.data.frame())
+VCA::anovaVCA(other ~ FAMID, Data = data_within |> as.data.frame())
+VCA::anovaVCA(hispanic ~ FAMID, Data = data_within |> as.data.frame())
+
+
 VCA::anovaVCA(age_1 ~ FAMID, Data = data_within |> as.data.frame())
 VCA::anovaVCA(age_3 ~ FAMID, Data = data_within |> as.data.frame())
 VCA::anovaVCA(par_age ~ FAMID, Data = data_within |> as.data.frame())

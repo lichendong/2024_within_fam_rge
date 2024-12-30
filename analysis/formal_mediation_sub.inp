@@ -41,6 +41,7 @@ VARIABLE:
 
 
 DEFINE:
+        del_peer = -del_peer;
         afr = 0;
         eas = 0;
         his = 0;
@@ -170,7 +171,7 @@ NEW(iwa1parent iwa1child iwa1peer iwa1scho
     piwa1parent piwa1child piwa1peer piwa1scho
     
     iwa2parent iwa2child iwa2peer iwa2scho
-    tw2parent tw2child tw2peer tw2scho
+    tw2
     piwa2parent piwa2child piwa2peer piwa2scho
     
     iba1parent iba1child iba1peer iba1scho
@@ -178,7 +179,7 @@ NEW(iwa1parent iwa1child iwa1peer iwa1scho
     piba1parent piba1child piba1peer piba1scho
     
     iba2parent iba2child iba2peer iba2scho
-    tb2parent tb2child tb2peer tb2scho
+    tb2
     piba2parent piba2child piba2peer piba2scho);
     
     iwa1parent = a1w*b1w_parent; 
@@ -201,15 +202,15 @@ NEW(iwa1parent iwa1child iwa1peer iwa1scho
     iwa2peer = tw1peer*c1w_peer;
     iwa2scho = tw1scho*c1w_scho;
 
-    tw2parent = f1w + tw1parent*c1w_parent;
-    tw2child = f1w + tw1child*c1w_child;
-    tw2peer = f1w + tw1peer*c1w_peer;
-    tw2scho = f1w + tw1scho*c1w_scho;
+    tw2 = f1w + tw1parent*c1w_parent +
+          tw1child*c1w_child +
+          tw1peer*c1w_peer +
+          tw1scho*c1w_scho;
 
-    piwa2parent = iwa2parent/tw2parent;
-    piwa2child = iwa2child/tw2child;
-    piwa2peer = iwa2peer/tw2peer;
-    piwa2scho = iwa2scho/tw2scho;
+    piwa2parent = iwa2parent/tw2;
+    piwa2child = iwa2child/tw2;
+    piwa2peer = iwa2peer/tw2;
+    piwa2scho = iwa2scho/tw2;
 
 
 
@@ -233,15 +234,15 @@ NEW(iwa1parent iwa1child iwa1peer iwa1scho
     iba2peer = tb1peer*c1b_peer;
     iba2scho = tb1scho*c1b_scho;
 
-    tb2parent = f1b + tb1parent*c1b_parent;
-    tb2child = f1b + tb1child*c1b_child;
-    tb2peer = f1b + tb1peer*c1b_peer;
-    tb2scho = f1b + tb1scho*c1b_scho;
+    tb2 = f1b + tb1parent*c1b_parent + 
+          tb1child*c1b_child + 
+          tb1peer*c1b_peer +
+          tb1scho*c1b_scho;
 
-    piba2parent = iba2parent/tb2parent;
-    piba2child = iba2child/tb2child;
-    piba2peer = iba2peer/tb2peer;
-    piba2scho = iba2scho/tb2scho;
+    piba2parent = iba2parent/tb2;
+    piba2child = iba2child/tb2;
+    piba2peer = iba2peer/tb2;
+    piba2scho = iba2scho/tb2;
 
 OUTPUT: TECH1 TECH8 CINTERVAL;
 PLOT: TYPE = PLOT2;
