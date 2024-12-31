@@ -1,0 +1,57 @@
+---
+title: "Add Health Data Preparation for Within-Family Analysis of rGE"
+author: "LiChen Dong"
+date: "`r lubridate::today()`"
+format: 
+  html: 
+    embed-resources: true
+    toc: true 
+    toc_depth: 4
+editor_options: 
+  chunk_output_type: console
+---
+
+
+## Setup
+
+```{r}
+#| output: false # This tells R not to print the output of this code chunk
+
+options(conflicts.policy = "depends.ok")
+library(tidyverse)
+library(lavaan)
+theme_set(jtools::theme_apa())
+path_data <- "isrcap_2025"
+```
+
+
+## Read in data 
+
+```{r}
+data <- readxl::read_xlsx(here::here(path_data, "coefficients_mediation.xlsx"), trim_ws = F) |> 
+        glimpse()
+```
+
+## Make `est` numeric and seperate `ci` into `lwr` and `upr`
+
+```{r}
+data <- data |> mutate(path = fct_rev(fct(path)),
+                       est = str_replace(est, "\\*$", ""),
+                       lwr = str_split_i(ci, "\\s~\\s", 1),
+                       upr = str_split_i(ci, "\\s~\\s", 2),
+                       across(c(est,lwr,upr),as.numeric),
+                       across(where(is.numeric), ~ num(., digits = 3)))
+```
+
+## Forest Plot
+
+```{r}
+ggplot(data = data, aes(y = est, ymin = lwr, ymax = upr, x = path, color = level, shape = level ,group = level)) +
+  geom_hline(yintercept = 0, color = "black", linetype = "dashed") +
+  geom_errorbar(position = position_dodge(.5), size = .8) +
+  geom_point(position = position_dodge(.5), size = 2, color = "black") +
+  theme(axis.text.y = element_text(hjust=0)) +
+  facet_grid(. ~ model) +
+  coord_flip(ylim = c(-.5, .5))
+```
+
