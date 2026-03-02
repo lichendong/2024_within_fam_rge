@@ -1,0 +1,1666 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+04/06/2025   2:04 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+          Causal rGE on differential parenting;
+
+  DATA:
+          FILE IS "c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv";
+
+  VARIABLE:
+          Names are AID FAM sex age_1 age_3
+          white african native asian other hispanic
+          income par_ed
+          PC34A PC34B PC34C PC34D PC34E PC44A
+          H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          H1TO29 H1TO33 H1TO9 H1DS14
+          H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+          H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+          H3RA1 H3RA2 H3RA3 H3RA4 H3RA5 H3RA6 H3RA7 H3RA8
+          H3RA9 H3RA10 H3RA11 H3RA12 H3RA13 H3RA14 H3RA15
+          H3RA16 H3RA17
+          par_age par_sex par_marry
+          PA61 PA62 PB22
+          PC10 PC11 PC12 PC17
+          PC32
+          H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+
+          usevariables are FAM
+          !PC34A PC34B PC34C PC34D PC34E PC44A
+          !H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          !H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          !H1TO29 H1TO33 H1TO9 H1DS14
+          !H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          !H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          !H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          !H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+          !H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+          H3RA1 H3RA2 H3RA3 H3RA4 H3RA5 H3RA6 H3RA7 H3RA8
+          H3RA9 H3RA10 H3RA11 H3RA12 H3RA13 H3RA14 H3RA15
+          H3RA16 H3RA17
+          !PA61 PA62 PB22
+          !PC10 PC11 PC12 PC17
+          !H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          !H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+          ;
+
+          IDVARIABLE = AID;
+
+          CATEGORICAL ARE
+          !PC34A PC34B PC34C PC34D PC34E PC44A
+          !H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          !H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          !H1TO29 H1TO33 H1TO9 H1DS14
+          !H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          !H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          !H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          H3RA1 H3RA2 H3RA3 H3RA4 H3RA5 H3RA6 H3RA7 H3RA8
+          H3RA9 H3RA10 H3RA11 H3RA12 H3RA13 H3RA14 H3RA15
+          H3RA16 H3RA17
+          !PC10 PC11 PC12 PC17
+          !H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          !H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+          ;
+
+          COUNT ARE
+          !H1TO15 (bi) H1TO17 (bi) H1TO5 (bi) H1TO32 (bi)
+          !H1TO36 (bi) H1TO42 (bi)
+          !H3TO38 (bi) H3TO40 (bi)
+          !H3TO7 (bi) H3TO110 (bi) H3TO113 (bi) H3TO119 (bi)
+          !PA61 (i) PA62 (i) PB22 (i)
+          ;
+
+          CLUSTER IS FAM;
+
+          Missing are .;
+
+  DEFINE:
+
+
+  ANALYSIS:
+
+          TYPE = COMPLEX;
+          !ESTIMATOR = BAYES;
+          ESTIMATOR=WLSMV;
+          !BOOTSTRAP = 20000;
+          !FBITERATIONS= 20000;
+  MODEL:
+
+          !f1 BY PC34A* PC34B PC34C PC34D PC34E PC44A;
+          !f2 BY H1WP9* H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5;
+          !f3 BY H1WP13* H1WP14 H1PF23 H1PF24 H1PF25;
+          !f4 BY H1TO29* H1TO33 H1TO9 H1DS14;
+          !f5 BY H1ED19* H1ED20 H1ED22 H1ED23 H1ED24 H1PR2;
+          !f6 BY H1DS2* H1DS12 H1FV8 H1DS6 H1DS9
+          !H1DS10 H1DS13 H1DS11 H1FV7 H1DS7;
+          !f7 BY H3DS1* H3DS5 H3DS18I H3DS17 H3DS2
+          !H3DS3 H3DS6 H3DS4 H3DS18H H3HR23;
+
+
+          !f8 BY H1TO15* H1TO17 H1TO5 H1TO32 H1TO36 H1TO42;
+          !f9 BY H3TO38* H3TO40 H3TO7 H3TO110 H3TO113 H3TO119;
+          f14 BY H3RA1* H3RA2 H3RA3 H3RA4 H3RA5 H3RA6 H3RA7 H3RA8
+          H3RA9 H3RA10 H3RA11 H3RA12 H3RA13 H3RA14 H3RA15
+          H3RA16 H3RA17;
+
+          !f11 BY PC10* PC11 PC12 PC17;
+          !f12 BY H1WP1* H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7;
+          !f13 BY H1WP17F* H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+
+          [f14@0];
+          f14@1;
+          H3RA14 WITH H3RA16;
+          H3RA12 WITH H3RA14;
+          H3RA13 WITH H3RA17;
+
+  MODEL CONSTRAINT:
+
+  OUTPUT: TECH1 TECH8 MODINDICES(ALL);
+  PLOT: TYPE = PLOT3;
+
+  SAVEDATA:
+  FILE IS withinfamrGE_factor_score_adhd;
+
+  SAVE = FSCORES;
+
+
+
+
+*** WARNING in OUTPUT command
+  TECH8 option is available only with analysis types MIXTURE, RANDOM, or
+  TWOLEVEL with estimators ML, MLF, or MLR or ALGORITHM=INTEGRATION.
+  Request for TECH8 is ignored.
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  1602
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+Causal rGE on differential parenting;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        8372
+
+Number of dependent variables                                   17
+Number of independent variables                                  0
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   H3RA1       H3RA2       H3RA3       H3RA4       H3RA5       H3RA6
+   H3RA7       H3RA8       H3RA9       H3RA10      H3RA11      H3RA12
+   H3RA13      H3RA14      H3RA15      H3RA16      H3RA17
+
+Continuous latent variables
+   F14
+
+Variables with special functions
+
+  Cluster variable      FAM
+  ID variable           AID
+
+Estimator                                                    WLSMV
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Parameterization                                             DELTA
+
+Input data file(s)
+  c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            69
+     Number of clusters        7534
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              H3RA1         H3RA2         H3RA3         H3RA4         H3RA5
+              ________      ________      ________      ________      ________
+ H3RA1          0.995
+ H3RA2          0.993         0.997
+ H3RA3          0.995         0.997         0.999
+ H3RA4          0.994         0.996         0.997         0.998
+ H3RA5          0.995         0.996         0.998         0.997         0.999
+ H3RA6          0.993         0.995         0.996         0.996         0.997
+ H3RA7          0.995         0.996         0.998         0.997         0.998
+ H3RA8          0.994         0.995         0.997         0.997         0.997
+ H3RA9          0.993         0.995         0.996         0.996         0.996
+ H3RA10         0.992         0.994         0.996         0.995         0.995
+ H3RA11         0.993         0.994         0.996         0.995         0.995
+ H3RA12         0.994         0.995         0.997         0.997         0.997
+ H3RA13         0.994         0.995         0.997         0.996         0.996
+ H3RA14         0.995         0.996         0.998         0.997         0.998
+ H3RA15         0.994         0.996         0.998         0.997         0.998
+ H3RA16         0.995         0.996         0.998         0.997         0.998
+ H3RA17         0.994         0.995         0.997         0.996         0.997
+
+
+           Covariance Coverage
+              H3RA6         H3RA7         H3RA8         H3RA9         H3RA10
+              ________      ________      ________      ________      ________
+ H3RA6          0.997
+ H3RA7          0.997         0.999
+ H3RA8          0.996         0.998         0.998
+ H3RA9          0.995         0.996         0.996         0.997
+ H3RA10         0.994         0.995         0.995         0.994         0.996
+ H3RA11         0.994         0.996         0.995         0.995         0.994
+ H3RA12         0.996         0.997         0.997         0.996         0.995
+ H3RA13         0.995         0.997         0.996         0.995         0.995
+ H3RA14         0.996         0.998         0.997         0.996         0.996
+ H3RA15         0.996         0.998         0.997         0.996         0.996
+ H3RA16         0.997         0.998         0.997         0.996         0.996
+ H3RA17         0.996         0.997         0.997         0.995         0.995
+
+
+           Covariance Coverage
+              H3RA11        H3RA12        H3RA13        H3RA14        H3RA15
+              ________      ________      ________      ________      ________
+ H3RA11         0.996
+ H3RA12         0.995         0.998
+ H3RA13         0.995         0.996         0.997
+ H3RA14         0.996         0.997         0.997         0.999
+ H3RA15         0.996         0.997         0.997         0.998         0.999
+ H3RA16         0.996         0.998         0.997         0.998         0.998
+ H3RA17         0.995         0.997         0.996         0.997         0.997
+
+
+           Covariance Coverage
+              H3RA16        H3RA17
+              ________      ________
+ H3RA16         0.999
+ H3RA17         0.997         0.998
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    H3RA1
+      Category 1    0.260         2163.000
+      Category 2    0.528         4402.000
+      Category 3    0.163         1362.000
+      Category 4    0.049          407.000
+    H3RA2
+      Category 1    0.261         2175.000
+      Category 2    0.388         3239.000
+      Category 3    0.227         1894.000
+      Category 4    0.125         1040.000
+    H3RA3
+      Category 1    0.541         4526.000
+      Category 2    0.328         2746.000
+      Category 3    0.095          797.000
+      Category 4    0.035          293.000
+    H3RA4
+      Category 1    0.692         5785.000
+      Category 2    0.221         1844.000
+      Category 3    0.060          498.000
+      Category 4    0.028          230.000
+    H3RA5
+      Category 1    0.565         4727.000
+      Category 2    0.343         2869.000
+      Category 3    0.066          550.000
+      Category 4    0.026          216.000
+    H3RA6
+      Category 1    0.410         3425.000
+      Category 2    0.432         3609.000
+      Category 3    0.113          943.000
+      Category 4    0.045          374.000
+    H3RA7
+      Category 1    0.524         4381.000
+      Category 2    0.377         3156.000
+      Category 3    0.070          588.000
+      Category 4    0.028          237.000
+    H3RA8
+      Category 1    0.547         4574.000
+      Category 2    0.309         2584.000
+      Category 3    0.104          872.000
+      Category 4    0.039          326.000
+    H3RA9
+      Category 1    0.519         4332.000
+      Category 2    0.379         3165.000
+      Category 3    0.077          640.000
+      Category 4    0.025          209.000
+    H3RA10
+      Category 1    0.374         3117.000
+      Category 2    0.376         3134.000
+      Category 3    0.169         1407.000
+      Category 4    0.082          683.000
+    H3RA11
+      Category 1    0.597         4983.000
+      Category 2    0.313         2610.000
+      Category 3    0.070          582.000
+      Category 4    0.020          167.000
+    H3RA12
+      Category 1    0.357         2983.000
+      Category 2    0.304         2540.000
+      Category 3    0.181         1512.000
+      Category 4    0.158         1322.000
+    H3RA13
+      Category 1    0.458         3821.000
+      Category 2    0.420         3508.000
+      Category 3    0.089          742.000
+      Category 4    0.033          278.000
+    H3RA14
+      Category 1    0.393         3283.000
+      Category 2    0.403         3368.000
+      Category 3    0.144         1205.000
+      Category 4    0.061          506.000
+    H3RA15
+      Category 1    0.316         2642.000
+      Category 2    0.436         3645.000
+      Category 3    0.167         1398.000
+      Category 4    0.081          676.000
+    H3RA16
+      Category 1    0.506         4231.000
+      Category 2    0.355         2973.000
+      Category 3    0.098          818.000
+      Category 4    0.041          341.000
+    H3RA17
+      Category 1    0.407         3403.000
+      Category 2    0.447         3738.000
+      Category 3    0.104          868.000
+      Category 4    0.041          345.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE MODEL CONTAINS A NON-ZERO CORRELATION BETWEEN DEPENDENT VARIABLES.
+     SUCH CORRELATIONS ARE IGNORED IN THE COMPUTATION OF THE FACTOR SCORES.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       71
+
+Chi-Square Test of Model Fit
+
+          Value                           5525.894*
+          Degrees of Freedom                   116
+          P-Value                           0.0000
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.075
+          90 Percent C.I.                    0.073  0.076
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                0.945
+          TLI                                0.936
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                          99061.141
+          Degrees of Freedom                   136
+          P-Value                           0.0000
+
+WRMR (Weighted Root Mean Square Residual)
+
+          Value                              4.243
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F14      BY
+    H3RA1              0.643      0.008     83.152      0.000
+    H3RA2              0.605      0.008     74.009      0.000
+    H3RA3              0.750      0.007    112.974      0.000
+    H3RA4              0.724      0.008     90.648      0.000
+    H3RA5              0.694      0.008     87.755      0.000
+    H3RA6              0.704      0.007     99.420      0.000
+    H3RA7              0.765      0.006    121.859      0.000
+    H3RA8              0.669      0.008     83.296      0.000
+    H3RA9              0.696      0.008     92.745      0.000
+    H3RA10             0.462      0.010     46.171      0.000
+    H3RA11             0.684      0.008     84.417      0.000
+    H3RA12             0.501      0.009     53.195      0.000
+    H3RA13             0.651      0.008     81.439      0.000
+    H3RA14             0.451      0.010     44.300      0.000
+    H3RA15             0.815      0.005    162.593      0.000
+    H3RA16             0.686      0.007     91.863      0.000
+    H3RA17             0.619      0.008     75.268      0.000
+
+ H3RA14   WITH
+    H3RA16             0.276      0.009     30.484      0.000
+
+ H3RA12   WITH
+    H3RA14             0.263      0.010     27.320      0.000
+
+ H3RA13   WITH
+    H3RA17             0.194      0.008     22.934      0.000
+
+ Means
+    F14                0.000      0.000    999.000    999.000
+
+ Thresholds
+    H3RA1$1           -0.645      0.015    -43.016      0.000
+    H3RA1$2            0.799      0.016     51.351      0.000
+    H3RA1$3            1.656      0.023     70.886      0.000
+    H3RA2$1           -0.642      0.015    -43.118      0.000
+    H3RA2$2            0.381      0.014     26.799      0.000
+    H3RA2$3            1.152      0.018     64.624      0.000
+    H3RA3$1            0.104      0.014      7.482      0.000
+    H3RA3$2            1.125      0.017     64.847      0.000
+    H3RA3$3            1.811      0.026     69.715      0.000
+    H3RA4$1            0.502      0.015     34.606      0.000
+    H3RA4$2            1.359      0.020     69.020      0.000
+    H3RA4$3            1.919      0.028     67.782      0.000
+    H3RA5$1            0.164      0.014     11.827      0.000
+    H3RA5$2            1.331      0.019     69.101      0.000
+    H3RA5$3            1.946      0.029     67.225      0.000
+    H3RA6$1           -0.227      0.014    -16.228      0.000
+    H3RA6$2            1.004      0.017     60.366      0.000
+    H3RA6$3            1.698      0.024     70.206      0.000
+    H3RA7$1            0.060      0.014      4.352      0.000
+    H3RA7$2            1.289      0.019     68.102      0.000
+    H3RA7$3            1.906      0.028     67.534      0.000
+    H3RA8$1            0.119      0.014      8.565      0.000
+    H3RA8$2            1.065      0.017     62.063      0.000
+    H3RA8$3            1.762      0.025     69.958      0.000
+    H3RA9$1            0.048      0.014      3.458      0.001
+    H3RA9$2            1.272      0.019     67.779      0.000
+    H3RA9$3            1.959      0.029     66.926      0.000
+    H3RA10$1          -0.322      0.014    -22.946      0.000
+    H3RA10$2           0.673      0.015     44.708      0.000
+    H3RA10$3           1.393      0.020     69.877      0.000
+    H3RA11$1           0.246      0.014     17.696      0.000
+    H3RA11$2           1.342      0.019     69.404      0.000
+    H3RA11$3           2.053      0.032     65.073      0.000
+    H3RA12$1          -0.367      0.014    -25.838      0.000
+    H3RA12$2           0.415      0.014     29.116      0.000
+    H3RA12$3           1.002      0.017     60.169      0.000
+    H3RA13$1          -0.106      0.014     -7.663      0.000
+    H3RA13$2           1.164      0.018     65.432      0.000
+    H3RA13$3           1.834      0.027     68.531      0.000
+    H3RA14$1          -0.273      0.014    -19.340      0.000
+    H3RA14$2           0.825      0.016     52.526      0.000
+    H3RA14$3           1.550      0.022     70.788      0.000
+    H3RA15$1          -0.479      0.014    -33.248      0.000
+    H3RA15$2           0.681      0.015     45.354      0.000
+    H3RA15$3           1.399      0.020     69.799      0.000
+    H3RA16$1           0.015      0.014      1.072      0.284
+    H3RA16$2           1.087      0.017     63.336      0.000
+    H3RA16$3           1.742      0.025     70.636      0.000
+    H3RA17$1          -0.234      0.014    -16.731      0.000
+    H3RA17$2           1.057      0.017     62.215      0.000
+    H3RA17$3           1.736      0.025     70.301      0.000
+
+ Variances
+    F14                1.000      0.000    999.000    999.000
+
+
+R-SQUARE
+
+    Observed                   Residual
+    Variable        Estimate   Variance
+
+    H3RA1              0.413      0.587
+    H3RA2              0.366      0.634
+    H3RA3              0.562      0.438
+    H3RA4              0.524      0.476
+    H3RA5              0.482      0.518
+    H3RA6              0.496      0.504
+    H3RA7              0.585      0.415
+    H3RA8              0.447      0.553
+    H3RA9              0.484      0.516
+    H3RA10             0.214      0.786
+    H3RA11             0.469      0.531
+    H3RA12             0.251      0.749
+    H3RA13             0.424      0.576
+    H3RA14             0.203      0.797
+    H3RA15             0.665      0.335
+    H3RA16             0.470      0.530
+    H3RA17             0.383      0.617
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.830E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+MODEL MODIFICATION INDICES
+
+Minimum M.I. value for printing the modification index    10.000
+
+                                   M.I.     E.P.C.  Std E.P.C.  StdYX E.P.C.
+
+ON/BY Statements
+
+F14      ON F14      /
+F14      BY F14                  999.000     0.000      0.000        0.000
+
+ON Statements
+
+F14      ON H3RA1                999.000     0.000      0.000        0.000
+F14      ON H3RA2                999.000     0.000      0.000        0.000
+F14      ON H3RA3                999.000     0.000      0.000        0.000
+F14      ON H3RA4                999.000     0.000      0.000        0.000
+F14      ON H3RA5                999.000     0.000      0.000        0.000
+F14      ON H3RA6                999.000     0.000      0.000        0.000
+F14      ON H3RA7                999.000     0.000      0.000        0.000
+F14      ON H3RA8                999.000     0.000      0.000        0.000
+F14      ON H3RA9                999.000     0.000      0.000        0.000
+F14      ON H3RA10               999.000     0.000      0.000        0.000
+F14      ON H3RA11               999.000     0.000      0.000        0.000
+F14      ON H3RA12               999.000     0.000      0.000        0.000
+F14      ON H3RA13               999.000     0.000      0.000        0.000
+F14      ON H3RA14               999.000     0.000      0.000        0.000
+F14      ON H3RA15               999.000     0.000      0.000        0.000
+F14      ON H3RA16               999.000     0.000      0.000        0.000
+F14      ON H3RA17               999.000     0.000      0.000        0.000
+H3RA1    ON H3RA2                 24.880     0.041      0.041        0.041
+H3RA1    ON H3RA3                 73.885     0.070      0.070        0.070
+H3RA1    ON H3RA4                 14.725    -0.038     -0.038       -0.038
+H3RA1    ON H3RA6                 55.554    -0.065     -0.065       -0.065
+H3RA1    ON H3RA7                110.600     0.085      0.085        0.085
+H3RA1    ON H3RA8                 54.673    -0.070     -0.070       -0.070
+H3RA1    ON H3RA9                 14.597     0.033      0.033        0.033
+H3RA1    ON H3RA10                72.793    -0.081     -0.081       -0.081
+H3RA1    ON H3RA11                31.347     0.051      0.051        0.051
+H3RA1    ON H3RA12                95.686    -0.091     -0.091       -0.091
+H3RA1    ON H3RA13                17.585     0.037      0.037        0.037
+H3RA1    ON H3RA14               206.975    -0.131     -0.131       -0.131
+H3RA1    ON H3RA16               187.456    -0.126     -0.126       -0.126
+H3RA1    ON H3RA17                74.072     0.072      0.072        0.072
+H3RA2    ON H3RA1                 24.877     0.041      0.041        0.041
+H3RA2    ON H3RA3                117.811     0.090      0.090        0.090
+H3RA2    ON H3RA4                 34.199    -0.061     -0.061       -0.061
+H3RA2    ON H3RA5                 88.250    -0.093     -0.093       -0.093
+H3RA2    ON H3RA6                309.934     0.136      0.136        0.136
+H3RA2    ON H3RA7                105.401    -0.099     -0.099       -0.099
+H3RA2    ON H3RA8                 15.250    -0.037     -0.037       -0.037
+H3RA2    ON H3RA9                 29.624    -0.052     -0.052       -0.052
+H3RA2    ON H3RA10                17.957     0.038      0.038        0.038
+H3RA2    ON H3RA11                46.631    -0.068     -0.068       -0.068
+H3RA2    ON H3RA12                11.624     0.030      0.030        0.030
+H3RA2    ON H3RA13                33.335    -0.054     -0.054       -0.054
+H3RA2    ON H3RA14                24.175     0.043      0.043        0.043
+H3RA3    ON H3RA1                 73.882     0.070      0.070        0.070
+H3RA3    ON H3RA2                117.817     0.090      0.090        0.090
+H3RA3    ON H3RA6                 59.808     0.062      0.062        0.062
+H3RA3    ON H3RA8                 11.019    -0.030     -0.030       -0.030
+H3RA3    ON H3RA10                27.383    -0.052     -0.052       -0.052
+H3RA3    ON H3RA12               179.428    -0.133     -0.133       -0.133
+H3RA3    ON H3RA13                31.936    -0.052     -0.052       -0.052
+H3RA3    ON H3RA14               172.855    -0.127     -0.127       -0.127
+H3RA3    ON H3RA15                18.613     0.033      0.033        0.033
+H3RA3    ON H3RA16                86.568    -0.085     -0.085       -0.085
+H3RA3    ON H3RA17                20.558    -0.041     -0.041       -0.041
+H3RA4    ON H3RA1                 14.735    -0.038     -0.038       -0.038
+H3RA4    ON H3RA2                 34.208    -0.061     -0.061       -0.061
+H3RA4    ON H3RA5                376.865     0.160      0.160        0.160
+H3RA4    ON H3RA9                108.276    -0.109     -0.109       -0.109
+H3RA4    ON H3RA11                20.020    -0.047     -0.047       -0.047
+H3RA4    ON H3RA12                25.525     0.052      0.052        0.052
+H3RA4    ON H3RA13                24.590    -0.050     -0.050       -0.050
+H3RA4    ON H3RA14                67.320     0.080      0.080        0.080
+H3RA4    ON H3RA15                22.441    -0.043     -0.043       -0.043
+H3RA4    ON H3RA16                26.509     0.048      0.048        0.048
+H3RA4    ON H3RA17               109.437    -0.110     -0.110       -0.110
+H3RA5    ON H3RA2                 88.252    -0.093     -0.093       -0.093
+H3RA5    ON H3RA4                376.888     0.160      0.160        0.160
+H3RA5    ON H3RA7                 93.917     0.078      0.078        0.078
+H3RA5    ON H3RA9                 21.234    -0.044     -0.044       -0.044
+H3RA5    ON H3RA10                13.890    -0.038     -0.038       -0.038
+H3RA5    ON H3RA13                18.227    -0.041     -0.041       -0.041
+H3RA5    ON H3RA15                36.180    -0.051     -0.051       -0.051
+H3RA5    ON H3RA17                33.228    -0.055     -0.055       -0.055
+H3RA6    ON H3RA1                 55.555    -0.065     -0.065       -0.065
+H3RA6    ON H3RA2                309.946     0.136      0.136        0.136
+H3RA6    ON H3RA3                 59.810     0.062      0.062        0.062
+H3RA6    ON H3RA7                 17.169    -0.036     -0.036       -0.036
+H3RA6    ON H3RA8                 14.168    -0.035     -0.035       -0.035
+H3RA6    ON H3RA9                 13.066    -0.032     -0.032       -0.032
+H3RA6    ON H3RA10               106.420     0.091      0.091        0.091
+H3RA6    ON H3RA11                19.477    -0.041     -0.041       -0.041
+H3RA6    ON H3RA13                41.432    -0.059     -0.059       -0.059
+H3RA6    ON H3RA17                21.043    -0.041     -0.041       -0.041
+H3RA7    ON H3RA1                110.600     0.085      0.085        0.085
+H3RA7    ON H3RA2                105.391    -0.099     -0.099       -0.099
+H3RA7    ON H3RA5                 93.930     0.078      0.078        0.078
+H3RA7    ON H3RA6                 17.168    -0.036     -0.036       -0.036
+H3RA7    ON H3RA8                 40.825    -0.060     -0.060       -0.060
+H3RA7    ON H3RA9                 22.647     0.039      0.039        0.039
+H3RA7    ON H3RA10                78.754    -0.090     -0.090       -0.090
+H3RA7    ON H3RA11                76.935     0.074      0.074        0.074
+H3RA7    ON H3RA12                99.192    -0.097     -0.097       -0.097
+H3RA7    ON H3RA13                32.645     0.049      0.049        0.049
+H3RA7    ON H3RA14               127.746    -0.107     -0.107       -0.107
+H3RA7    ON H3RA16               115.037    -0.098     -0.098       -0.098
+H3RA7    ON H3RA17                37.872     0.052      0.052        0.052
+H3RA8    ON H3RA1                 54.685    -0.070     -0.070       -0.070
+H3RA8    ON H3RA2                 15.252    -0.037     -0.037       -0.037
+H3RA8    ON H3RA3                 11.023    -0.030     -0.030       -0.030
+H3RA8    ON H3RA6                 14.174    -0.035     -0.035       -0.035
+H3RA8    ON H3RA7                 40.838    -0.060     -0.060       -0.060
+H3RA8    ON H3RA9                 43.815     0.057      0.057        0.057
+H3RA8    ON H3RA10                64.423     0.075      0.075        0.075
+H3RA8    ON H3RA12               214.170     0.130      0.130        0.130
+H3RA8    ON H3RA13                10.542    -0.031     -0.031       -0.031
+H3RA8    ON H3RA14               160.384     0.115      0.115        0.115
+H3RA8    ON H3RA16                95.747     0.083      0.083        0.083
+H3RA8    ON H3RA17                26.454    -0.050     -0.050       -0.050
+H3RA9    ON H3RA1                 14.594     0.033      0.033        0.033
+H3RA9    ON H3RA2                 29.624    -0.052     -0.052       -0.052
+H3RA9    ON H3RA4                108.256    -0.109     -0.109       -0.109
+H3RA9    ON H3RA5                 21.232    -0.044     -0.044       -0.044
+H3RA9    ON H3RA6                 13.069    -0.032     -0.032       -0.032
+H3RA9    ON H3RA7                 22.642     0.039      0.039        0.039
+H3RA9    ON H3RA8                 43.819     0.057      0.057        0.057
+H3RA9    ON H3RA10                40.004    -0.063     -0.063       -0.063
+H3RA9    ON H3RA11               151.439     0.105      0.105        0.105
+H3RA9    ON H3RA12               185.490    -0.136     -0.136       -0.136
+H3RA9    ON H3RA13                87.032     0.081      0.081        0.081
+H3RA9    ON H3RA14               194.775    -0.134     -0.134       -0.134
+H3RA9    ON H3RA16                91.773    -0.088     -0.088       -0.088
+H3RA9    ON H3RA17               154.739     0.105      0.105        0.105
+H3RA10   ON H3RA1                 72.806    -0.081     -0.081       -0.081
+H3RA10   ON H3RA2                 17.954     0.038      0.038        0.038
+H3RA10   ON H3RA3                 27.391    -0.052     -0.052       -0.052
+H3RA10   ON H3RA5                 13.894    -0.038     -0.038       -0.038
+H3RA10   ON H3RA6                106.405     0.091      0.091        0.091
+H3RA10   ON H3RA7                 78.771    -0.090     -0.090       -0.090
+H3RA10   ON H3RA8                 64.420     0.075      0.075        0.075
+H3RA10   ON H3RA9                 40.011    -0.063     -0.063       -0.063
+H3RA10   ON H3RA12               239.271     0.140      0.140        0.140
+H3RA10   ON H3RA13                37.307    -0.060     -0.060       -0.060
+H3RA10   ON H3RA14               397.172     0.174      0.174        0.174
+H3RA10   ON H3RA15                18.664    -0.040     -0.040       -0.040
+H3RA10   ON H3RA16                80.029     0.083      0.083        0.083
+H3RA10   ON H3RA17                66.965    -0.081     -0.081       -0.081
+H3RA11   ON H3RA1                 31.334     0.050      0.050        0.050
+H3RA11   ON H3RA2                 46.641    -0.068     -0.068       -0.068
+H3RA11   ON H3RA4                 20.020    -0.047     -0.047       -0.047
+H3RA11   ON H3RA6                 19.488    -0.041     -0.041       -0.041
+H3RA11   ON H3RA7                 76.913     0.074      0.074        0.074
+H3RA11   ON H3RA9                151.422     0.105      0.105        0.105
+H3RA11   ON H3RA12               124.092    -0.114     -0.114       -0.114
+H3RA11   ON H3RA14               205.681    -0.144     -0.144       -0.144
+H3RA11   ON H3RA16                87.966    -0.091     -0.091       -0.091
+H3RA11   ON H3RA17                12.678     0.033      0.033        0.033
+H3RA12   ON H3RA1                 54.972    -0.071     -0.071       -0.071
+H3RA12   ON H3RA3                131.655    -0.117     -0.117       -0.117
+H3RA12   ON H3RA4                 11.433     0.035      0.035        0.035
+H3RA12   ON H3RA7                 69.904    -0.084     -0.084       -0.084
+H3RA12   ON H3RA8                173.036     0.120      0.120        0.120
+H3RA12   ON H3RA9                131.188    -0.117     -0.117       -0.117
+H3RA12   ON H3RA10               129.746     0.106      0.106        0.106
+H3RA12   ON H3RA11                73.839    -0.091     -0.091       -0.091
+H3RA12   ON H3RA14               411.392     0.626      0.626        0.626
+H3RA12   ON H3RA15                10.855     0.028      0.028        0.028
+H3RA12   ON H3RA16               411.752     0.173      0.173        0.173
+H3RA12   ON H3RA17                37.310    -0.060     -0.060       -0.060
+H3RA13   ON H3RA2                 29.181    -0.051     -0.051       -0.051
+H3RA13   ON H3RA3                 24.822    -0.046     -0.046       -0.046
+H3RA13   ON H3RA5                 10.817    -0.032     -0.032       -0.032
+H3RA13   ON H3RA6                 33.440    -0.053     -0.053       -0.053
+H3RA13   ON H3RA7                 22.195     0.041      0.041        0.041
+H3RA13   ON H3RA9                 51.368     0.062      0.062        0.062
+H3RA13   ON H3RA10                22.383    -0.047     -0.047       -0.047
+H3RA13   ON H3RA12                22.768     0.044      0.044        0.044
+H3RA13   ON H3RA14               118.562     0.096      0.096        0.096
+H3RA13   ON H3RA16                27.578     0.046      0.046        0.046
+H3RA14   ON H3RA1                100.246    -0.096     -0.096       -0.096
+H3RA14   ON H3RA2                 27.092     0.048      0.048        0.048
+H3RA14   ON H3RA3                 75.185    -0.088     -0.088       -0.088
+H3RA14   ON H3RA4                 44.916     0.068      0.068        0.068
+H3RA14   ON H3RA7                 49.852    -0.070     -0.070       -0.070
+H3RA14   ON H3RA8                 52.410     0.069      0.069        0.069
+H3RA14   ON H3RA9                 91.320    -0.097     -0.097       -0.097
+H3RA14   ON H3RA10               277.779     0.151      0.151        0.151
+H3RA14   ON H3RA11               118.085    -0.115     -0.115       -0.115
+H3RA14   ON H3RA13                91.798     0.088      0.088        0.088
+H3RA15   ON H3RA3                 18.609     0.033      0.033        0.033
+H3RA15   ON H3RA4                 22.435    -0.043     -0.043       -0.043
+H3RA15   ON H3RA5                 36.181    -0.051     -0.051       -0.051
+H3RA15   ON H3RA10                18.661    -0.040     -0.040       -0.040
+H3RA15   ON H3RA12                15.983     0.034      0.034        0.034
+H3RA15   ON H3RA14                42.709     0.055      0.055        0.055
+H3RA15   ON H3RA16                87.967     0.069      0.069        0.069
+H3RA15   ON H3RA17                35.827     0.047      0.047        0.047
+H3RA16   ON H3RA1                127.991    -0.107     -0.107       -0.107
+H3RA16   ON H3RA3                 53.613    -0.068     -0.068       -0.068
+H3RA16   ON H3RA4                 12.554     0.033      0.033        0.033
+H3RA16   ON H3RA7                 83.460    -0.086     -0.086       -0.086
+H3RA16   ON H3RA8                 66.496     0.071      0.071        0.071
+H3RA16   ON H3RA9                 54.000    -0.069     -0.069       -0.069
+H3RA16   ON H3RA10                19.296     0.042      0.042        0.042
+H3RA16   ON H3RA11                45.990    -0.068     -0.068       -0.068
+H3RA16   ON H3RA12               411.758     0.173      0.173        0.173
+H3RA16   ON H3RA14               412.132     0.656      0.656        0.656
+H3RA16   ON H3RA15                77.182     0.066      0.066        0.066
+H3RA17   ON H3RA1                 66.839     0.068      0.068        0.068
+H3RA17   ON H3RA3                 13.018    -0.033     -0.033       -0.033
+H3RA17   ON H3RA4                 98.388    -0.105     -0.105       -0.105
+H3RA17   ON H3RA5                 26.734    -0.049     -0.049       -0.049
+H3RA17   ON H3RA6                 12.408    -0.031     -0.031       -0.031
+H3RA17   ON H3RA7                 27.886     0.045      0.045        0.045
+H3RA17   ON H3RA8                 22.294    -0.046     -0.046       -0.046
+H3RA17   ON H3RA9                124.037     0.095      0.095        0.095
+H3RA17   ON H3RA10                53.690    -0.073     -0.073       -0.073
+H3RA17   ON H3RA11                10.669     0.030      0.030        0.030
+H3RA17   ON H3RA12                49.734    -0.068     -0.068       -0.068
+H3RA17   ON H3RA14                15.642    -0.036     -0.036       -0.036
+H3RA17   ON H3RA15                37.687     0.049      0.049        0.049
+
+WITH Statements
+
+H3RA2    WITH H3RA1               24.856     0.041      0.041        0.068
+H3RA3    WITH H3RA1               73.835     0.070      0.070        0.139
+H3RA3    WITH H3RA2              117.761     0.090      0.090        0.170
+H3RA4    WITH H3RA1               14.751    -0.038     -0.038       -0.071
+H3RA4    WITH H3RA2               34.232    -0.061     -0.061       -0.110
+H3RA5    WITH H3RA2               88.299    -0.093     -0.093       -0.162
+H3RA5    WITH H3RA4              376.792     0.160      0.160        0.323
+H3RA6    WITH H3RA1               55.598    -0.065     -0.065       -0.120
+H3RA6    WITH H3RA2              309.862     0.136      0.136        0.241
+H3RA6    WITH H3RA3               59.763     0.062      0.062        0.131
+H3RA7    WITH H3RA1              110.538     0.085      0.085        0.172
+H3RA7    WITH H3RA2              105.458    -0.099     -0.099       -0.193
+H3RA7    WITH H3RA5               93.868     0.078      0.078        0.169
+H3RA7    WITH H3RA6               17.197    -0.036     -0.036       -0.079
+H3RA8    WITH H3RA1               54.717    -0.070     -0.070       -0.122
+H3RA8    WITH H3RA2               15.268    -0.037     -0.037       -0.063
+H3RA8    WITH H3RA3               11.040    -0.030     -0.030       -0.062
+H3RA8    WITH H3RA6               14.192    -0.035     -0.035       -0.066
+H3RA8    WITH H3RA7               40.871    -0.060     -0.060       -0.125
+H3RA9    WITH H3RA1               14.575     0.033      0.033        0.060
+H3RA9    WITH H3RA2               29.651    -0.052     -0.052       -0.091
+H3RA9    WITH H3RA4              108.326    -0.109     -0.109       -0.221
+H3RA9    WITH H3RA5               21.259    -0.044     -0.044       -0.085
+H3RA9    WITH H3RA6               13.089    -0.032     -0.032       -0.064
+H3RA9    WITH H3RA7               22.616     0.039      0.039        0.084
+H3RA9    WITH H3RA8               43.786     0.057      0.057        0.107
+H3RA10   WITH H3RA1               72.829    -0.081     -0.081       -0.119
+H3RA10   WITH H3RA2               17.944     0.038      0.038        0.053
+H3RA10   WITH H3RA3               27.407    -0.052     -0.052       -0.089
+H3RA10   WITH H3RA5               13.905    -0.038     -0.038       -0.060
+H3RA10   WITH H3RA6              106.377     0.091      0.091        0.144
+H3RA10   WITH H3RA7               78.801    -0.090     -0.090       -0.157
+H3RA10   WITH H3RA8               64.398     0.075      0.075        0.114
+H3RA10   WITH H3RA9               40.030    -0.063     -0.063       -0.099
+H3RA11   WITH H3RA1               31.314     0.050      0.050        0.090
+H3RA11   WITH H3RA2               46.667    -0.068     -0.068       -0.118
+H3RA11   WITH H3RA4               20.041    -0.047     -0.047       -0.093
+H3RA11   WITH H3RA6               19.506    -0.041     -0.041       -0.080
+H3RA11   WITH H3RA7               76.878     0.074      0.074        0.158
+H3RA11   WITH H3RA9              151.376     0.105      0.105        0.200
+H3RA12   WITH H3RA1               55.015    -0.071     -0.071       -0.107
+H3RA12   WITH H3RA3              131.738    -0.117     -0.117       -0.205
+H3RA12   WITH H3RA4               11.409     0.035      0.035        0.059
+H3RA12   WITH H3RA7               69.964    -0.084     -0.084       -0.150
+H3RA12   WITH H3RA8              172.961     0.120      0.120        0.186
+H3RA12   WITH H3RA9              131.265    -0.118     -0.118       -0.189
+H3RA12   WITH H3RA10             129.700     0.106      0.106        0.138
+H3RA12   WITH H3RA11              73.897    -0.091     -0.091       -0.144
+H3RA13   WITH H3RA2               29.217    -0.051     -0.051       -0.085
+H3RA13   WITH H3RA3               24.862    -0.046     -0.046       -0.092
+H3RA13   WITH H3RA5               10.842    -0.032     -0.032       -0.058
+H3RA13   WITH H3RA6               33.483    -0.053     -0.053       -0.099
+H3RA13   WITH H3RA7               22.159     0.041      0.041        0.083
+H3RA13   WITH H3RA9               51.318     0.062      0.062        0.114
+H3RA13   WITH H3RA10              22.408    -0.047     -0.047       -0.070
+H3RA14   WITH H3RA1              100.270    -0.096     -0.096       -0.140
+H3RA14   WITH H3RA2               27.081     0.048      0.048        0.067
+H3RA14   WITH H3RA3               75.212    -0.088     -0.088       -0.149
+H3RA14   WITH H3RA4               44.896     0.068      0.068        0.111
+H3RA14   WITH H3RA7               49.874    -0.070     -0.070       -0.122
+H3RA14   WITH H3RA8               52.392     0.069      0.069        0.104
+H3RA14   WITH H3RA9               91.347    -0.097     -0.097       -0.151
+H3RA14   WITH H3RA10             277.750     0.151      0.151        0.191
+H3RA14   WITH H3RA11             118.117    -0.115     -0.115       -0.177
+H3RA14   WITH H3RA13             101.452     0.093      0.093        0.137
+H3RA15   WITH H3RA3               18.586     0.033      0.033        0.085
+H3RA15   WITH H3RA4               22.464    -0.043     -0.043       -0.108
+H3RA15   WITH H3RA5               36.215    -0.051     -0.051       -0.123
+H3RA15   WITH H3RA10              18.678    -0.040     -0.040       -0.077
+H3RA15   WITH H3RA12              10.833     0.028      0.028        0.057
+H3RA16   WITH H3RA1              128.036    -0.107     -0.107       -0.192
+H3RA16   WITH H3RA3               53.647    -0.068     -0.068       -0.141
+H3RA16   WITH H3RA4               12.538     0.033      0.033        0.067
+H3RA16   WITH H3RA7               83.504    -0.086     -0.086       -0.183
+H3RA16   WITH H3RA8               66.465     0.071      0.071        0.131
+H3RA16   WITH H3RA9               54.032    -0.069     -0.069       -0.132
+H3RA16   WITH H3RA10              19.283     0.042      0.042        0.065
+H3RA16   WITH H3RA11              46.020    -0.068     -0.068       -0.127
+H3RA16   WITH H3RA12             411.683     0.173      0.173        0.274
+H3RA16   WITH H3RA15              77.147     0.066      0.066        0.156
+H3RA17   WITH H3RA1               66.789     0.068      0.068        0.114
+H3RA17   WITH H3RA3               13.046    -0.033     -0.033       -0.064
+H3RA17   WITH H3RA4               98.476    -0.106     -0.106       -0.195
+H3RA17   WITH H3RA5               26.773    -0.049     -0.049       -0.088
+H3RA17   WITH H3RA6               12.434    -0.032     -0.032       -0.057
+H3RA17   WITH H3RA7               27.846     0.045      0.045        0.089
+H3RA17   WITH H3RA8               22.330    -0.046     -0.046       -0.079
+H3RA17   WITH H3RA9              123.961     0.095      0.095        0.168
+H3RA17   WITH H3RA10              53.729    -0.073     -0.073       -0.105
+H3RA17   WITH H3RA11              10.646     0.030      0.030        0.053
+H3RA17   WITH H3RA12              43.442    -0.065     -0.065       -0.096
+H3RA17   WITH H3RA15              37.642     0.049      0.049        0.107
+
+Variances/Residual Variances
+
+F14                              999.000     0.000      0.000        0.000
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           TAU
+              H3RA1$1       H3RA1$2       H3RA1$3       H3RA2$1       H3RA2$2
+              ________      ________      ________      ________      ________
+      1           1             2             3             4             5
+
+
+           TAU
+              H3RA2$3       H3RA3$1       H3RA3$2       H3RA3$3       H3RA4$1
+              ________      ________      ________      ________      ________
+      1           6             7             8             9            10
+
+
+           TAU
+              H3RA4$2       H3RA4$3       H3RA5$1       H3RA5$2       H3RA5$3
+              ________      ________      ________      ________      ________
+      1          11            12            13            14            15
+
+
+           TAU
+              H3RA6$1       H3RA6$2       H3RA6$3       H3RA7$1       H3RA7$2
+              ________      ________      ________      ________      ________
+      1          16            17            18            19            20
+
+
+           TAU
+              H3RA7$3       H3RA8$1       H3RA8$2       H3RA8$3       H3RA9$1
+              ________      ________      ________      ________      ________
+      1          21            22            23            24            25
+
+
+           TAU
+              H3RA9$2       H3RA9$3       H3RA10$1      H3RA10$2      H3RA10$3
+              ________      ________      ________      ________      ________
+      1          26            27            28            29            30
+
+
+           TAU
+              H3RA11$1      H3RA11$2      H3RA11$3      H3RA12$1      H3RA12$2
+              ________      ________      ________      ________      ________
+      1          31            32            33            34            35
+
+
+           TAU
+              H3RA12$3      H3RA13$1      H3RA13$2      H3RA13$3      H3RA14$1
+              ________      ________      ________      ________      ________
+      1          36            37            38            39            40
+
+
+           TAU
+              H3RA14$2      H3RA14$3      H3RA15$1      H3RA15$2      H3RA15$3
+              ________      ________      ________      ________      ________
+      1          41            42            43            44            45
+
+
+           TAU
+              H3RA16$1      H3RA16$2      H3RA16$3      H3RA17$1      H3RA17$2
+              ________      ________      ________      ________      ________
+      1          46            47            48            49            50
+
+
+           TAU
+              H3RA17$3
+              ________
+      1          51
+
+
+           NU
+              H3RA1         H3RA2         H3RA3         H3RA4         H3RA5
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           NU
+              H3RA6         H3RA7         H3RA8         H3RA9         H3RA10
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           NU
+              H3RA11        H3RA12        H3RA13        H3RA14        H3RA15
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           NU
+              H3RA16        H3RA17
+              ________      ________
+      1           0             0
+
+
+           LAMBDA
+              F14           H3RA1         H3RA2         H3RA3         H3RA4
+              ________      ________      ________      ________      ________
+ H3RA1              0             0             0             0             0
+ H3RA2              0             0             0             0             0
+ H3RA3              0             0             0             0             0
+ H3RA4              0             0             0             0             0
+ H3RA5              0             0             0             0             0
+ H3RA6              0             0             0             0             0
+ H3RA7              0             0             0             0             0
+ H3RA8              0             0             0             0             0
+ H3RA9              0             0             0             0             0
+ H3RA10             0             0             0             0             0
+ H3RA11             0             0             0             0             0
+ H3RA12             0             0             0             0             0
+ H3RA13             0             0             0             0             0
+ H3RA14             0             0             0             0             0
+ H3RA15             0             0             0             0             0
+ H3RA16             0             0             0             0             0
+ H3RA17             0             0             0             0             0
+
+
+           LAMBDA
+              H3RA5         H3RA6         H3RA7         H3RA8         H3RA9
+              ________      ________      ________      ________      ________
+ H3RA1              0             0             0             0             0
+ H3RA2              0             0             0             0             0
+ H3RA3              0             0             0             0             0
+ H3RA4              0             0             0             0             0
+ H3RA5              0             0             0             0             0
+ H3RA6              0             0             0             0             0
+ H3RA7              0             0             0             0             0
+ H3RA8              0             0             0             0             0
+ H3RA9              0             0             0             0             0
+ H3RA10             0             0             0             0             0
+ H3RA11             0             0             0             0             0
+ H3RA12             0             0             0             0             0
+ H3RA13             0             0             0             0             0
+ H3RA14             0             0             0             0             0
+ H3RA15             0             0             0             0             0
+ H3RA16             0             0             0             0             0
+ H3RA17             0             0             0             0             0
+
+
+           LAMBDA
+              H3RA10        H3RA11        H3RA12        H3RA13        H3RA14
+              ________      ________      ________      ________      ________
+ H3RA1              0             0             0             0             0
+ H3RA2              0             0             0             0             0
+ H3RA3              0             0             0             0             0
+ H3RA4              0             0             0             0             0
+ H3RA5              0             0             0             0             0
+ H3RA6              0             0             0             0             0
+ H3RA7              0             0             0             0             0
+ H3RA8              0             0             0             0             0
+ H3RA9              0             0             0             0             0
+ H3RA10             0             0             0             0             0
+ H3RA11             0             0             0             0             0
+ H3RA12             0             0             0             0             0
+ H3RA13             0             0             0             0             0
+ H3RA14             0             0             0             0             0
+ H3RA15             0             0             0             0             0
+ H3RA16             0             0             0             0             0
+ H3RA17             0             0             0             0             0
+
+
+           LAMBDA
+              H3RA15        H3RA16        H3RA17
+              ________      ________      ________
+ H3RA1              0             0             0
+ H3RA2              0             0             0
+ H3RA3              0             0             0
+ H3RA4              0             0             0
+ H3RA5              0             0             0
+ H3RA6              0             0             0
+ H3RA7              0             0             0
+ H3RA8              0             0             0
+ H3RA9              0             0             0
+ H3RA10             0             0             0
+ H3RA11             0             0             0
+ H3RA12             0             0             0
+ H3RA13             0             0             0
+ H3RA14             0             0             0
+ H3RA15             0             0             0
+ H3RA16             0             0             0
+ H3RA17             0             0             0
+
+
+           ALPHA
+              F14           H3RA1         H3RA2         H3RA3         H3RA4
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           ALPHA
+              H3RA5         H3RA6         H3RA7         H3RA8         H3RA9
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           ALPHA
+              H3RA10        H3RA11        H3RA12        H3RA13        H3RA14
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           ALPHA
+              H3RA15        H3RA16        H3RA17
+              ________      ________      ________
+      1           0             0             0
+
+
+           BETA
+              F14           H3RA1         H3RA2         H3RA3         H3RA4
+              ________      ________      ________      ________      ________
+ F14                0             0             0             0             0
+ H3RA1             52             0             0             0             0
+ H3RA2             53             0             0             0             0
+ H3RA3             54             0             0             0             0
+ H3RA4             55             0             0             0             0
+ H3RA5             56             0             0             0             0
+ H3RA6             57             0             0             0             0
+ H3RA7             58             0             0             0             0
+ H3RA8             59             0             0             0             0
+ H3RA9             60             0             0             0             0
+ H3RA10            61             0             0             0             0
+ H3RA11            62             0             0             0             0
+ H3RA12            63             0             0             0             0
+ H3RA13            64             0             0             0             0
+ H3RA14            65             0             0             0             0
+ H3RA15            66             0             0             0             0
+ H3RA16            67             0             0             0             0
+ H3RA17            68             0             0             0             0
+
+
+           BETA
+              H3RA5         H3RA6         H3RA7         H3RA8         H3RA9
+              ________      ________      ________      ________      ________
+ F14                0             0             0             0             0
+ H3RA1              0             0             0             0             0
+ H3RA2              0             0             0             0             0
+ H3RA3              0             0             0             0             0
+ H3RA4              0             0             0             0             0
+ H3RA5              0             0             0             0             0
+ H3RA6              0             0             0             0             0
+ H3RA7              0             0             0             0             0
+ H3RA8              0             0             0             0             0
+ H3RA9              0             0             0             0             0
+ H3RA10             0             0             0             0             0
+ H3RA11             0             0             0             0             0
+ H3RA12             0             0             0             0             0
+ H3RA13             0             0             0             0             0
+ H3RA14             0             0             0             0             0
+ H3RA15             0             0             0             0             0
+ H3RA16             0             0             0             0             0
+ H3RA17             0             0             0             0             0
+
+
+           BETA
+              H3RA10        H3RA11        H3RA12        H3RA13        H3RA14
+              ________      ________      ________      ________      ________
+ F14                0             0             0             0             0
+ H3RA1              0             0             0             0             0
+ H3RA2              0             0             0             0             0
+ H3RA3              0             0             0             0             0
+ H3RA4              0             0             0             0             0
+ H3RA5              0             0             0             0             0
+ H3RA6              0             0             0             0             0
+ H3RA7              0             0             0             0             0
+ H3RA8              0             0             0             0             0
+ H3RA9              0             0             0             0             0
+ H3RA10             0             0             0             0             0
+ H3RA11             0             0             0             0             0
+ H3RA12             0             0             0             0             0
+ H3RA13             0             0             0             0             0
+ H3RA14             0             0             0             0             0
+ H3RA15             0             0             0             0             0
+ H3RA16             0             0             0             0             0
+ H3RA17             0             0             0             0             0
+
+
+           BETA
+              H3RA15        H3RA16        H3RA17
+              ________      ________      ________
+ F14                0             0             0
+ H3RA1              0             0             0
+ H3RA2              0             0             0
+ H3RA3              0             0             0
+ H3RA4              0             0             0
+ H3RA5              0             0             0
+ H3RA6              0             0             0
+ H3RA7              0             0             0
+ H3RA8              0             0             0
+ H3RA9              0             0             0
+ H3RA10             0             0             0
+ H3RA11             0             0             0
+ H3RA12             0             0             0
+ H3RA13             0             0             0
+ H3RA14             0             0             0
+ H3RA15             0             0             0
+ H3RA16             0             0             0
+ H3RA17             0             0             0
+
+
+           PSI
+              F14           H3RA1         H3RA2         H3RA3         H3RA4
+              ________      ________      ________      ________      ________
+ F14                0
+ H3RA1              0             0
+ H3RA2              0             0             0
+ H3RA3              0             0             0             0
+ H3RA4              0             0             0             0             0
+ H3RA5              0             0             0             0             0
+ H3RA6              0             0             0             0             0
+ H3RA7              0             0             0             0             0
+ H3RA8              0             0             0             0             0
+ H3RA9              0             0             0             0             0
+ H3RA10             0             0             0             0             0
+ H3RA11             0             0             0             0             0
+ H3RA12             0             0             0             0             0
+ H3RA13             0             0             0             0             0
+ H3RA14             0             0             0             0             0
+ H3RA15             0             0             0             0             0
+ H3RA16             0             0             0             0             0
+ H3RA17             0             0             0             0             0
+
+
+           PSI
+              H3RA5         H3RA6         H3RA7         H3RA8         H3RA9
+              ________      ________      ________      ________      ________
+ H3RA5              0
+ H3RA6              0             0
+ H3RA7              0             0             0
+ H3RA8              0             0             0             0
+ H3RA9              0             0             0             0             0
+ H3RA10             0             0             0             0             0
+ H3RA11             0             0             0             0             0
+ H3RA12             0             0             0             0             0
+ H3RA13             0             0             0             0             0
+ H3RA14             0             0             0             0             0
+ H3RA15             0             0             0             0             0
+ H3RA16             0             0             0             0             0
+ H3RA17             0             0             0             0             0
+
+
+           PSI
+              H3RA10        H3RA11        H3RA12        H3RA13        H3RA14
+              ________      ________      ________      ________      ________
+ H3RA10             0
+ H3RA11             0             0
+ H3RA12             0             0             0
+ H3RA13             0             0             0             0
+ H3RA14             0             0            69             0             0
+ H3RA15             0             0             0             0             0
+ H3RA16             0             0             0             0            70
+ H3RA17             0             0             0            71             0
+
+
+           PSI
+              H3RA15        H3RA16        H3RA17
+              ________      ________      ________
+ H3RA15             0
+ H3RA16             0             0
+ H3RA17             0             0             0
+
+
+     STARTING VALUES
+
+
+           TAU
+              H3RA1$1       H3RA1$2       H3RA1$3       H3RA2$1       H3RA2$2
+              ________      ________      ________      ________      ________
+      1        -0.645         0.799         1.656        -0.642         0.381
+
+
+           TAU
+              H3RA2$3       H3RA3$1       H3RA3$2       H3RA3$3       H3RA4$1
+              ________      ________      ________      ________      ________
+      1         1.152         0.104         1.125         1.811         0.502
+
+
+           TAU
+              H3RA4$2       H3RA4$3       H3RA5$1       H3RA5$2       H3RA5$3
+              ________      ________      ________      ________      ________
+      1         1.359         1.919         0.164         1.331         1.946
+
+
+           TAU
+              H3RA6$1       H3RA6$2       H3RA6$3       H3RA7$1       H3RA7$2
+              ________      ________      ________      ________      ________
+      1        -0.227         1.004         1.698         0.060         1.289
+
+
+           TAU
+              H3RA7$3       H3RA8$1       H3RA8$2       H3RA8$3       H3RA9$1
+              ________      ________      ________      ________      ________
+      1         1.906         0.119         1.065         1.762         0.048
+
+
+           TAU
+              H3RA9$2       H3RA9$3       H3RA10$1      H3RA10$2      H3RA10$3
+              ________      ________      ________      ________      ________
+      1         1.272         1.959        -0.322         0.673         1.393
+
+
+           TAU
+              H3RA11$1      H3RA11$2      H3RA11$3      H3RA12$1      H3RA12$2
+              ________      ________      ________      ________      ________
+      1         0.246         1.342         2.053        -0.367         0.415
+
+
+           TAU
+              H3RA12$3      H3RA13$1      H3RA13$2      H3RA13$3      H3RA14$1
+              ________      ________      ________      ________      ________
+      1         1.002        -0.106         1.164         1.834        -0.273
+
+
+           TAU
+              H3RA14$2      H3RA14$3      H3RA15$1      H3RA15$2      H3RA15$3
+              ________      ________      ________      ________      ________
+      1         0.825         1.550        -0.479         0.681         1.399
+
+
+           TAU
+              H3RA16$1      H3RA16$2      H3RA16$3      H3RA17$1      H3RA17$2
+              ________      ________      ________      ________      ________
+      1         0.015         1.087         1.742        -0.234         1.057
+
+
+           TAU
+              H3RA17$3
+              ________
+      1         1.736
+
+
+           NU
+              H3RA1         H3RA2         H3RA3         H3RA4         H3RA5
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              H3RA6         H3RA7         H3RA8         H3RA9         H3RA10
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              H3RA11        H3RA12        H3RA13        H3RA14        H3RA15
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              H3RA16        H3RA17
+              ________      ________
+      1         0.000         0.000
+
+
+           LAMBDA
+              F14           H3RA1         H3RA2         H3RA3         H3RA4
+              ________      ________      ________      ________      ________
+ H3RA1          0.000         1.000         0.000         0.000         0.000
+ H3RA2          0.000         0.000         1.000         0.000         0.000
+ H3RA3          0.000         0.000         0.000         1.000         0.000
+ H3RA4          0.000         0.000         0.000         0.000         1.000
+ H3RA5          0.000         0.000         0.000         0.000         0.000
+ H3RA6          0.000         0.000         0.000         0.000         0.000
+ H3RA7          0.000         0.000         0.000         0.000         0.000
+ H3RA8          0.000         0.000         0.000         0.000         0.000
+ H3RA9          0.000         0.000         0.000         0.000         0.000
+ H3RA10         0.000         0.000         0.000         0.000         0.000
+ H3RA11         0.000         0.000         0.000         0.000         0.000
+ H3RA12         0.000         0.000         0.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000         0.000         0.000
+ H3RA14         0.000         0.000         0.000         0.000         0.000
+ H3RA15         0.000         0.000         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              H3RA5         H3RA6         H3RA7         H3RA8         H3RA9
+              ________      ________      ________      ________      ________
+ H3RA1          0.000         0.000         0.000         0.000         0.000
+ H3RA2          0.000         0.000         0.000         0.000         0.000
+ H3RA3          0.000         0.000         0.000         0.000         0.000
+ H3RA4          0.000         0.000         0.000         0.000         0.000
+ H3RA5          1.000         0.000         0.000         0.000         0.000
+ H3RA6          0.000         1.000         0.000         0.000         0.000
+ H3RA7          0.000         0.000         1.000         0.000         0.000
+ H3RA8          0.000         0.000         0.000         1.000         0.000
+ H3RA9          0.000         0.000         0.000         0.000         1.000
+ H3RA10         0.000         0.000         0.000         0.000         0.000
+ H3RA11         0.000         0.000         0.000         0.000         0.000
+ H3RA12         0.000         0.000         0.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000         0.000         0.000
+ H3RA14         0.000         0.000         0.000         0.000         0.000
+ H3RA15         0.000         0.000         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              H3RA10        H3RA11        H3RA12        H3RA13        H3RA14
+              ________      ________      ________      ________      ________
+ H3RA1          0.000         0.000         0.000         0.000         0.000
+ H3RA2          0.000         0.000         0.000         0.000         0.000
+ H3RA3          0.000         0.000         0.000         0.000         0.000
+ H3RA4          0.000         0.000         0.000         0.000         0.000
+ H3RA5          0.000         0.000         0.000         0.000         0.000
+ H3RA6          0.000         0.000         0.000         0.000         0.000
+ H3RA7          0.000         0.000         0.000         0.000         0.000
+ H3RA8          0.000         0.000         0.000         0.000         0.000
+ H3RA9          0.000         0.000         0.000         0.000         0.000
+ H3RA10         1.000         0.000         0.000         0.000         0.000
+ H3RA11         0.000         1.000         0.000         0.000         0.000
+ H3RA12         0.000         0.000         1.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000         1.000         0.000
+ H3RA14         0.000         0.000         0.000         0.000         1.000
+ H3RA15         0.000         0.000         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              H3RA15        H3RA16        H3RA17
+              ________      ________      ________
+ H3RA1          0.000         0.000         0.000
+ H3RA2          0.000         0.000         0.000
+ H3RA3          0.000         0.000         0.000
+ H3RA4          0.000         0.000         0.000
+ H3RA5          0.000         0.000         0.000
+ H3RA6          0.000         0.000         0.000
+ H3RA7          0.000         0.000         0.000
+ H3RA8          0.000         0.000         0.000
+ H3RA9          0.000         0.000         0.000
+ H3RA10         0.000         0.000         0.000
+ H3RA11         0.000         0.000         0.000
+ H3RA12         0.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000
+ H3RA14         0.000         0.000         0.000
+ H3RA15         1.000         0.000         0.000
+ H3RA16         0.000         1.000         0.000
+ H3RA17         0.000         0.000         1.000
+
+
+           ALPHA
+              F14           H3RA1         H3RA2         H3RA3         H3RA4
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              H3RA5         H3RA6         H3RA7         H3RA8         H3RA9
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              H3RA10        H3RA11        H3RA12        H3RA13        H3RA14
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              H3RA15        H3RA16        H3RA17
+              ________      ________      ________
+      1         0.000         0.000         0.000
+
+
+           BETA
+              F14           H3RA1         H3RA2         H3RA3         H3RA4
+              ________      ________      ________      ________      ________
+ F14            0.000         0.000         0.000         0.000         0.000
+ H3RA1          1.000         0.000         0.000         0.000         0.000
+ H3RA2          1.000         0.000         0.000         0.000         0.000
+ H3RA3          1.000         0.000         0.000         0.000         0.000
+ H3RA4          1.000         0.000         0.000         0.000         0.000
+ H3RA5          1.000         0.000         0.000         0.000         0.000
+ H3RA6          1.000         0.000         0.000         0.000         0.000
+ H3RA7          1.000         0.000         0.000         0.000         0.000
+ H3RA8          1.000         0.000         0.000         0.000         0.000
+ H3RA9          1.000         0.000         0.000         0.000         0.000
+ H3RA10         1.000         0.000         0.000         0.000         0.000
+ H3RA11         1.000         0.000         0.000         0.000         0.000
+ H3RA12         1.000         0.000         0.000         0.000         0.000
+ H3RA13         1.000         0.000         0.000         0.000         0.000
+ H3RA14         1.000         0.000         0.000         0.000         0.000
+ H3RA15         1.000         0.000         0.000         0.000         0.000
+ H3RA16         1.000         0.000         0.000         0.000         0.000
+ H3RA17         1.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              H3RA5         H3RA6         H3RA7         H3RA8         H3RA9
+              ________      ________      ________      ________      ________
+ F14            0.000         0.000         0.000         0.000         0.000
+ H3RA1          0.000         0.000         0.000         0.000         0.000
+ H3RA2          0.000         0.000         0.000         0.000         0.000
+ H3RA3          0.000         0.000         0.000         0.000         0.000
+ H3RA4          0.000         0.000         0.000         0.000         0.000
+ H3RA5          0.000         0.000         0.000         0.000         0.000
+ H3RA6          0.000         0.000         0.000         0.000         0.000
+ H3RA7          0.000         0.000         0.000         0.000         0.000
+ H3RA8          0.000         0.000         0.000         0.000         0.000
+ H3RA9          0.000         0.000         0.000         0.000         0.000
+ H3RA10         0.000         0.000         0.000         0.000         0.000
+ H3RA11         0.000         0.000         0.000         0.000         0.000
+ H3RA12         0.000         0.000         0.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000         0.000         0.000
+ H3RA14         0.000         0.000         0.000         0.000         0.000
+ H3RA15         0.000         0.000         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              H3RA10        H3RA11        H3RA12        H3RA13        H3RA14
+              ________      ________      ________      ________      ________
+ F14            0.000         0.000         0.000         0.000         0.000
+ H3RA1          0.000         0.000         0.000         0.000         0.000
+ H3RA2          0.000         0.000         0.000         0.000         0.000
+ H3RA3          0.000         0.000         0.000         0.000         0.000
+ H3RA4          0.000         0.000         0.000         0.000         0.000
+ H3RA5          0.000         0.000         0.000         0.000         0.000
+ H3RA6          0.000         0.000         0.000         0.000         0.000
+ H3RA7          0.000         0.000         0.000         0.000         0.000
+ H3RA8          0.000         0.000         0.000         0.000         0.000
+ H3RA9          0.000         0.000         0.000         0.000         0.000
+ H3RA10         0.000         0.000         0.000         0.000         0.000
+ H3RA11         0.000         0.000         0.000         0.000         0.000
+ H3RA12         0.000         0.000         0.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000         0.000         0.000
+ H3RA14         0.000         0.000         0.000         0.000         0.000
+ H3RA15         0.000         0.000         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              H3RA15        H3RA16        H3RA17
+              ________      ________      ________
+ F14            0.000         0.000         0.000
+ H3RA1          0.000         0.000         0.000
+ H3RA2          0.000         0.000         0.000
+ H3RA3          0.000         0.000         0.000
+ H3RA4          0.000         0.000         0.000
+ H3RA5          0.000         0.000         0.000
+ H3RA6          0.000         0.000         0.000
+ H3RA7          0.000         0.000         0.000
+ H3RA8          0.000         0.000         0.000
+ H3RA9          0.000         0.000         0.000
+ H3RA10         0.000         0.000         0.000
+ H3RA11         0.000         0.000         0.000
+ H3RA12         0.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000
+ H3RA14         0.000         0.000         0.000
+ H3RA15         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000
+
+
+           PSI
+              F14           H3RA1         H3RA2         H3RA3         H3RA4
+              ________      ________      ________      ________      ________
+ F14            1.000
+ H3RA1          0.000         1.000
+ H3RA2          0.000         0.000         1.000
+ H3RA3          0.000         0.000         0.000         1.000
+ H3RA4          0.000         0.000         0.000         0.000         1.000
+ H3RA5          0.000         0.000         0.000         0.000         0.000
+ H3RA6          0.000         0.000         0.000         0.000         0.000
+ H3RA7          0.000         0.000         0.000         0.000         0.000
+ H3RA8          0.000         0.000         0.000         0.000         0.000
+ H3RA9          0.000         0.000         0.000         0.000         0.000
+ H3RA10         0.000         0.000         0.000         0.000         0.000
+ H3RA11         0.000         0.000         0.000         0.000         0.000
+ H3RA12         0.000         0.000         0.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000         0.000         0.000
+ H3RA14         0.000         0.000         0.000         0.000         0.000
+ H3RA15         0.000         0.000         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              H3RA5         H3RA6         H3RA7         H3RA8         H3RA9
+              ________      ________      ________      ________      ________
+ H3RA5          1.000
+ H3RA6          0.000         1.000
+ H3RA7          0.000         0.000         1.000
+ H3RA8          0.000         0.000         0.000         1.000
+ H3RA9          0.000         0.000         0.000         0.000         1.000
+ H3RA10         0.000         0.000         0.000         0.000         0.000
+ H3RA11         0.000         0.000         0.000         0.000         0.000
+ H3RA12         0.000         0.000         0.000         0.000         0.000
+ H3RA13         0.000         0.000         0.000         0.000         0.000
+ H3RA14         0.000         0.000         0.000         0.000         0.000
+ H3RA15         0.000         0.000         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              H3RA10        H3RA11        H3RA12        H3RA13        H3RA14
+              ________      ________      ________      ________      ________
+ H3RA10         1.000
+ H3RA11         0.000         1.000
+ H3RA12         0.000         0.000         1.000
+ H3RA13         0.000         0.000         0.000         1.000
+ H3RA14         0.000         0.000         0.000         0.000         1.000
+ H3RA15         0.000         0.000         0.000         0.000         0.000
+ H3RA16         0.000         0.000         0.000         0.000         0.000
+ H3RA17         0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              H3RA15        H3RA16        H3RA17
+              ________      ________      ________
+ H3RA15         1.000
+ H3RA16         0.000         1.000
+ H3RA17         0.000         0.000         1.000
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              F14
+              ________
+ 1              0.015
+
+
+           Covariances
+              F14
+              ________
+ F14            0.869
+
+
+           Correlations
+              F14
+              ________
+ F14            1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values, estimated factor scores, estimated values, residuals)
+  Scatterplots (sample values, estimated factor scores, estimated values, residuals)
+  Sample proportions and estimated probabilities
+  Item characteristic curves
+  Information curves
+  Latent variable distribution plots
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    withinfamrGE_factor_score_adhd
+
+  Order and format of variables
+
+    H3RA1          F10.3
+    H3RA2          F10.3
+    H3RA3          F10.3
+    H3RA4          F10.3
+    H3RA5          F10.3
+    H3RA6          F10.3
+    H3RA7          F10.3
+    H3RA8          F10.3
+    H3RA9          F10.3
+    H3RA10         F10.3
+    H3RA11         F10.3
+    H3RA12         F10.3
+    H3RA13         F10.3
+    H3RA14         F10.3
+    H3RA15         F10.3
+    H3RA16         F10.3
+    H3RA17         F10.3
+    AID            I9
+    F14            F10.3
+    FAM            I9
+
+  Save file format
+    17F10.3 I9 F10.3 I9
+
+  Save file record length    10000
+
+
+DIAGRAM INFORMATION
+
+  Use View Diagram under the Diagram menu in the Mplus Editor to view the diagram.
+  If running Mplus from the Mplus Diagrammer, the diagram opens automatically.
+
+  Diagram output
+    c:\repo\2024_within_fam_rge\analysis\factor_score_adhd.dgm
+
+     Beginning Time:  14:04:45
+        Ending Time:  14:04:47
+       Elapsed Time:  00:00:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

@@ -1,0 +1,195 @@
+TITLE:    
+        Causal rGE on differential parenting;
+
+DATA:   
+        FILE IS "c:\Repo\data_local\withinfamrGE_addh.csv";
+
+
+
+
+VARIABLE:
+        Names are AID FAM GPAIRID GID GFAM 
+        pgs ANCESTRY sex age_1 age_3 
+        white african native asian other hispanic 
+        income par_ed par_age 
+        par_sex par_marry 
+        bad_temper pr_parent pr_child del_peer scho_con
+        asb_1 asb_3 sub_1 sub_3 
+        par_sub autonomy par_involv adhd;
+
+        usevariables are FAM
+         pgs sex age_1 !age_3
+         !pr_parent 
+         pr_child 
+         !del_peer scho_con
+         asb_1 sub_1 adhd
+         !sub_3
+         pgs_m sex_m age_1_m !age_3_m
+         income_m par_ed_m
+         afr eas his;
+                
+        CLUSTER IS FAM;
+        
+        WITHIN ARE
+         pgs sex age_1 !age_3
+         ;
+
+        BETWEEN ARE 
+        pgs_m sex_m age_1_m !age_3_m
+        income_m par_ed_m
+        afr eas his;
+    
+
+        Missing are .;
+
+
+DEFINE:
+        del_peer = -del_peer;
+        afr = 0;
+        eas = 0;
+        his = 0;
+        IF(ANCESTRY EQ 2)THEN afr = 1;
+        IF(ANCESTRY EQ 3)THEN eas = 1;
+        IF(ANCESTRY EQ 4)THEN his = 1;
+        income = log(income + 1);
+        pgs_m = CLUSTER_MEAN(pgs);
+        sex_m = CLUSTER_MEAN(sex);
+        age_1_m = CLUSTER_MEAN(age_1);
+        !age_3_m = CLUSTER_MEAN(age_3);
+        income_m = CLUSTER_MEAN(income);
+        par_ed_m = CLUSTER_MEAN(par_ed);
+        CENTER pgs sex age_1(GROUPMEAN); 
+        !CENTER age_3(GROUPMEAN);
+
+ANALYSIS:
+
+        TYPE = TWOLEVEL RANDOM;
+        ESTIMATOR = BAYES;
+        !ESTIMATOR=WLSM;
+        !BOOTSTRAP = 20000;
+        PROC = 10;
+        CHAINS = 10;
+        FBITERATIONS= 30000;
+
+MODEL:
+        
+        %WITHIN%
+        
+        pr_child ON sex age_1;
+        asb_1 sub_1 adhd ON sex age_1;
+        [pgs sex age_1 @0];
+        
+        asb_1 ON pgs(aw_asb);
+        sub_1 ON pgs(aw_sub);
+        adhd ON pgs(aw_adhd);
+
+        !pr_parent ON asb_1(b1w_asb);
+        !pr_parent ON sub_1(b1w_sub);
+        !pr_parent ON adhd(b1w_adhd);
+
+        !pr_parent ON pgs(c1w);
+
+        pr_child ON asb_1(b2w_asb);
+        pr_child ON sub_1(b2w_sub);
+        pr_child ON adhd(b2w_adhd);
+
+        pr_child ON pgs(c2w);
+
+        pr_child;
+        !pr_parent pr_child WITH pr_parent pr_child;
+        
+        !sub_1 
+        asb_1 sub_1 adhd;
+        asb_1 sub_1 adhd WITH asb_1 sub_1 adhd;
+
+        pgs sex age_1;
+        pgs sex age_1 WITH pgs sex age_1;
+
+        %BETWEEN%
+        pr_child ON sex_m age_1_m income_m par_ed_m afr eas his;
+
+        asb_1 sub_1 adhd ON sex_m age_1_m income_m par_ed_m afr eas his;
+
+   
+        asb_1 ON pgs_m(ab_asb);
+        sub_1 ON pgs_m(ab_sub);
+        adhd ON pgs_m(ab_adhd);
+
+        !pr_parent ON asb_1(b1b_asb);
+        !pr_parent ON sub_1(b1b_sub);
+        !pr_parent ON adhd(b1b_adhd);
+
+        !pr_parent ON pgs_m(c1b);
+
+        pr_child ON asb_1(b2b_asb);
+        pr_child ON sub_1(b2b_sub);
+        pr_child ON adhd(b2b_adhd);
+
+        pr_child ON pgs_m(c2b);
+
+        pr_child;
+        !pr_parent pr_child WITH pr_parent pr_child;
+
+        asb_1 sub_1 adhd;
+        asb_1 sub_1 adhd WITH asb_1 sub_1 adhd;
+
+
+        pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        
+        pgs_m sex_m WITH pgs_m sex_m age_1_m income_m par_ed_m;
+        age_1_m WITH pgs_m sex_m age_1_m income_m par_ed_m;
+        income_m par_ed_m WITH pgs_m sex_m age_1_m income_m par_ed_m;
+
+        afr eas his WITH pgs_m sex_m age_1_m income_m par_ed_m;
+        afr eas his WITH afr eas his;
+
+
+MODEL CONSTRAINT:
+
+NEW(!iwa1asb iwa1sub iwa1adhd
+    !tw1
+    !pwa1asb pwa1sub pwa1adhd
+    !totw1 ptotw1
+
+    iwa2asb iwa2sub iwa2adhd
+    tw2
+    pwa2asb pwa2sub pwa2adhd
+    totw2 ptotw2
+    );
+    
+    !iwa1asb = aw_asb*b1w_asb;
+    !iwa1sub = aw_sub*b1w_sub;
+    !iwa1adhd = aw_adhd*b1w_adhd;
+
+    !totw1 = iwa1asb + iwa1sub + iwa1adhd;
+
+    !tw1 = c1w + iwa1asb + iwa1sub + iwa1adhd; 
+
+    !pwa1asb = iwa1asb/tw1;
+    !pwa1sub = iwa1sub/tw1;
+    !pwa1adhd = iwa1adhd/tw1;
+
+    !ptotw1 = pwa1asb + pwa1sub + pwa1adhd;
+
+
+    iwa2asb = aw_asb*b2w_asb;
+    iwa2sub = aw_sub*b2w_sub;
+    iwa2adhd = aw_adhd*b2w_adhd;
+
+    totw2 = iwa2asb + iwa2sub + iwa2adhd;
+
+
+    tw2 = c2w + iwa2asb + iwa2sub + iwa2adhd; 
+
+    pwa2asb = iwa2asb/tw2;
+    pwa2sub = iwa2sub/tw2;
+    pwa2adhd = iwa2adhd/tw2;
+
+    ptotw2 = pwa2asb + pwa2sub + pwa2adhd;
+
+
+OUTPUT: TECH1 TECH8 CINTERVAL;
+PLOT: TYPE = PLOT2;
+!SAVEDATA:
+  !BPARAMETERS = bayes.pars;
+
