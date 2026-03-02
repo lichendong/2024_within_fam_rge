@@ -15,39 +15,49 @@ VARIABLE:
         par_sex par_marry 
         bad_temper pr_parent pr_child del_peer scho_con
         asb_1 asb_3 sub_1 sub_3 
-        par_sub autonomy par_involv;
+        par_sub autonomy par_involv adhd;
 
         usevariables are FAM
-         pgs sex age_1 age_3
+         pgs sex age_1 !age_3
          pr_parent pr_child del_peer scho_con
-         asb_1 sub_1 asb_3 sub_3
-         pgs_m sex_m age_1_m age_3_m
-         income_m par_ed_m;
+         asb_1 sub_1 
+         asb_3 sub_3
+         pgs_m sex_m age_1_m !age_3_m
+         income_m par_ed_m
+         afr eas his;
                 
         CLUSTER IS FAM;
         
         WITHIN ARE
-         pgs sex age_1 age_3
+         pgs sex age_1 !age_3
          ;
 
         BETWEEN ARE 
-        pgs_m sex_m age_1_m age_3_m
-        income_m par_ed_m;
+        pgs_m sex_m age_1_m !age_3_m
+        income_m par_ed_m
+        afr eas his;
     
 
         Missing are .;
 
 
 DEFINE:
+        del_peer = -del_peer;
+        afr = 0;
+        eas = 0;
+        his = 0;
+        IF(ANCESTRY EQ 2)THEN afr = 1;
+        IF(ANCESTRY EQ 3)THEN eas = 1;
+        IF(ANCESTRY EQ 4)THEN his = 1;
         income = log(income + 1);
         pgs_m = CLUSTER_MEAN(pgs);
         sex_m = CLUSTER_MEAN(sex);
         age_1_m = CLUSTER_MEAN(age_1);
-        age_3_m = CLUSTER_MEAN(age_3);
+        !age_3_m = CLUSTER_MEAN(age_3);
         income_m = CLUSTER_MEAN(income);
         par_ed_m = CLUSTER_MEAN(par_ed);
         CENTER pgs sex age_1(GROUPMEAN); 
-        CENTER age_3(GROUPMEAN);
+        !CENTER age_3(GROUPMEAN);
 
 ANALYSIS:
 
@@ -57,31 +67,42 @@ ANALYSIS:
         !BOOTSTRAP = 20000;
         PROC = 10;
         CHAINS = 10;
-        FBITERATIONS= 20000;
+        FBITERATIONS= 30000;
 
 MODEL:
         
         %WITHIN%
         
-        pr_parent pr_child del_peer scho_con ON pgs sex age_1;
-        asb_1 sub_1 ON pgs sex age_1;
-        asb_3 sub_3 ON pgs sex age_3;
-        [pgs sex age_1 age_3 @0];
-        pgs sex age_1 age_3;
-        pgs sex age_1 age_3 WITH pgs sex age_1 age_3;
+        pr_parent pr_child del_peer scho_con asb_3 sub_3 asb_1 sub_1 ON sex age_1;
+        pr_parent ON pgs;        
+        pr_child ON pgs;        
+        del_peer ON pgs;        
+        scho_con ON pgs;     
+        asb_1 ON pgs;        
+        sub_1 ON pgs;           
+        asb_3 ON pgs;        
+        sub_3 ON pgs;        
+
+        [pgs sex age_1 @0];
+        pgs sex age_1 ;
+        pgs sex age_1 WITH pgs sex age_1 ;
 
         %BETWEEN%
         pr_parent pr_child del_peer scho_con asb_1 sub_1 asb_3 sub_3;
-        pgs_m sex_m age_1_m age_3_m income_m par_ed_m;
-        pr_parent pr_child  ON pgs_m sex_m age_1_m income_m par_ed_m;
-        del_peer scho_con ON pgs_m sex_m age_1_m income_m par_ed_m;
-        asb_1 sub_1 ON pgs_m sex_m age_1_m income_m par_ed_m;
-        asb_3 sub_3 ON pgs_m sex_m age_3_m income_m par_ed_m;
+        pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
 
+        pr_parent ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        pr_child ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        del_peer ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        scho_con ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        asb_1 sub_1 ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        asb_3 sub_3 ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
 
-        pgs_m sex_m WITH pgs_m sex_m age_1_m age_3_m income_m par_ed_m;
-        age_1_m age_3_m WITH pgs_m sex_m age_1_m age_3_m income_m par_ed_m;
-        income_m par_ed_m WITH pgs_m sex_m age_1_m age_3_m income_m par_ed_m;
+        pgs_m sex_m WITH pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        age_1_m WITH pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        income_m WITH pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        par_ed_m WITH pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        afr eas his WITH pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
 
 MODEL CONSTRAINT:
 

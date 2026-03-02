@@ -1,0 +1,205 @@
+VERSION 1.1.0
+INPUT
+TITLE:
+
+        Causal rGE on differential parenting;
+
+DATA:
+        FILE IS "c:\Repo\data_local\populationrGE_addh.csv";
+VARIABLE:
+        Names are AID FAM GPAIRID GID GFAM
+        pgs ANCESTRY sex age_1 age_3
+        white african native asian other hispanic
+        income par_ed par_age
+        par_sex par_marry
+        bad_temper pr_parent pr_child del_peer scho_con
+        asb_1 asb_3 sub_1 sub_3
+        par_sub autonomy par_involv adhd;
+        usevariables are
+         pgs sex age_1
+         pr_parent pr_child del_peer scho_con
+         asb_1 sub_1 asb_3 sub_3
+         income par_ed
+         afr eas his;
+        Missing are .;
+DEFINE:
+        income = log(income + 1);
+        afr = 0;
+        eas = 0;
+        his = 0;
+        IF(ANCESTRY EQ 2)THEN afr = 1;
+        IF(ANCESTRY EQ 3)THEN eas = 1;
+        IF(ANCESTRY EQ 4)THEN his = 1;
+ANALYSIS:
+        ESTIMATOR = BAYES;
+        PROC = 10;
+        CHAINS = 10;
+        FBITERATIONS= 30000;
+OUTPUT:
+ TECH1 TECH8 CINTERVAL;
+PLOT:
+ TYPE = PLOT2;
+MODEL:
+        pr_parent ON pgs sex age_1 income par_ed afr eas his;
+        pr_child ON pgs sex age_1 income par_ed afr eas his;
+        del_peer ON pgs sex age_1 income par_ed afr eas his;
+        scho_con ON pgs sex age_1 income par_ed afr eas his;
+        asb_1 sub_1 asb_3 sub_3 ON pgs sex age_1 income par_ed afr eas his;
+        pgs sex age_1 income par_ed afr eas his;
+        pgs sex WITH pgs sex age_1 income par_ed afr eas his;
+        age_1 income WITH pgs sex age_1 income par_ed afr eas his;
+        par_ed afr WITH pgs sex age_1 income par_ed afr eas his;
+        eas his WITH pgs sex age_1 income par_ed afr eas his;
+INPUT_END
+3
+0
+0
+0
+BAYES
+1
+GENERAL
+0
+16
+0
+0
+pr_parent pr_child del_peer scho_con asb_1 sub_1 asb_3 sub_3 pgs sex age_1 income par_ed afr eas his
+2
+1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0
+0
+0
+1 1 pgs pr_parent   -0.097    0.012   -0.121   -0.073
+1 1 sex pr_parent   -0.024    0.024   -0.072    0.024
+1 1 age_1 pr_parent   -0.032    0.007   -0.046   -0.018
+1 1 income pr_parent    0.031    0.018   -0.003    0.066
+1 1 par_ed pr_parent    0.010    0.011   -0.012    0.031
+1 1 afr pr_parent   -0.014    0.031   -0.076    0.047
+1 1 eas pr_parent    0.173    0.062    0.052    0.295
+1 1 his pr_parent    0.213    0.041    0.133    0.293
+1 1 pgs pr_child   -0.051    0.012   -0.075   -0.028
+1 1 sex pr_child   -0.231    0.024   -0.278   -0.183
+1 1 age_1 pr_child   -0.110    0.007   -0.124   -0.096
+1 1 income pr_child    0.026    0.018   -0.008    0.061
+1 1 par_ed pr_child    0.016    0.011   -0.006    0.038
+1 1 afr pr_child    0.033    0.031   -0.029    0.094
+1 1 eas pr_child   -0.017    0.062   -0.138    0.104
+1 1 his pr_child   -0.061    0.041   -0.141    0.019
+1 1 pgs del_peer   -0.111    0.012   -0.133   -0.088
+1 1 sex del_peer    0.035    0.023   -0.011    0.080
+1 1 age_1 del_peer   -0.174    0.007   -0.187   -0.160
+1 1 income del_peer    0.032    0.017   -0.002    0.065
+1 1 par_ed del_peer    0.048    0.011    0.027    0.069
+1 1 afr del_peer    0.202    0.030    0.144    0.261
+1 1 eas del_peer    0.409    0.059    0.293    0.525
+1 1 his del_peer    0.105    0.039    0.028    0.182
+1 1 pgs scho_con   -0.069    0.012   -0.093   -0.046
+1 1 sex scho_con   -0.025    0.024   -0.073    0.023
+1 1 age_1 scho_con   -0.059    0.007   -0.073   -0.045
+1 1 income scho_con    0.020    0.018   -0.015    0.055
+1 1 par_ed scho_con    0.031    0.011    0.009    0.053
+1 1 afr scho_con   -0.057    0.032   -0.119    0.004
+1 1 eas scho_con    0.118    0.062   -0.004    0.240
+1 1 his scho_con   -0.022    0.041   -0.102    0.059
+1 1 pgs asb_1    0.122    0.012    0.099    0.146
+1 1 sex asb_1   -0.474    0.024   -0.521   -0.428
+1 1 age_1 asb_1   -0.003    0.007   -0.017    0.011
+1 1 income asb_1   -0.005    0.017   -0.039    0.028
+1 1 par_ed asb_1   -0.008    0.011   -0.029    0.014
+1 1 afr asb_1    0.104    0.031    0.044    0.164
+1 1 eas asb_1    0.002    0.060   -0.116    0.121
+1 1 his asb_1    0.142    0.040    0.063    0.220
+1 1 pgs sub_1    0.105    0.011    0.082    0.127
+1 1 sex sub_1   -0.104    0.023   -0.149   -0.059
+1 1 age_1 sub_1    0.171    0.007    0.158    0.185
+1 1 income sub_1    0.013    0.017   -0.020    0.046
+1 1 par_ed sub_1   -0.013    0.011   -0.034    0.008
+1 1 afr sub_1   -0.432    0.030   -0.490   -0.373
+1 1 eas sub_1   -0.441    0.058   -0.555   -0.326
+1 1 his sub_1   -0.147    0.039   -0.223   -0.072
+1 1 pgs asb_3    0.100    0.012    0.076    0.123
+1 1 sex asb_3   -0.508    0.024   -0.555   -0.462
+1 1 age_1 asb_3   -0.056    0.007   -0.069   -0.042
+1 1 income asb_3    0.003    0.017   -0.031    0.036
+1 1 par_ed asb_3    0.029    0.011    0.008    0.051
+1 1 afr asb_3    0.087    0.031    0.027    0.147
+1 1 eas asb_3    0.053    0.060   -0.065    0.172
+1 1 his asb_3    0.084    0.040    0.006    0.163
+1 1 pgs sub_3    0.072    0.012    0.049    0.094
+1 1 sex sub_3   -0.356    0.023   -0.401   -0.310
+1 1 age_1 sub_3    0.022    0.007    0.009    0.035
+1 1 income sub_3    0.076    0.017    0.042    0.109
+1 1 par_ed sub_3    0.074    0.011    0.053    0.095
+1 1 afr sub_3   -0.571    0.030   -0.630   -0.512
+1 1 eas sub_3   -0.411    0.059   -0.527   -0.296
+1 1 his sub_3   -0.200    0.039   -0.277   -0.123
+2 1 pgs sex    0.004    0.006   -0.008    0.015
+2 1 pgs age_1    0.000    0.020   -0.038    0.039
+2 1 pgs income   -0.045    0.011   -0.066   -0.024
+2 1 pgs par_ed   -0.086    0.015   -0.115   -0.056
+2 1 pgs afr    0.001    0.005   -0.009    0.010
+2 1 pgs eas    0.004    0.002    0.000    0.009
+2 1 pgs his    0.000    0.004   -0.007    0.007
+2 1 sex age_1   -0.044    0.010   -0.063   -0.025
+2 1 sex income   -0.003    0.005   -0.014    0.007
+2 1 sex par_ed   -0.011    0.007   -0.025    0.004
+2 1 sex afr    0.005    0.002    0.000    0.010
+2 1 sex eas   -0.003    0.001   -0.006   -0.001
+2 1 sex his   -0.004    0.002   -0.007    0.000
+2 1 age_1 income   -0.027    0.018   -0.063    0.009
+2 1 age_1 par_ed   -0.142    0.026   -0.193   -0.091
+2 1 age_1 afr   -0.001    0.008   -0.018    0.015
+2 1 age_1 eas    0.022    0.004    0.014    0.031
+2 1 age_1 his    0.028    0.006    0.016    0.040
+2 1 income par_ed    0.458    0.015    0.430    0.488
+2 1 income afr   -0.077    0.005   -0.086   -0.068
+2 1 income eas    0.008    0.002    0.003    0.013
+2 1 income his   -0.023    0.003   -0.030   -0.016
+2 1 par_ed afr   -0.007    0.006   -0.020    0.005
+2 1 par_ed eas    0.018    0.003    0.012    0.025
+2 1 par_ed his   -0.072    0.005   -0.082   -0.063
+2 1 afr eas   -0.011    0.001   -0.013   -0.009
+2 1 afr his   -0.024    0.002   -0.027   -0.021
+2 1 eas his   -0.005    0.001   -0.007   -0.004
+2 1 pr_child pr_parent    0.334    0.013    0.309    0.358
+2 1 del_peer pr_parent    0.189    0.012    0.166    0.212
+2 1 del_peer pr_child    0.163    0.012    0.140    0.186
+2 1 scho_con pr_parent    0.170    0.012    0.147    0.194
+2 1 scho_con pr_child    0.295    0.013    0.271    0.320
+2 1 scho_con del_peer    0.191    0.012    0.168    0.214
+2 1 asb_1 pr_parent   -0.213    0.012   -0.237   -0.190
+2 1 asb_1 pr_child   -0.216    0.012   -0.239   -0.193
+2 1 asb_1 del_peer   -0.364    0.012   -0.388   -0.341
+2 1 asb_1 scho_con   -0.211    0.012   -0.234   -0.187
+2 1 sub_1 pr_parent   -0.186    0.012   -0.208   -0.163
+2 1 sub_1 pr_child   -0.168    0.011   -0.191   -0.146
+2 1 sub_1 del_peer   -0.529    0.013   -0.554   -0.505
+2 1 sub_1 scho_con   -0.157    0.011   -0.179   -0.134
+2 1 sub_1 asb_1    0.396    0.012    0.372    0.420
+2 1 asb_3 pr_parent   -0.141    0.012   -0.164   -0.118
+2 1 asb_3 pr_child   -0.136    0.012   -0.160   -0.113
+2 1 asb_3 del_peer   -0.204    0.011   -0.227   -0.182
+2 1 asb_3 scho_con   -0.141    0.012   -0.164   -0.118
+2 1 asb_3 asb_1    0.578    0.013    0.553    0.605
+2 1 asb_3 sub_1    0.236    0.011    0.214    0.259
+2 1 sub_3 pr_parent   -0.067    0.011   -0.089   -0.044
+2 1 sub_3 pr_child   -0.068    0.011   -0.090   -0.045
+2 1 sub_3 del_peer   -0.208    0.011   -0.230   -0.186
+2 1 sub_3 scho_con   -0.025    0.011   -0.048   -0.003
+2 1 sub_3 asb_1    0.193    0.011    0.171    0.216
+2 1 sub_3 sub_1    0.377    0.012    0.354    0.400
+2 1 sub_3 asb_3    0.262    0.012    0.239    0.284
+4 1 pr_parent    0.971    0.017    0.939    1.004
+4 1 pr_child    0.963    0.017    0.931    0.997
+4 1 del_peer    0.889    0.015    0.860    0.920
+4 1 scho_con    0.978    0.017    0.945    1.012
+4 1 asb_1    0.932    0.016    0.901    0.964
+4 1 sub_1    0.871    0.015    0.842    0.901
+4 1 asb_3    0.931    0.016    0.900    0.964
+4 1 sub_3    0.890    0.015    0.860    0.921
+5 1 pgs    0.988    0.016    0.958    1.020
+5 1 sex    0.250    0.004    0.242    0.258
+5 1 age_1    2.963    0.048    2.870    3.059
+5 1 income    0.699    0.013    0.674    0.725
+5 1 par_ed    1.620    0.027    1.569    1.674
+5 1 afr    0.173    0.003    0.168    0.179
+5 1 eas    0.046    0.001    0.045    0.048
+5 1 his    0.097    0.002    0.094    0.100

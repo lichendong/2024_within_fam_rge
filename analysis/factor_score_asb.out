@@ -1,0 +1,1165 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+04/06/2025   2:04 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+          Causal rGE on differential parenting;
+
+  DATA:
+          FILE IS "c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv";
+
+  VARIABLE:
+          Names are AID FAM sex age_1 age_3
+          white african native asian other hispanic
+          income par_ed
+          PC34A PC34B PC34C PC34D PC34E PC44A
+          H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          H1TO29 H1TO33 H1TO9 H1DS14
+          H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+          H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+          H3RA1 H3RA2 H3RA3 H3RA4 H3RA5 H3RA6 H3RA7 H3RA8
+          H3RA9 H3RA10 H3RA11 H3RA12 H3RA13 H3RA14 H3RA15
+          H3RA16 H3RA17
+          par_age par_sex par_marry
+          PA61 PA62 PB22
+          PC10 PC11 PC12 PC17
+          PC32
+          H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+
+
+          usevariables are FAM
+          !PC34A PC34B PC34C PC34D PC34E PC44A
+          !H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          !H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          !H1TO29 H1TO33 H1TO9 H1DS14
+          !H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          !H1TO15 H1TO17 H1TO5 H1TO32 H1TO36 H1TO42
+          !H3TO38 H3TO40 H3TO7 H3TO110 H3TO113 H3TO119
+          !PA61 PA62 PB22
+          !PC10 PC11 PC12 PC17
+          !H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          !H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+          ;
+
+          IDVARIABLE = AID;
+
+          CATEGORICAL ARE
+          !PC34A PC34B PC34C PC34D PC34E PC44A
+          !H1WP9 H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5
+          !H1WP13 H1WP14 H1PF23 H1PF24 H1PF25
+          !H1TO29 H1TO33 H1TO9 H1DS14
+          !H1ED19 H1ED20 H1ED22 H1ED23 H1ED24 H1PR2
+          H1DS2 H1DS12 H1FV8 H1DS6 H1DS9
+          H1DS10 H1DS13 H1DS11 H1FV7 H1DS7
+          H3DS1 H3DS5 H3DS18I H3DS17 H3DS2
+          H3DS3 H3DS6 H3DS4 H3DS18H H3HR23
+          !PC10 PC11 PC12 PC17
+          !H1WP1 H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7
+          !H1WP17F H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H
+          ;
+
+          !CENSORED ARE
+          !H1TO15 (bi) H1TO17 (bi) H1TO5 (bi) H1TO32 (bi)
+          !H1TO36 (bi) H1TO42 (bi) H3TO38 (bi) H3TO40 (bi)
+          !H3TO7 (bi) H3TO110 (bi) H3TO113 (bi) H3TO119 (bi)
+          !PA61 (bi) PA62 (bi) PB22 (bi)
+          !;
+
+          CLUSTER IS FAM;
+
+          Missing are .;
+
+  DEFINE:
+
+
+  ANALYSIS:
+
+          TYPE = COMPLEX;
+          !ESTIMATOR = BAYES;
+          ESTIMATOR=WLSMV;
+          !BOOTSTRAP = 20000;
+          !FBITERATIONS= 20000;
+  MODEL:
+
+          !f1 BY PC34A* PC34B PC34C PC34D PC34E PC44A;
+          !f2 BY H1WP9* H1WP10 H1PF1 H1PF2 H1PF3 H1PF4 H1PF5;
+          !f3 BY H1WP13* H1WP14 H1PF23 H1PF24 H1PF25;
+          !f4 BY H1TO29* H1TO33 H1TO9 H1DS14;
+          !f5 BY H1ED19* H1ED20 H1ED22 H1ED23 H1ED24 H1PR2;
+          f6 BY H1DS2* H1DS12 H1FV8 H1DS6 H1DS9
+          H1DS10 H1DS13 H1DS11 H1FV7 H1DS7;
+          f7 BY H3DS1* H3DS5 H3DS18I H3DS17 H3DS2
+          H3DS3 H3DS6 H3DS4 H3DS18H H3HR23;
+
+          H1DS2 H1DS12 H1FV8 H1DS6 PWITH H3DS1 H3DS5 H3DS18I H3DS17;
+          H1DS9 H1DS10 H1DS13 H1DS11 PWITH H3DS2 H3DS3 H3DS6 H3DS4;
+          H1FV7 H1DS7 PWITH H3DS18H H3HR23;
+
+          !f8 BY H1TO15* H1TO17 H1TO5 H1TO32 H1TO36 H1TO42;
+          !f9 BY H3TO38* H3TO40 H3TO7 H3TO110 H3TO113 H3TO119;
+          !f10 BY PA61* PA62 PB22;
+          !f11 BY PC10* PC11 PC12 PC17;
+          !f12 BY H1WP1* H1WP2 H1WP3 H1WP4 H1WP5 H1WP6 H1WP7;
+          !f13 BY H1WP17F* H1WP17G H1WP17H H1WP18F H1WP18G H1WP18H;
+
+          [f6-f7@0];
+          f6-f7@1;
+          f6 WITH f7;
+
+
+  MODEL CONSTRAINT:
+
+  OUTPUT: TECH1 TECH8 MODINDICES;
+  PLOT: TYPE = PLOT3;
+
+  SAVEDATA:
+  FILE IS withinfamrGE_factor_score_asb;
+
+  SAVE = FSCORES;
+
+
+
+*** WARNING in OUTPUT command
+  TECH8 option is available only with analysis types MIXTURE, RANDOM, or
+  TWOLEVEL with estimators ML, MLF, or MLR or ALGORITHM=INTEGRATION.
+  Request for TECH8 is ignored.
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  14
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+Causal rGE on differential parenting;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        9960
+
+Number of dependent variables                                   20
+Number of independent variables                                  0
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   H1DS2       H1DS12      H1FV8       H1DS6       H1DS9       H1DS10
+   H1DS13      H1DS11      H1FV7       H1DS7       H3DS1       H3DS5
+   H3DS18I     H3DS17      H3DS2       H3DS3       H3DS6       H3DS4
+   H3DS18H     H3HR23
+
+Continuous latent variables
+   F6          F7
+
+Variables with special functions
+
+  Cluster variable      FAM
+  ID variable           AID
+
+Estimator                                                    WLSMV
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Parameterization                                             DELTA
+
+Input data file(s)
+  c:\Repo\data_local\withinfamrGE_addh_full_sample_for_fa.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            89
+     Number of clusters        8923
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              H1DS2         H1DS12        H1FV8         H1DS6         H1DS9
+              ________      ________      ________      ________      ________
+ H1DS2          0.995
+ H1DS12         0.993         0.995
+ H1FV8          0.994         0.994         0.996
+ H1DS6          0.993         0.992         0.993         0.994
+ H1DS9          0.994         0.994         0.995         0.994         0.996
+ H1DS10         0.994         0.994         0.995         0.994         0.996
+ H1DS13         0.993         0.993         0.994         0.993         0.994
+ H1DS11         0.994         0.994         0.995         0.994         0.995
+ H1FV7          0.994         0.994         0.996         0.994         0.995
+ H1DS7          0.995         0.994         0.995         0.994         0.996
+ H3DS1          0.831         0.830         0.830         0.830         0.831
+ H3DS5          0.830         0.829         0.830         0.829         0.830
+ H3DS18I        0.833         0.832         0.833         0.833         0.834
+ H3DS17         0.826         0.825         0.826         0.825         0.826
+ H3DS2          0.831         0.830         0.831         0.831         0.832
+ H3DS3          0.832         0.831         0.832         0.832         0.833
+ H3DS6          0.832         0.831         0.832         0.831         0.832
+ H3DS4          0.832         0.832         0.832         0.832         0.833
+ H3DS18H        0.833         0.832         0.833         0.833         0.833
+ H3HR23         0.837         0.836         0.837         0.836         0.837
+
+
+           Covariance Coverage
+              H1DS10        H1DS13        H1DS11        H1FV7         H1DS7
+              ________      ________      ________      ________      ________
+ H1DS10         0.996
+ H1DS13         0.994         0.995
+ H1DS11         0.996         0.994         0.996
+ H1FV7          0.995         0.994         0.995         0.996
+ H1DS7          0.996         0.994         0.996         0.996         0.996
+ H3DS1          0.831         0.829         0.831         0.831         0.831
+ H3DS5          0.830         0.829         0.830         0.830         0.830
+ H3DS18I        0.833         0.832         0.833         0.833         0.834
+ H3DS17         0.826         0.824         0.826         0.826         0.826
+ H3DS2          0.831         0.830         0.831         0.832         0.832
+ H3DS3          0.832         0.831         0.832         0.832         0.833
+ H3DS6          0.832         0.831         0.832         0.832         0.832
+ H3DS4          0.832         0.831         0.832         0.833         0.833
+ H3DS18H        0.833         0.832         0.833         0.833         0.834
+ H3HR23         0.837         0.836         0.837         0.837         0.838
+
+
+           Covariance Coverage
+              H3DS1         H3DS5         H3DS18I       H3DS17        H3DS2
+              ________      ________      ________      ________      ________
+ H3DS1          0.834
+ H3DS5          0.830         0.833
+ H3DS18I        0.831         0.830         0.837
+ H3DS17         0.825         0.824         0.827         0.829
+ H3DS2          0.833         0.831         0.832         0.826         0.835
+ H3DS3          0.833         0.832         0.833         0.827         0.834
+ H3DS6          0.832         0.832         0.832         0.826         0.834
+ H3DS4          0.833         0.833         0.833         0.827         0.834
+ H3DS18H        0.831         0.830         0.836         0.827         0.832
+ H3HR23         0.833         0.832         0.836         0.828         0.834
+
+
+           Covariance Coverage
+              H3DS3         H3DS6         H3DS4         H3DS18H       H3HR23
+              ________      ________      ________      ________      ________
+ H3DS3          0.836
+ H3DS6          0.834         0.835
+ H3DS4          0.835         0.835         0.836
+ H3DS18H        0.833         0.833         0.833         0.837
+ H3HR23         0.835         0.835         0.835         0.836         0.841
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    H1DS2
+      Category 1    0.823         8155.000
+      Category 2    0.136         1351.000
+      Category 3    0.022          216.000
+      Category 4    0.019          190.000
+    H1DS12
+      Category 1    0.925         9162.000
+      Category 2    0.037          366.000
+      Category 3    0.012          118.000
+      Category 4    0.026          261.000
+    H1FV8
+      Category 1    0.983         9749.000
+      Category 2    0.011          112.000
+      Category 3    0.006           59.000
+    H1DS6
+      Category 1    0.816         8080.000
+      Category 2    0.141         1400.000
+      Category 3    0.023          225.000
+      Category 4    0.020          200.000
+    H1DS9
+      Category 1    0.947         9394.000
+      Category 2    0.035          351.000
+      Category 3    0.008           79.000
+      Category 4    0.010           97.000
+    H1DS10
+      Category 1    0.947         9397.000
+      Category 2    0.036          361.000
+      Category 3    0.007           68.000
+      Category 4    0.009           93.000
+    H1DS13
+      Category 1    0.793         7856.000
+      Category 2    0.129         1273.000
+      Category 3    0.028          281.000
+      Category 4    0.050          496.000
+    H1DS11
+      Category 1    0.956         9484.000
+      Category 2    0.033          332.000
+      Category 3    0.006           58.000
+      Category 4    0.005           46.000
+    H1FV7
+      Category 1    0.954         9466.000
+      Category 2    0.034          335.000
+      Category 3    0.012          122.000
+    H1DS7
+      Category 1    0.913         9063.000
+      Category 2    0.069          680.000
+      Category 3    0.010          104.000
+      Category 4    0.008           77.000
+    H3DS1
+      Category 1    0.913         7581.000
+      Category 2    0.073          606.000
+      Category 3    0.009           74.000
+      Category 4    0.005           43.000
+    H3DS5
+      Category 1    0.922         7647.000
+      Category 2    0.030          246.000
+      Category 3    0.014          112.000
+      Category 4    0.035          291.000
+    H3DS18I
+      Category 1    0.995         8291.000
+      Category 2    0.005           41.000
+    H3DS17
+      Category 1    0.944         7788.000
+      Category 2    0.046          380.000
+      Category 3    0.006           53.000
+      Category 4    0.004           33.000
+    H3DS2
+      Category 1    0.968         8045.000
+      Category 2    0.024          199.000
+      Category 3    0.005           42.000
+      Category 4    0.003           28.000
+    H3DS3
+      Category 1    0.982         8173.000
+      Category 2    0.014          116.000
+      Category 3    0.002           16.000
+      Category 4    0.002           17.000
+    H3DS6
+      Category 1    0.925         7692.000
+      Category 2    0.056          464.000
+      Category 3    0.010           82.000
+      Category 4    0.010           80.000
+    H3DS4
+      Category 1    0.980         8161.000
+      Category 2    0.017          139.000
+      Category 3    0.002           18.000
+      Category 4    0.001            6.000
+    H3DS18H
+      Category 1    0.985         8207.000
+      Category 2    0.015          125.000
+    H3HR23
+      Category 1    0.914         7657.000
+      Category 2    0.086          716.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE MODEL CONTAINS A NON-ZERO CORRELATION BETWEEN DEPENDENT VARIABLES.
+     SUCH CORRELATIONS ARE IGNORED IN THE COMPUTATION OF THE FACTOR SCORES.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       83
+
+Chi-Square Test of Model Fit
+
+          Value                           1832.657*
+          Degrees of Freedom                   159
+          P-Value                           0.0000
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.033
+          90 Percent C.I.                    0.031  0.034
+          Probability RMSEA <= .05           1.000
+
+CFI/TLI
+
+          CFI                                0.941
+          TLI                                0.929
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                          28428.991
+          Degrees of Freedom                   190
+          P-Value                           0.0000
+
+WRMR (Weighted Root Mean Square Residual)
+
+          Value                              2.853
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ F6       BY
+    H1DS2              0.687      0.012     57.706      0.000
+    H1DS12             0.719      0.014     50.135      0.000
+    H1FV8              0.893      0.016     55.683      0.000
+    H1DS6              0.635      0.013     49.870      0.000
+    H1DS9              0.827      0.012     68.020      0.000
+    H1DS10             0.824      0.013     65.632      0.000
+    H1DS13             0.717      0.012     61.929      0.000
+    H1DS11             0.764      0.015     50.885      0.000
+    H1FV7              0.839      0.012     71.007      0.000
+    H1DS7              0.473      0.020     24.186      0.000
+
+ F7       BY
+    H3DS1              0.666      0.019     35.344      0.000
+    H3DS5              0.659      0.020     32.359      0.000
+    H3DS18I            0.907      0.034     26.926      0.000
+    H3DS17             0.579      0.025     23.389      0.000
+    H3DS2              0.847      0.017     49.072      0.000
+    H3DS3              0.867      0.019     46.268      0.000
+    H3DS6              0.753      0.017     45.124      0.000
+    H3DS4              0.705      0.028     25.372      0.000
+    H3DS18H            0.795      0.031     26.033      0.000
+    H3HR23             0.357      0.029     12.152      0.000
+
+ F6       WITH
+    F7                 0.422      0.023     18.211      0.000
+
+ H1DS2    WITH
+    H3DS1              0.157      0.021      7.339      0.000
+
+ H1DS12   WITH
+    H3DS5              0.190      0.026      7.232      0.000
+
+ H1FV8    WITH
+    H3DS18I           -0.149      0.122     -1.222      0.222
+
+ H1DS6    WITH
+    H3DS17             0.198      0.025      7.949      0.000
+
+ H1DS9    WITH
+    H3DS2             -0.034      0.039     -0.866      0.387
+
+ H1DS10   WITH
+    H3DS3              0.017      0.044      0.388      0.698
+
+ H1DS13   WITH
+    H3DS6              0.086      0.023      3.775      0.000
+
+ H1DS11   WITH
+    H3DS4              0.091      0.046      1.963      0.050
+
+ H1FV7    WITH
+    H3DS18H            0.103      0.048      2.172      0.030
+
+ H1DS7    WITH
+    H3HR23             0.571      0.020     28.073      0.000
+
+ Means
+    F6                 0.000      0.000    999.000    999.000
+    F7                 0.000      0.000    999.000    999.000
+
+ Thresholds
+    H1DS2$1            0.926      0.015     61.595      0.000
+    H1DS2$2            1.740      0.023     75.746      0.000
+    H1DS2$3            2.071      0.030     69.995      0.000
+    H1DS12$1           1.438      0.019     76.107      0.000
+    H1DS12$2           1.771      0.023     75.459      0.000
+    H1DS12$3           1.937      0.027     72.878      0.000
+    H1FV8$1            2.114      0.031     68.732      0.000
+    H1FV8$2            2.515      0.046     55.006      0.000
+    H1DS6$1            0.899      0.015     60.630      0.000
+    H1DS6$2            1.718      0.023     75.789      0.000
+    H1DS6$3            2.050      0.029     70.299      0.000
+    H1DS9$1            1.615      0.021     76.412      0.000
+    H1DS9$2            2.103      0.031     68.281      0.000
+    H1DS9$3            2.335      0.038     61.185      0.000
+    H1DS10$1           1.620      0.021     77.269      0.000
+    H1DS10$2           2.139      0.032     67.197      0.000
+    H1DS10$3           2.350      0.039     60.600      0.000
+    H1DS13$1           0.817      0.014     56.599      0.000
+    H1DS13$2           1.416      0.019     75.321      0.000
+    H1DS13$3           1.644      0.022     76.032      0.000
+    H1DS11$1           1.707      0.022     76.416      0.000
+    H1DS11$2           2.309      0.037     62.184      0.000
+    H1DS11$3           2.602      0.050     51.614      0.000
+    H1FV7$1            1.684      0.022     76.483      0.000
+    H1FV7$2            2.248      0.035     64.346      0.000
+    H1DS7$1            1.361      0.018     75.725      0.000
+    H1DS7$2            2.092      0.030     69.775      0.000
+    H1DS7$3            2.420      0.041     58.681      0.000
+    H3DS1$1            1.359      0.020     69.048      0.000
+    H3DS1$2            2.195      0.036     60.984      0.000
+    H3DS1$3            2.564      0.053     48.569      0.000
+    H3DS5$1            1.417      0.020     69.323      0.000
+    H3DS5$2            1.659      0.024     70.342      0.000
+    H3DS5$3            1.811      0.026     68.832      0.000
+    H3DS18I$1          2.581      0.054     48.026      0.000
+    H3DS17$1           1.585      0.022     70.670      0.000
+    H3DS17$2           2.311      0.040     57.134      0.000
+    H3DS17$3           2.652      0.059     45.202      0.000
+    H3DS2$1            1.847      0.027     68.928      0.000
+    H3DS2$2            2.390      0.044     54.752      0.000
+    H3DS2$3            2.710      0.063     43.305      0.000
+    H3DS3$1            2.099      0.033     63.404      0.000
+    H3DS3$2            2.655      0.059     45.331      0.000
+    H3DS3$3            2.871      0.077     37.510      0.000
+    H3DS6$1            1.438      0.021     69.904      0.000
+    H3DS6$2            2.065      0.032     63.874      0.000
+    H3DS6$3            2.341      0.041     56.421      0.000
+    H3DS4$1            2.062      0.032     64.685      0.000
+    H3DS4$2            2.761      0.067     41.474      0.000
+    H3DS4$3            3.186      0.118     26.987      0.000
+    H3DS18H$1          2.170      0.035     61.297      0.000
+    H3HR23$1           1.369      0.020     68.895      0.000
+
+ Variances
+    F6                 1.000      0.000    999.000    999.000
+    F7                 1.000      0.000    999.000    999.000
+
+
+R-SQUARE
+
+    Observed                   Residual
+    Variable        Estimate   Variance
+
+    H1DS2              0.472      0.528
+    H1DS12             0.517      0.483
+    H1FV8              0.797      0.203
+    H1DS6              0.404      0.596
+    H1DS9              0.684      0.316
+    H1DS10             0.680      0.320
+    H1DS13             0.514      0.486
+    H1DS11             0.584      0.416
+    H1FV7              0.704      0.296
+    H1DS7              0.224      0.776
+    H3DS1              0.443      0.557
+    H3DS5              0.434      0.566
+    H3DS18I            0.822      0.178
+    H3DS17             0.335      0.665
+    H3DS2              0.717      0.283
+    H3DS3              0.752      0.248
+    H3DS6              0.568      0.432
+    H3DS4              0.497      0.503
+    H3DS18H            0.632      0.368
+    H3HR23             0.127      0.873
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.244E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+MODEL MODIFICATION INDICES
+
+NOTE:  Modification indices for direct effects of observed dependent variables
+regressed on covariates and residual covariances among observed dependent
+variables may not be included.  To include these, request MODINDICES (ALL).
+
+Minimum M.I. value for printing the modification index    10.000
+
+                                   M.I.     E.P.C.  Std E.P.C.  StdYX E.P.C.
+
+BY Statements
+
+F6       BY H3DS5                 35.393     0.129      0.129        0.129
+F6       BY H3DS2                 11.729    -0.097     -0.097       -0.097
+F6       BY H3DS6                 33.521    -0.138     -0.138       -0.138
+F6       BY H3HR23               141.853     0.251      0.251        0.251
+F7       BY H1DS2                 32.355     0.124      0.124        0.124
+F7       BY H1DS7                 15.483    -0.104     -0.104       -0.104
+
+WITH Statements
+
+H1FV8    WITH H1DS2               27.454    -0.179     -0.179       -0.547
+H1DS9    WITH H1FV8               36.389    -0.233     -0.233       -0.920
+H1DS10   WITH H1FV8               50.333    -0.295     -0.295       -1.158
+H1DS10   WITH H1DS6               29.366    -0.140     -0.140       -0.321
+H1DS10   WITH H1DS9               31.237     0.124      0.124        0.388
+H1DS13   WITH H1DS2               38.577     0.106      0.106        0.210
+H1DS13   WITH H1FV8              104.077    -0.396     -0.396       -1.262
+H1DS13   WITH H1DS6               40.298    -0.124     -0.124       -0.231
+H1DS13   WITH H1DS9               36.355     0.120      0.120        0.306
+H1DS13   WITH H1DS10             119.697     0.209      0.209        0.530
+H1DS11   WITH H1DS13              38.224    -0.165     -0.165       -0.366
+H1FV7    WITH H1DS2               27.134    -0.135     -0.135       -0.341
+H1FV7    WITH H1FV8              241.652     0.351      0.351        1.431
+H1FV7    WITH H1DS6               28.059     0.116      0.116        0.276
+H1FV7    WITH H1DS9               49.514    -0.224     -0.224       -0.733
+H1FV7    WITH H1DS10              63.341    -0.262     -0.262       -0.849
+H1FV7    WITH H1DS13             125.289    -0.311     -0.311       -0.819
+H1FV7    WITH H1DS11              11.958     0.087      0.087        0.248
+H1DS7    WITH H1DS12              11.848     0.093      0.093        0.152
+H3DS5    WITH H1DS2               15.887     0.106      0.106        0.193
+H3DS18I  WITH H3DS1               30.586    -0.399     -0.399       -1.269
+H3DS18I  WITH H3DS5               20.813    -0.340     -0.340       -1.073
+H3DS17   WITH H1DS12              13.057     0.130      0.130        0.229
+H3DS17   WITH H3DS18I             11.450     0.179      0.179        0.522
+H3DS2    WITH H3DS18I             25.157    -0.427     -0.427       -1.907
+H3DS2    WITH H3DS17              15.007    -0.171     -0.171       -0.395
+H3DS3    WITH H3DS18I             26.835    -0.570     -0.570       -2.718
+H3DS6    WITH H1DS2               22.864     0.127      0.127        0.265
+H3DS6    WITH H1DS6               23.173    -0.147     -0.147       -0.289
+H3DS6    WITH H1FV7               16.696    -0.180     -0.180       -0.502
+H3DS6    WITH H1DS7               13.940    -0.142     -0.142       -0.245
+H3DS6    WITH H3DS1               39.757     0.167      0.167        0.341
+H3DS6    WITH H3DS18I             55.749    -0.778     -0.778       -2.807
+H3DS6    WITH H3DS17              46.313    -0.273     -0.273       -0.510
+H3DS6    WITH H3DS2               82.709     0.255      0.255        0.730
+H3DS6    WITH H3DS3               13.764     0.122      0.122        0.373
+H3DS18H  WITH H3DS1               12.615    -0.175     -0.175       -0.387
+H3DS18H  WITH H3DS5               12.395    -0.179     -0.179       -0.392
+H3DS18H  WITH H3DS18I            193.852     0.618      0.618        2.416
+H3DS18H  WITH H3DS17              24.058     0.202      0.202        0.408
+H3DS18H  WITH H3DS2               30.158    -0.334     -0.334       -1.036
+H3DS18H  WITH H3DS3               29.777    -0.401     -0.401       -1.327
+H3DS18H  WITH H3DS6               65.643    -0.479     -0.479       -1.200
+H3HR23   WITH H1DS2               12.450     0.096      0.096        0.142
+H3HR23   WITH H1DS12              20.357     0.153      0.153        0.235
+H3HR23   WITH H1DS6               20.474     0.124      0.124        0.172
+H3HR23   WITH H1DS9               21.327     0.168      0.168        0.319
+H3HR23   WITH H1DS10              11.077     0.123      0.123        0.232
+H3HR23   WITH H1DS13              26.809     0.137      0.137        0.210
+H3HR23   WITH H3DS6               23.736    -0.184     -0.184       -0.300
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           TAU
+              H1DS2$1       H1DS2$2       H1DS2$3       H1DS12$1      H1DS12$2
+              ________      ________      ________      ________      ________
+      1           1             2             3             4             5
+
+
+           TAU
+              H1DS12$3      H1FV8$1       H1FV8$2       H1DS6$1       H1DS6$2
+              ________      ________      ________      ________      ________
+      1           6             7             8             9            10
+
+
+           TAU
+              H1DS6$3       H1DS9$1       H1DS9$2       H1DS9$3       H1DS10$1
+              ________      ________      ________      ________      ________
+      1          11            12            13            14            15
+
+
+           TAU
+              H1DS10$2      H1DS10$3      H1DS13$1      H1DS13$2      H1DS13$3
+              ________      ________      ________      ________      ________
+      1          16            17            18            19            20
+
+
+           TAU
+              H1DS11$1      H1DS11$2      H1DS11$3      H1FV7$1       H1FV7$2
+              ________      ________      ________      ________      ________
+      1          21            22            23            24            25
+
+
+           TAU
+              H1DS7$1       H1DS7$2       H1DS7$3       H3DS1$1       H3DS1$2
+              ________      ________      ________      ________      ________
+      1          26            27            28            29            30
+
+
+           TAU
+              H3DS1$3       H3DS5$1       H3DS5$2       H3DS5$3       H3DS18I$
+              ________      ________      ________      ________      ________
+      1          31            32            33            34            35
+
+
+           TAU
+              H3DS17$1      H3DS17$2      H3DS17$3      H3DS2$1       H3DS2$2
+              ________      ________      ________      ________      ________
+      1          36            37            38            39            40
+
+
+           TAU
+              H3DS2$3       H3DS3$1       H3DS3$2       H3DS3$3       H3DS6$1
+              ________      ________      ________      ________      ________
+      1          41            42            43            44            45
+
+
+           TAU
+              H3DS6$2       H3DS6$3       H3DS4$1       H3DS4$2       H3DS4$3
+              ________      ________      ________      ________      ________
+      1          46            47            48            49            50
+
+
+           TAU
+              H3DS18H$      H3HR23$1
+              ________      ________
+      1          51            52
+
+
+           NU
+              H1DS2         H1DS12        H1FV8         H1DS6         H1DS9
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           NU
+              H1DS10        H1DS13        H1DS11        H1FV7         H1DS7
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           NU
+              H3DS1         H3DS5         H3DS18I       H3DS17        H3DS2
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           NU
+              H3DS3         H3DS6         H3DS4         H3DS18H       H3HR23
+              ________      ________      ________      ________      ________
+      1           0             0             0             0             0
+
+
+           LAMBDA
+              F6            F7
+              ________      ________
+ H1DS2             53             0
+ H1DS12            54             0
+ H1FV8             55             0
+ H1DS6             56             0
+ H1DS9             57             0
+ H1DS10            58             0
+ H1DS13            59             0
+ H1DS11            60             0
+ H1FV7             61             0
+ H1DS7             62             0
+ H3DS1              0            63
+ H3DS5              0            64
+ H3DS18I            0            65
+ H3DS17             0            66
+ H3DS2              0            67
+ H3DS3              0            68
+ H3DS6              0            69
+ H3DS4              0            70
+ H3DS18H            0            71
+ H3HR23             0            72
+
+
+           THETA
+              H1DS2         H1DS12        H1FV8         H1DS6         H1DS9
+              ________      ________      ________      ________      ________
+ H1DS2              0
+ H1DS12             0             0
+ H1FV8              0             0             0
+ H1DS6              0             0             0             0
+ H1DS9              0             0             0             0             0
+ H1DS10             0             0             0             0             0
+ H1DS13             0             0             0             0             0
+ H1DS11             0             0             0             0             0
+ H1FV7              0             0             0             0             0
+ H1DS7              0             0             0             0             0
+ H3DS1             73             0             0             0             0
+ H3DS5              0            74             0             0             0
+ H3DS18I            0             0            75             0             0
+ H3DS17             0             0             0            76             0
+ H3DS2              0             0             0             0            77
+ H3DS3              0             0             0             0             0
+ H3DS6              0             0             0             0             0
+ H3DS4              0             0             0             0             0
+ H3DS18H            0             0             0             0             0
+ H3HR23             0             0             0             0             0
+
+
+           THETA
+              H1DS10        H1DS13        H1DS11        H1FV7         H1DS7
+              ________      ________      ________      ________      ________
+ H1DS10             0
+ H1DS13             0             0
+ H1DS11             0             0             0
+ H1FV7              0             0             0             0
+ H1DS7              0             0             0             0             0
+ H3DS1              0             0             0             0             0
+ H3DS5              0             0             0             0             0
+ H3DS18I            0             0             0             0             0
+ H3DS17             0             0             0             0             0
+ H3DS2              0             0             0             0             0
+ H3DS3             78             0             0             0             0
+ H3DS6              0            79             0             0             0
+ H3DS4              0             0            80             0             0
+ H3DS18H            0             0             0            81             0
+ H3HR23             0             0             0             0            82
+
+
+           THETA
+              H3DS1         H3DS5         H3DS18I       H3DS17        H3DS2
+              ________      ________      ________      ________      ________
+ H3DS1              0
+ H3DS5              0             0
+ H3DS18I            0             0             0
+ H3DS17             0             0             0             0
+ H3DS2              0             0             0             0             0
+ H3DS3              0             0             0             0             0
+ H3DS6              0             0             0             0             0
+ H3DS4              0             0             0             0             0
+ H3DS18H            0             0             0             0             0
+ H3HR23             0             0             0             0             0
+
+
+           THETA
+              H3DS3         H3DS6         H3DS4         H3DS18H       H3HR23
+              ________      ________      ________      ________      ________
+ H3DS3              0
+ H3DS6              0             0
+ H3DS4              0             0             0
+ H3DS18H            0             0             0             0
+ H3HR23             0             0             0             0             0
+
+
+           ALPHA
+              F6            F7
+              ________      ________
+      1           0             0
+
+
+           BETA
+              F6            F7
+              ________      ________
+ F6                 0             0
+ F7                 0             0
+
+
+           PSI
+              F6            F7
+              ________      ________
+ F6                 0
+ F7                83             0
+
+
+     STARTING VALUES
+
+
+           TAU
+              H1DS2$1       H1DS2$2       H1DS2$3       H1DS12$1      H1DS12$2
+              ________      ________      ________      ________      ________
+      1         0.926         1.740         2.071         1.438         1.771
+
+
+           TAU
+              H1DS12$3      H1FV8$1       H1FV8$2       H1DS6$1       H1DS6$2
+              ________      ________      ________      ________      ________
+      1         1.937         2.114         2.515         0.899         1.718
+
+
+           TAU
+              H1DS6$3       H1DS9$1       H1DS9$2       H1DS9$3       H1DS10$1
+              ________      ________      ________      ________      ________
+      1         2.050         1.615         2.103         2.335         1.620
+
+
+           TAU
+              H1DS10$2      H1DS10$3      H1DS13$1      H1DS13$2      H1DS13$3
+              ________      ________      ________      ________      ________
+      1         2.139         2.350         0.817         1.416         1.644
+
+
+           TAU
+              H1DS11$1      H1DS11$2      H1DS11$3      H1FV7$1       H1FV7$2
+              ________      ________      ________      ________      ________
+      1         1.707         2.309         2.602         1.684         2.248
+
+
+           TAU
+              H1DS7$1       H1DS7$2       H1DS7$3       H3DS1$1       H3DS1$2
+              ________      ________      ________      ________      ________
+      1         1.361         2.092         2.420         1.359         2.195
+
+
+           TAU
+              H3DS1$3       H3DS5$1       H3DS5$2       H3DS5$3       H3DS18I$
+              ________      ________      ________      ________      ________
+      1         2.564         1.417         1.659         1.811         2.581
+
+
+           TAU
+              H3DS17$1      H3DS17$2      H3DS17$3      H3DS2$1       H3DS2$2
+              ________      ________      ________      ________      ________
+      1         1.585         2.311         2.652         1.847         2.390
+
+
+           TAU
+              H3DS2$3       H3DS3$1       H3DS3$2       H3DS3$3       H3DS6$1
+              ________      ________      ________      ________      ________
+      1         2.710         2.099         2.655         2.871         1.438
+
+
+           TAU
+              H3DS6$2       H3DS6$3       H3DS4$1       H3DS4$2       H3DS4$3
+              ________      ________      ________      ________      ________
+      1         2.065         2.341         2.062         2.761         3.186
+
+
+           TAU
+              H3DS18H$      H3HR23$1
+              ________      ________
+      1         2.170         1.369
+
+
+           NU
+              H1DS2         H1DS12        H1FV8         H1DS6         H1DS9
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              H1DS10        H1DS13        H1DS11        H1FV7         H1DS7
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              H3DS1         H3DS5         H3DS18I       H3DS17        H3DS2
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              H3DS3         H3DS6         H3DS4         H3DS18H       H3HR23
+              ________      ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              F6            F7
+              ________      ________
+ H1DS2          1.000         0.000
+ H1DS12         1.000         0.000
+ H1FV8          1.000         0.000
+ H1DS6          1.000         0.000
+ H1DS9          1.000         0.000
+ H1DS10         1.000         0.000
+ H1DS13         1.000         0.000
+ H1DS11         1.000         0.000
+ H1FV7          1.000         0.000
+ H1DS7          1.000         0.000
+ H3DS1          0.000         1.000
+ H3DS5          0.000         1.000
+ H3DS18I        0.000         1.000
+ H3DS17         0.000         1.000
+ H3DS2          0.000         1.000
+ H3DS3          0.000         1.000
+ H3DS6          0.000         1.000
+ H3DS4          0.000         1.000
+ H3DS18H        0.000         1.000
+ H3HR23         0.000         1.000
+
+
+           THETA
+              H1DS2         H1DS12        H1FV8         H1DS6         H1DS9
+              ________      ________      ________      ________      ________
+ H1DS2          1.000
+ H1DS12         0.000         1.000
+ H1FV8          0.000         0.000         1.000
+ H1DS6          0.000         0.000         0.000         1.000
+ H1DS9          0.000         0.000         0.000         0.000         1.000
+ H1DS10         0.000         0.000         0.000         0.000         0.000
+ H1DS13         0.000         0.000         0.000         0.000         0.000
+ H1DS11         0.000         0.000         0.000         0.000         0.000
+ H1FV7          0.000         0.000         0.000         0.000         0.000
+ H1DS7          0.000         0.000         0.000         0.000         0.000
+ H3DS1          0.000         0.000         0.000         0.000         0.000
+ H3DS5          0.000         0.000         0.000         0.000         0.000
+ H3DS18I        0.000         0.000         0.000         0.000         0.000
+ H3DS17         0.000         0.000         0.000         0.000         0.000
+ H3DS2          0.000         0.000         0.000         0.000         0.000
+ H3DS3          0.000         0.000         0.000         0.000         0.000
+ H3DS6          0.000         0.000         0.000         0.000         0.000
+ H3DS4          0.000         0.000         0.000         0.000         0.000
+ H3DS18H        0.000         0.000         0.000         0.000         0.000
+ H3HR23         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              H1DS10        H1DS13        H1DS11        H1FV7         H1DS7
+              ________      ________      ________      ________      ________
+ H1DS10         1.000
+ H1DS13         0.000         1.000
+ H1DS11         0.000         0.000         1.000
+ H1FV7          0.000         0.000         0.000         1.000
+ H1DS7          0.000         0.000         0.000         0.000         1.000
+ H3DS1          0.000         0.000         0.000         0.000         0.000
+ H3DS5          0.000         0.000         0.000         0.000         0.000
+ H3DS18I        0.000         0.000         0.000         0.000         0.000
+ H3DS17         0.000         0.000         0.000         0.000         0.000
+ H3DS2          0.000         0.000         0.000         0.000         0.000
+ H3DS3          0.000         0.000         0.000         0.000         0.000
+ H3DS6          0.000         0.000         0.000         0.000         0.000
+ H3DS4          0.000         0.000         0.000         0.000         0.000
+ H3DS18H        0.000         0.000         0.000         0.000         0.000
+ H3HR23         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              H3DS1         H3DS5         H3DS18I       H3DS17        H3DS2
+              ________      ________      ________      ________      ________
+ H3DS1          1.000
+ H3DS5          0.000         1.000
+ H3DS18I        0.000         0.000         1.000
+ H3DS17         0.000         0.000         0.000         1.000
+ H3DS2          0.000         0.000         0.000         0.000         1.000
+ H3DS3          0.000         0.000         0.000         0.000         0.000
+ H3DS6          0.000         0.000         0.000         0.000         0.000
+ H3DS4          0.000         0.000         0.000         0.000         0.000
+ H3DS18H        0.000         0.000         0.000         0.000         0.000
+ H3HR23         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              H3DS3         H3DS6         H3DS4         H3DS18H       H3HR23
+              ________      ________      ________      ________      ________
+ H3DS3          1.000
+ H3DS6          0.000         1.000
+ H3DS4          0.000         0.000         1.000
+ H3DS18H        0.000         0.000         0.000         1.000
+ H3HR23         0.000         0.000         0.000         0.000         1.000
+
+
+           ALPHA
+              F6            F7
+              ________      ________
+      1         0.000         0.000
+
+
+           BETA
+              F6            F7
+              ________      ________
+ F6             0.000         0.000
+ F7             0.000         0.000
+
+
+           PSI
+              F6            F7
+              ________      ________
+ F6             1.000
+ F7             0.000         1.000
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              F6            F7
+              ________      ________
+ 1              0.134         0.133
+
+
+           Covariances
+              F6            F7
+              ________      ________
+ F6             0.506
+ F7             0.270         0.356
+
+
+           Correlations
+              F6            F7
+              ________      ________
+ F6             1.000
+ F7             0.637         1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values, estimated factor scores, estimated values, residuals)
+  Scatterplots (sample values, estimated factor scores, estimated values, residuals)
+  Sample proportions and estimated probabilities
+  Item characteristic curves
+  Information curves
+  Latent variable distribution plots
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    withinfamrGE_factor_score_asb
+
+  Order and format of variables
+
+    H1DS2          F10.3
+    H1DS12         F10.3
+    H1FV8          F10.3
+    H1DS6          F10.3
+    H1DS9          F10.3
+    H1DS10         F10.3
+    H1DS13         F10.3
+    H1DS11         F10.3
+    H1FV7          F10.3
+    H1DS7          F10.3
+    H3DS1          F10.3
+    H3DS5          F10.3
+    H3DS18I        F10.3
+    H3DS17         F10.3
+    H3DS2          F10.3
+    H3DS3          F10.3
+    H3DS6          F10.3
+    H3DS4          F10.3
+    H3DS18H        F10.3
+    H3HR23         F10.3
+    AID            I9
+    F6             F10.3
+    F7             F10.3
+    FAM            I9
+
+  Save file format
+    20F10.3 I9 2F10.3 I9
+
+  Save file record length    10000
+
+
+DIAGRAM INFORMATION
+
+  Use View Diagram under the Diagram menu in the Mplus Editor to view the diagram.
+  If running Mplus from the Mplus Diagrammer, the diagram opens automatically.
+
+  Diagram output
+    c:\repo\2024_within_fam_rge\analysis\factor_score_asb.dgm
+
+     Beginning Time:  14:04:53
+        Ending Time:  14:04:55
+       Elapsed Time:  00:00:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

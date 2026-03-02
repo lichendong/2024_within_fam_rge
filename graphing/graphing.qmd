@@ -21,7 +21,7 @@ options(conflicts.policy = "depends.ok")
 library(tidyverse)
 library(lavaan)
 theme_set(jtools::theme_apa())
-path_data <- "isrcap_2025"
+path_data <- "graphing"
 ```
 
 # Regression
@@ -60,9 +60,213 @@ data <- data |> mutate(path = fct_rev(fct(path)),
   coord_flip(ylim = c(-.3, .3)) + 
   scale_color_brewer(palette = "Set1"))
 
-ggsave("regression.png", rp1, path = here::here(path_data), width = 9.2, height = 5.2, dpi = 600)
+ggsave("regression.png", rp1, path = here::here(path_data), width = 9.2, height = 7.8, dpi = 600)
 
 ```
+
+### Forest Plot - Shorten
+
+```{r}
+(rp2 <- ggplot(data |> filter(path != "PGS → SUB"& path != "PGS → ASB"), aes(y = est, ymin = lwr, ymax = upr, x = path, color = level, shape = level ,group = level)) +
+  geom_hline(yintercept = 0, color = "black", linewidth = .8, linetype = "dashed") +
+  geom_errorbar(position = position_dodge(-.7), linewidth = .8, width = .3) +
+  geom_point(position = position_dodge(-.7), size = 3, color = "black") +
+  geom_text(aes(label = text, vjust = -.8), position = position_dodge(-.7), color = "black") +
+  theme(axis.text.y = element_text(hjust=0)) + 
+  labs(x = "Path", y = "Estimate") + 
+  coord_flip(ylim = c(-.3, .3)) + 
+  scale_color_brewer(palette = "Set1"))
+
+ggsave("regression_short.png", rp2, path = here::here(path_data), width = 9.2, height = 5.2, dpi = 600)
+
+```
+
+### Forest Plot - Population
+
+```{r}
+(rp3 <- ggplot(data |> filter(path != "PGS → SUB"& path != "PGS → ASB", level == "Population"), aes(y = est, ymin = lwr, ymax = upr, x = path, color = level, shape = level ,group = level)) +
+  geom_hline(yintercept = 0, color = "black", linewidth = .8, linetype = "dashed") +
+  geom_errorbar(position = position_dodge(-.7), linewidth = .8, width = .15) +
+  geom_point(position = position_dodge(-.7), size = 3, color = "black") +
+  geom_text(aes(label = text, vjust = -.8), position = position_dodge(-.7), color = "black") +
+  theme(axis.text.y = element_text(hjust=0)) + 
+  labs(x = "Path", y = "Estimate") + 
+  coord_flip(ylim = c(-.3, .3)) + 
+  scale_color_manual(values = RColorBrewer::brewer.pal(n = 3, name = "Set1")[3]))
+
+ggsave("regression_pop.png", rp3, path = here::here(path_data), width = 9.2, height = 5.2, dpi = 600)
+
+```
+
+# Mediation_GPE
+
+
+
+### Read in data
+```{r}
+data <- readxl::read_xlsx(here::here(path_data, "coefficients_mediation_GPE.xlsx"), trim_ws = F) |> 
+        glimpse()
+
+```
+
+
+### Make `est` numeric and seperate `ci` into `lwr` and `upr`
+
+```{r}
+data <- data |> mutate(
+                       model = paste(model, "Report"),
+                       model = factor(model, 
+                                      c("Parent Report", "Child Report")),
+                       path = fct_rev(factor(path,
+                                     c("Total PGS effect", 
+                                       "Indirect effect via Wave 1 SUB",
+                                       "Indirect effect via Wave 1 ASB",
+                                       "Indirect effect via Childhood ADHD",
+                                       "Indirect effects combined",
+                                       "PGS direct effect"))),
+                       text = est,
+                       pct = replace_na(pct, ""),
+                       est = str_replace(est, "\\*$", ""),
+                       lwr = str_split_i(ci, "\\s~\\s", 1),
+                       upr = str_split_i(ci, "\\s~\\s", 2),
+                       text = paste0("b = ", text),
+                       across(c(est,lwr,upr),as.numeric),
+                       across(where(is.numeric), ~ round(., digits = 3)))
+```
+
+### Forest Plot
+
+```{r}
+(mp_gpe <- ggplot(data, aes(y = est, ymin = lwr, ymax = upr, x = path)) +
+  geom_hline(yintercept = 0, color = "darkgrey", linewidth = .8, linetype = "dotted") +
+  geom_errorbar(linewidth = .8, width = .1) +
+  geom_point(size = 3, color = "black") +
+  geom_text(data = data, aes(y = .1, label = text), vjust = -.8, hjust = 1, color = "black") +
+  geom_text(data = data, aes(y = .1, label = pct), vjust = 1.2, hjust = 1, color = "black") +
+  theme(axis.text.y = element_text(hjust=0)) + 
+  labs(x = "Path", y = "Estimate") + 
+  coord_flip(ylim = c(-.2, .1)) +
+  facet_grid(. ~ model) + 
+  scale_color_brewer(palette = "Set1"))
+
+ggsave("mediation_gpe.png", mp_gpe, path = here::here(path_data), width = 12.2, height = 7.8, dpi = 600)
+
+```
+
+
+
+
+
+
+
+
+
+# Mediation_GEP
+
+
+
+### Read in data
+```{r}
+data <- readxl::read_xlsx(here::here(path_data, "coefficients_mediation_GEP.xlsx"), trim_ws = F) |> 
+        glimpse()
+
+```
+
+
+### Make `est` numeric and seperate `ci` into `lwr` and `upr`
+
+```{r}
+data <- data |> mutate(
+                       model = factor(model, 
+                                      c("Wave III SUB", "Wave III ASB")),
+                       path = fct_rev(factor(path,
+                                     c("Total PGS effect", 
+                                       "Indirect effect via parent report",
+                                       "Indirect effect via child report",
+                                       "Indirect effects combined",
+                                       "PGS direct effect"))),
+                       text = est,
+                       pct = replace_na(pct, ""),
+                       est = str_replace(est, "\\*$", ""),
+                       lwr = str_split_i(ci, "\\s~\\s", 1),
+                       upr = str_split_i(ci, "\\s~\\s", 2),
+                       text = paste0("b = ", text),
+                       across(c(est,lwr,upr),as.numeric),
+                       across(where(is.numeric), ~ round(., digits = 3)))
+```
+
+### Forest Plot
+
+```{r}
+(mp_gep <- ggplot(data, aes(y = est, ymin = lwr, ymax = upr, x = path)) +
+  geom_hline(yintercept = 0, color = "darkgrey", linewidth = .8, linetype = "dotted") +
+  geom_errorbar(linewidth = .8, width = .1) +
+  geom_point(size = 3, color = "black") +
+  geom_text(data = data, aes(label = text), vjust = -.8, color = "black") +
+  geom_text(data = data, aes(label = pct), vjust = 1.8, color = "black") +
+  theme(axis.text.y = element_text(hjust=0)) + 
+  labs(x = "Path", y = "Estimate") + 
+  coord_flip(ylim = c(-.15, .15)) +
+  facet_grid(. ~ model) + 
+  scale_color_brewer(palette = "Set1"))
+
+ggsave("mediation_gep.png", mp_gep, path = here::here(path_data), width = 12.2, height = 7.8, dpi = 600)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# end
+
+
+## Read in data 
+
+```{r}
+data <- readxl::read_xlsx(here::here(path_data, "coefficients_mediation.xlsx"), trim_ws = F) |> 
+        glimpse()
+```
+
+## Make `est` numeric and seperate `ci` into `lwr` and `upr`
+
+```{r}
+data <- data |> mutate(path = fct_rev(fct(path)),
+                       est = str_replace(est, "\\*$", ""),
+                       lwr = str_split_i(ci, "\\s~\\s", 1),
+                       upr = str_split_i(ci, "\\s~\\s", 2),
+                       across(c(est,lwr,upr),as.numeric),
+                       across(where(is.numeric), ~ round(., digits = 3)),
+                       level = factor(level,c("within", "between"),c("Within Family", "Between Family")))
+```
+
+## Forest Plot
+
+```{r}
+ggplot(data = data, aes(y = est, ymin = lwr, ymax = upr, x = path, color = level, shape = level ,group = level)) +
+  geom_hline(yintercept = 0, color = "black", linetype = "dashed") +
+  geom_errorbar(position = position_dodge(.5), size = .8) +
+  geom_point(position = position_dodge(.5), size = 2, color = "black") +
+  theme(axis.text.y = element_text(hjust=0)) +
+  facet_grid(. ~ model) +
+  coord_flip(ylim = c(-.5, .5))
+```
+
 
 
 # Mediation GEP

@@ -1,0 +1,69 @@
+TITLE:    
+        Causal rGE on differential parenting;
+
+DATA:   
+        FILE IS "c:\Repo\data_local\populationrGE_addh.csv";
+
+
+
+
+VARIABLE:
+        Names are AID FAM GPAIRID GID GFAM 
+        pgs ANCESTRY sex age_1 age_3 
+        white african native asian other hispanic 
+        income par_ed par_age 
+        par_sex par_marry 
+        bad_temper pr_parent pr_child del_peer scho_con
+        asb_1 asb_3 sub_1 sub_3 
+        par_sub autonomy par_involv adhd;
+
+        usevariables are !FAM
+         pgs sex age_1 !age_3
+         pr_parent pr_child del_peer scho_con
+         asb_1 sub_1 asb_3 sub_3
+         income par_ed
+         afr eas his;
+                
+
+        Missing are .;
+
+
+DEFINE:
+        income = log(income + 1);
+        afr = 0;
+        eas = 0;
+        his = 0;
+        IF(ANCESTRY EQ 2)THEN afr = 1;
+        IF(ANCESTRY EQ 3)THEN eas = 1;
+        IF(ANCESTRY EQ 4)THEN his = 1;
+
+ANALYSIS:
+
+        ESTIMATOR = BAYES;
+        !ESTIMATOR=WLSM;
+        !BOOTSTRAP = 20000;
+        PROC = 10;
+        CHAINS = 10;
+        FBITERATIONS= 30000;
+
+MODEL:
+        
+        
+        pr_parent ON pgs sex age_1 income par_ed afr eas his;
+        pr_child ON pgs sex age_1 income par_ed afr eas his;
+        del_peer ON pgs sex age_1 income par_ed afr eas his;
+        scho_con ON pgs sex age_1 income par_ed afr eas his;
+        asb_1 sub_1 asb_3 sub_3 ON pgs sex age_1 income par_ed afr eas his;
+        pgs sex age_1 income par_ed afr eas his;
+
+        pgs sex WITH pgs sex age_1 income par_ed afr eas his;
+        age_1 income WITH pgs sex age_1 income par_ed afr eas his;
+        par_ed afr WITH pgs sex age_1 income par_ed afr eas his;
+        eas his WITH pgs sex age_1 income par_ed afr eas his;
+
+
+MODEL CONSTRAINT:
+
+OUTPUT: TECH1 TECH8 CINTERVAL;
+PLOT: TYPE = PLOT2;
+
