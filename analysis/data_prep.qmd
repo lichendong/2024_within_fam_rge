@@ -703,3 +703,14 @@ write.table(data_population,file = here::here(path_data, "populationrGE_addh.csv
 names(data_population) |> cat()
 ```
 
+
+## Cross sample comparison
+
+```{r}
+data_all <- data_within |> group_by(FAMID) |> slice_sample(n = 1) |> mutate(SAMPLE = "fam") |> bind_rows(data_population |> mutate(SAMPLE = "pop"))
+
+lm(asb_wave1 ~ SAMPLE, data_all) |> broom::tidy()
+glm(other ~ SAMPLE, family = binomial(link = "logit"), data_all |> mutate(sex = sex - 1)) |> broom::tidy()
+chisq.test(data_all$par_ed, data_all$SAMPLE)
+```
+

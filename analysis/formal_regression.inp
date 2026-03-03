@@ -74,10 +74,10 @@ MODEL:
         %WITHIN%
         
         pr_parent pr_child del_peer scho_con asb_3 sub_3 asb_1 sub_1 ON sex age_1;
-        pr_parent ON pgs;        
-        pr_child ON pgs;        
-        del_peer ON pgs;        
-        scho_con ON pgs;     
+        pr_parent ON pgs (w1);        
+        pr_child ON pgs (w2);        
+        del_peer ON pgs (w3);        
+        scho_con ON pgs (w4);     
         asb_1 ON pgs;        
         sub_1 ON pgs;           
         asb_3 ON pgs;        
@@ -91,10 +91,15 @@ MODEL:
         pr_parent pr_child del_peer scho_con asb_1 sub_1 asb_3 sub_3;
         pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
 
-        pr_parent ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
-        pr_child ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
-        del_peer ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
-        scho_con ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
+        pr_parent ON pgs_m (b1);
+        pr_child ON pgs_m (b2);
+        del_peer ON pgs_m (b3);
+        scho_con ON pgs_m (b4);
+
+        pr_parent ON  sex_m age_1_m income_m par_ed_m afr eas his;
+        pr_child ON  sex_m age_1_m income_m par_ed_m afr eas his;
+        del_peer ON  sex_m age_1_m income_m par_ed_m afr eas his;
+        scho_con ON  sex_m age_1_m income_m par_ed_m afr eas his;
         asb_1 sub_1 ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
         asb_3 sub_3 ON pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
 
@@ -105,6 +110,14 @@ MODEL:
         afr eas his WITH pgs_m sex_m age_1_m income_m par_ed_m afr eas his;
 
 MODEL CONSTRAINT:
+
+NEW (d_parent d_child d_peer d_scho);
+
+d_parent = b1-w1;
+d_child = b2-w2;
+d_peer = b3-w3;
+d_scho = b4-w4;
+
 
 OUTPUT: TECH1 TECH8 CINTERVAL;
 PLOT: TYPE = PLOT2;
