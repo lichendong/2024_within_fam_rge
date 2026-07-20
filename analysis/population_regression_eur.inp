@@ -22,20 +22,15 @@ VARIABLE:
          pr_parent pr_child del_peer scho_con
          asb_1 sub_1 asb_3 sub_3
          income par_ed
-         afr eas his;
-                
+         ;
+          
+        useobs are ANCESTRY EQ 1;
 
         Missing are .;
 
 
 DEFINE:
         income = log(income + 1);
-        afr = 0;
-        eas = 0;
-        his = 0;
-        IF(ANCESTRY EQ 2)THEN afr = 1;
-        IF(ANCESTRY EQ 3)THEN eas = 1;
-        IF(ANCESTRY EQ 4)THEN his = 1;
 
 ANALYSIS:
 
@@ -44,22 +39,21 @@ ANALYSIS:
         !BOOTSTRAP = 20000;
         PROC = 10;
         CHAINS = 10;
-        FBITERATIONS= 30000;
+        FBITERATIONS= 15000;
 
 MODEL:
         
         
-        pr_parent ON pgs sex age_1 income par_ed afr eas his;
-        pr_child ON pgs sex age_1 income par_ed afr eas his;
-        del_peer ON pgs sex age_1 income par_ed afr eas his;
-        scho_con ON pgs sex age_1 income par_ed afr eas his;
-        asb_1 sub_1 asb_3 sub_3 ON pgs sex age_1 income par_ed afr eas his;
-        pgs sex age_1 income par_ed afr eas his;
+        pr_parent ON pgs sex age_1 income par_ed ;
+        pr_child ON pgs sex age_1 income par_ed ;
+        del_peer ON pgs sex age_1 income par_ed ;
+        scho_con ON pgs sex age_1 income par_ed ;
+        asb_1 sub_1 asb_3 sub_3 ON pgs sex age_1 income par_ed ;
+        pgs sex age_1 income par_ed ;
 
-        pgs sex WITH pgs sex age_1 income par_ed afr eas his;
-        age_1 income WITH pgs sex age_1 income par_ed afr eas his;
-        par_ed afr WITH pgs sex age_1 income par_ed afr eas his;
-        eas his WITH pgs sex age_1 income par_ed afr eas his;
+        pgs sex WITH pgs sex age_1 income par_ed ;
+        age_1 income WITH pgs sex age_1 income par_ed ;
+        par_ed WITH pgs sex age_1 income par_ed ;
 
 
 MODEL CONSTRAINT:

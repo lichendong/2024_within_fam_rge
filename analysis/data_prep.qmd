@@ -18,6 +18,7 @@ editor_options:
 #| output: false
 
 options(conflicts.policy = "depends.ok")
+options(scipen = 999)
 library(tidyverse)
 library(lavaan)
 
@@ -45,10 +46,13 @@ Here we select monozygotic twins, dizygotic twins, full siblings, and twins with
 
 ```{r}
 pairs <- read.csv(here::here(path_data, "LICHENMAINNEW.csv"), header = F) |> 
-         select(V2, V3, V4, V13) |> 
-         filter(V3 %in% c("MZ","DZ","FS","UD", "."))
+         select(V2, V3, V4, V13)
+names(pairs) <- c("PAIRID", "TYPE" , "AID1", "AID2")
 
-fs_dz_id <- c(pairs$V4, pairs$V13) |> unique()
+pairs <- pairs |> 
+         filter(TYPE %in% c("MZ","DZ","FS","UD", "."))
+
+fs_dz_id <- c(pairs$AID1, pairs$AID2) |> unique()
 ```
 
 ### Genetic ancestry
@@ -83,12 +87,34 @@ pgs_pc <- left_join(gid, ext_pgs) |> left_join(genetic_pc) |>
           mutate(AID = as.character(AID))
 ```
 
+
+### MZ by family
+
+```{r}
+mz_fam <- tibble(AID = c(pairs |> filter(TYPE == "MZ") |> pull(AID1),
+             pairs |> filter(TYPE == "MZ") |> pull(AID2)) |> unique())
+
+mz_fam <- mz_fam |> left_join(pgs_pc |> mutate(AID = as.integer(AID))) |> select(AID, FAMID)
+
+fam_size <- pgs_pc |> select(AID, FAMID) |> group_by(FAMID) |> summarize(size = n())
+
+mz_fam <-mz_fam |> left_join(fam_size)
+
+mz_fam <- mz_fam |> filter(size <= 2) |> 
+            # filter(FAMID %in% sample(unique(FAMID), size = 119)) |> 
+            pull(AID)
+
+# fs_dz_id <- fs_dz_id[!fs_dz_id%in%mz_fam]
+```
+
+
+
 ## Creating variables
 
 ### AID
 
 ```{r}
-data <- Wave1 |> select(AID)
+data <- Wave1 |> select(AID, SCID)
 ```
 
 ### Biological sex
@@ -178,9 +204,9 @@ pr_parent <- Wave1 %>% select("AID",starts_with("PC34"),"PC44A") |>
                     PC34D = 6 - PC34D,
                     PC44A = 6 - PC44A)
 
-psych::fa.parallel(pr_parent |> select(-AID), fm = "wls", fa = "fa", cor = "poly")
+# psych::fa.parallel(pr_parent |> select(-AID), fm = "wls", fa = "fa", cor = "poly")
 
-lavaan::efa(pr_parent |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
+# lavaan::efa(pr_parent |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
 
 data <- data |> left_join(pr_parent)
 
@@ -196,7 +222,7 @@ pr_child <- Wave1 |> select(AID, H1WP9, H1WP10, H1PF1, H1PF2,
             mutate(across(H1WP9:H1PF25, ~ replace(.x, .x > 5, NA)),
                    across(starts_with("H1PF"), ~ 6 - .x))
 
-psych::fa.parallel(pr_child |> select(H1WP9:H1PF25), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
+# psych::fa.parallel(pr_child |> select(H1WP9:H1PF25), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
 
 data <- data |> left_join(pr_child)
 
@@ -209,7 +235,7 @@ del_peer <- Wave1 |> select(AID, H1TO29, H1TO33, H1TO9, H1DS14) |>
             mutate(across(H1TO29:H1DS14, ~ replace(.x, .x > 5, NA)),
                    across(H1TO29:H1DS14, ~ 4 - .x))
 
-psych::fa.parallel(del_peer |> select(-AID), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
+# psych::fa.parallel(del_peer |> select(-AID), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
 
 data <- data |> left_join(del_peer)
 
@@ -223,7 +249,7 @@ school_con <- Wave1 |> select(AID, H1ED19, H1ED20, H1ED22, H1ED23,
               mutate(across(H1ED19:H1PR2, ~ replace(.x, .x > 5, NA)),
                      across(starts_with("H1ED"), ~ 6 - .x))
 
-psych::fa.parallel(school_con |> select(-AID), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
+# psych::fa.parallel(school_con |> select(-AID), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
 
 data <- data |> left_join(school_con)
 
@@ -248,9 +274,9 @@ asb_wave3 <- Wave3 |> select(AID, H3DS1, H3DS5, H3DS18I, H3DS17,
                     #across(H3DS1:H3HR23, ~ replace(.x , .x > 0, 1))
                     )
 
-psych::fa.parallel(asb_wave1 |> left_join(asb_wave3) |> select(-AID), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
+# psych::fa.parallel(asb_wave1 |> left_join(asb_wave3) |> select(-AID), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
 
-lavaan::efa(asb_wave1 |> left_join(asb_wave3) |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
+# lavaan::efa(asb_wave1 |> left_join(asb_wave3) |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
 
 
 data <- data |> left_join(asb_wave1) |> left_join(asb_wave3)
@@ -303,9 +329,9 @@ sub_wave3 <- Wave3 |> select(AID, H3TO38, H3TO40, H3TO7, H3TO110, H3TO113, H3TO1
                                 labels = F))
 
 
-psych::fa.parallel(sub_wave1 |> left_join(sub_wave3) |> select(-AID), fm = "wls", fa = "fa", cor = "cor", error.bars = T)
+# psych::fa.parallel(sub_wave1 |> left_join(sub_wave3) |> select(-AID), fm = "wls", fa = "fa", cor = "cor", error.bars = T)
 
-lavaan::efa(sub_wave1 |> left_join(sub_wave3) |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
+# lavaan::efa(sub_wave1 |> left_join(sub_wave3) |> select(-AID) |> mutate(across(everything(), as.ordered)), nfactors = 1:2, rotation = "oblimin") |> summary()
 
 
 data <- data |> left_join(sub_wave1) |> left_join(sub_wave3)
@@ -320,7 +346,7 @@ adhd <- Wave3 |> select(AID, H3RA1:H3RA17) |>
   mutate(across(H3RA1:H3RA17, ~ replace(.x, .x > 5, NA)))
 
 
-psych::fa.parallel(adhd |> select(-AID), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
+# psych::fa.parallel(adhd |> select(-AID), fm = "wls", fa = "fa", cor = "poly", error.bars = T)
 
 data <- data |> left_join(adhd)
 
@@ -380,6 +406,30 @@ pgs_pc <- pgs_pc |> mutate(
                          PC8 + PC9 + PC10,
                data = pgs_pc, na.action = "na.exclude") %>% residuals(),
   EXT_PGS = scale(EXT_PGS)|> as.vector())
+```
+
+### Examine PGS by pair type
+```{r}
+pairs_test <- pairs |> left_join(pgs_pc |> select(AID, EXT_PGS) |> 
+                                   mutate(AID = as.integer(AID)) |> 
+                                   rename(AID1 = AID, EXT_PGS1 = EXT_PGS)) |> 
+                       left_join(pgs_pc |> select(AID, EXT_PGS) |> 
+                                   mutate(AID = as.integer(AID)) |> 
+                                   rename(AID2 = AID, EXT_PGS2 = EXT_PGS)) |> 
+                       na.omit()
+
+pairs_test |> filter(TYPE == "MZ")
+
+# mz_fix <- pairs_test |> filter(TYPE == "MZ") |> 
+#   filter(AID2 %in% unique(pairs_test$AID2)) |> 
+#   select(AID2, EXT_PGS1) |> 
+#   rename(AID = AID2, EXT_PGS_new = EXT_PGS1) |> 
+#   mutate(AID = as.character(AID))
+#   
+# pgs_pc <- pgs_pc |> left_join(mz_fix) |> 
+#           mutate(EXT_PGS = 
+#                    if_else(is.na(EXT_PGS_new), EXT_PGS, EXT_PGS_new)) |>
+#           select(-EXT_PGS_new)
 ```
 
 
@@ -442,7 +492,7 @@ fs_adhd <- data.table::fread("withinfamrGE_factor_score_adhd") |>
         select(V18:V19) |> 
         rename(AID = V18, adhd = V19)
 
-fs_all <- fs_par_rel_parent |> left_join(fs_par_rel_child) |> left_join(fs_del_peer) |> 
+fs_all <- data |> mutate(AID = as.integer(AID)) |> select(AID) |> left_join(fs_par_rel_parent) |> left_join(fs_par_rel_child) |> left_join(fs_del_peer) |> 
                   left_join(fs_sch_con) |> left_join(fs_asb) |> left_join(fs_sub) |>
                   left_join(fs_5) |> left_join(fs_6) |> left_join(fs_adhd) |> 
           mutate(AID = as.character(AID)) |> 
@@ -456,7 +506,7 @@ fs_all <- fs_par_rel_parent |> left_join(fs_par_rel_child) |> left_join(fs_del_p
 
 ```{r}
 data_within <- pgs_pc |> select(-starts_with("PC")) |> left_join(ancestry) |> 
-               left_join(data |> select(AID, sex, age_1, age_3, white,
+               left_join(data |> select(AID, SCID, sex, age_1, age_3, white,
                                         african, native, asian, other,
                                         hispanic, income, par_ed, par_age,
                                         par_sex, par_marry, bad_temper)) |>
@@ -511,6 +561,7 @@ Mode <- function(x) {
 
 ```{r}
 data_within |> skimr::skim()
+
 
 skimr::skim(data_within)
 length(unique(data_within$FAMID))
@@ -599,7 +650,8 @@ Change ancestry to numeric coding for Mplus variable definition
 
 ```{r}
 data_within <- data_within |> 
-               mutate(ANCESTRY = factor(ANCESTRY, 
+               mutate(#ANCESTRY = if_else(is.na(ANCESTRY), "eur", ANCESTRY),
+                      ANCESTRY = factor(ANCESTRY, 
                                         c("eur", "afr", "eas", "his"),
                                         1:4)) |> 
                group_by(FAMID) |> 
@@ -611,7 +663,7 @@ data_within <- data_within |>
 Write data
 
 ```{r}
-write.table(data_within,file = here::here(path_data, "withinfamrGE_addh.csv"),sep = ",", na = ".",row.names = F,col.names  = F)
+#write.table(data_within,file = here::here(path_data, "withinfamrGE_addh_missfix_nomz.csv"),sep = ",", na = ".",row.names = F,col.names  = F)
 
 names(data_within) |> cat()
 ```
@@ -623,7 +675,7 @@ names(data_within) |> cat()
 ```{r}
 data_population <- pgs_pc |> select(-starts_with("PC")) |>
                left_join(ancestry) |> 
-               left_join(data |> select(AID, sex, age_1, age_3, white,
+               left_join(data |> select(AID, SCID, sex, age_1, age_3, white,
                                         african, native, asian, other,
                                         hispanic, income, par_ed, par_age,
                                         par_sex, par_marry, bad_temper)) |>
@@ -698,7 +750,7 @@ table(data_population$asian)
 table(data_population$other)
 table(data_population$hispanic)
 
-write.table(data_population,file = here::here(path_data, "populationrGE_addh.csv"),sep = ",", na = ".",row.names = F,col.names  = F)
+#write.table(data_population,file = here::here(path_data, "populationrGE_addh_missfix.csv"),sep = ",", na = ".",row.names = F,col.names  = F)
 
 names(data_population) |> cat()
 ```
@@ -707,10 +759,157 @@ names(data_population) |> cat()
 ## Cross sample comparison
 
 ```{r}
+set.seed(1234)
 data_all <- data_within |> group_by(FAMID) |> slice_sample(n = 1) |> mutate(SAMPLE = "fam") |> bind_rows(data_population |> mutate(SAMPLE = "pop"))
 
-lm(asb_wave1 ~ SAMPLE, data_all) |> broom::tidy()
-glm(other ~ SAMPLE, family = binomial(link = "logit"), data_all |> mutate(sex = sex - 1)) |> broom::tidy()
+lm(school_con ~ SAMPLE, data_all) |> broom::tidy()
+
+glm(hispanic ~ SAMPLE, family = binomial(link = "logit"), data_all |> mutate(sex = sex - 1)) |> broom::tidy()
+
 chisq.test(data_all$par_ed, data_all$SAMPLE)
+```
+
+
+## Revision
+
+### Pairtype
+
+```{r}
+set.seed(1234)
+
+fam_size <- data_within |> group_by(FAMID) |> summarize(size =n())
+  
+pairtype <- data_within |> select(AID, FAMID) |> left_join(fam_size) |> 
+  filter(size == 2) |> 
+  left_join(pairs |> mutate(AID = as.character(AID1), TYPE1 = TYPE) |> select(AID, TYPE1)) |> 
+  left_join(pairs |> mutate(AID = as.character(AID2), TYPE2 = TYPE) |> select(AID, TYPE2)) |> mutate(TYPE = if_else(is.na(TYPE1), TYPE2, TYPE1)) |> 
+  group_by(FAMID) |> select(-AID) |> 
+  slice_sample(n = 1) |> ungroup()
+
+
+pairtype |> 
+  pull(TYPE) |> table()
+
+
+pairtype_ud <- pairtype |> filter(TYPE %in% c(".","UD")) |> select(FAMID) |> 
+               left_join(pgs_pc |> select(FAMID, AID, EXT_PGS))
+
+pairtype_mz <- pairtype |> filter(TYPE %in% c("MZ")) |> select(FAMID) |> 
+               left_join(pgs_pc |> select(FAMID, AID, EXT_PGS))
+
+pairtype_dzfs <- pairtype |> filter(TYPE %in% c("DZ", "FS")) |> select(FAMID) |> 
+               left_join(pgs_pc |> select(FAMID, AID, EXT_PGS))
+
+pairtype_mz |> group_by(FAMID) |> summarize(var = var(EXT_PGS)) |> 
+  pull(var) |> hist(breaks = 100)
+pairtype_dzfs |> group_by(FAMID) |> summarize(var = var(EXT_PGS)) |> 
+  pull(var) |> hist(breaks = 100)
+
+pairtype_ud <- pairtype_ud |> 
+  group_by(FAMID) |> summarize(var = var(EXT_PGS)) |> 
+  mutate(type = if_else(var < .02, "MZ", "DZ"))
+
+pairtype_mz |> summarize(var = var(EXT_PGS)) 
+pairtype_dzfs |> summarize(var = var(EXT_PGS)) 
+
+pairfamid <- fam_size |> filter(size > 2) |> mutate(type = "Multi") |> 
+  select(FAMID, type) |> 
+  bind_rows(pairtype |> filter(!TYPE %in% c(".","UD")) |> 
+            mutate(type = TYPE) |> select(FAMID, type)) |> 
+  bind_rows(pairtype_ud |> select(-var))
+
+pairfamid
+
+
+descript_within <- data_within |> left_join(pairfamid)
+
+descript_within |> group_by(type) |> skimr::skim() |> skimr::yank("numeric") |>  as.data.frame() |> print(digits = 3, max = 20000)
+
+
+descript_within |> group_by(type) |> select(sex) |> table()
+descript_within |> group_by(type) |> select(hispanic) |> table()
+descript_within |> group_by(type) |> select(par_ed) |> table()
+
+
+VCA::anovaVCA(del_peer ~ FAMID, Data = descript_within |> filter(type == "MZ") |> as.data.frame())
+VCA::anovaVCA(del_peer ~ FAMID, Data = descript_within |> filter(type == "DZ") |> as.data.frame())
+VCA::anovaVCA(del_peer ~ FAMID, Data = descript_within |> filter(type == "FS") |> as.data.frame())
+VCA::anovaVCA(del_peer ~ FAMID, Data = descript_within |> filter(type == "Multi") |> as.data.frame())
+
+```
+
+
+### Ancestry
+
+```{r}
+data_within |> group_by(FAMID) |> slice_head() |> pull(ANCESTRY) |> table()
+
+data_within |> group_by(ANCESTRY) |> skimr::skim() |> skimr::yank("numeric") |>  as.data.frame() |> print(digits = 3, max = 20000)
+
+data_within |> group_by(ANCESTRY) |> select(sex) |> table()
+data_within |> group_by(ANCESTRY) |> select(hispanic) |> table()
+data_within |> group_by(ANCESTRY) |> select(par_ed) |> table()
+
+VCA::anovaVCA(del_peer ~ FAMID, Data = data_within |> filter(ANCESTRY == 1) |> as.data.frame())
+VCA::anovaVCA(del_peer ~ FAMID, Data = data_within |> filter(ANCESTRY == 2) |> as.data.frame())
+VCA::anovaVCA(del_peer ~ FAMID, Data = data_within |> filter(ANCESTRY == 3) |> as.data.frame())
+VCA::anovaVCA(del_peer ~ FAMID, Data = data_within |> filter(ANCESTRY == 4) |> as.data.frame())
+
+data_population |> pull(ANCESTRY) |> table()
+
+data_population |> group_by(ANCESTRY) |> skimr::skim() |> skimr::yank("numeric") |>  as.data.frame() |> print(digits = 3, max = 20000)
+
+data_population |> group_by(ANCESTRY) |> select(sex) |> table()
+data_population |> group_by(ANCESTRY) |> select(hispanic) |> table()
+data_population |> group_by(ANCESTRY) |> select(par_ed) |> table()
+
+```
+
+
+### Missing data
+
+```{r}
+set.seed(1234)
+miss_data_within <- data_within |> mutate(del_peer = -del_peer) |> 
+  group_by(FAMID) |> slice_sample(n = 1) |> ungroup() |> 
+  bind_rows(data_population  |> mutate(del_peer = -del_peer)) |> 
+  naniar::bind_shadow() |> 
+  mutate(income = log(income + 1))
+
+glm(school_con_NA ~ age_1, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+glm(school_con_NA ~ sex, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+glm(school_con_NA ~ income, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+glm(school_con_NA ~ par_ed, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+glm(school_con_NA ~ EXT_PGS, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+glm(school_con_NA ~ par_rel_parent, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+glm(school_con_NA ~ par_rel_child, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+glm(school_con_NA ~ del_peer, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+glm(school_con_NA ~ school_con, family = binomial(link = "logit"),
+    data = miss_data_within) |> summary()
+
+
+
+
+data |> select(PC34A:PC44A) |> naniar::miss_case_table()
+data |> select(H1WP9:H1PF5) |> naniar::miss_case_table()
+data |> select(H1WP13:H1PF25) |> naniar::miss_case_table()
+data |> select(H1TO29:H1DS14) |> naniar::miss_case_table()
+data |> select(H1ED19:H1PR2) |> naniar::miss_case_table()
+
+```
+
+
+### Addressing School
+
+```{r}
+data_within |> group_by(FAMID) |> summarize(schoolsize = unique(SCID) |> length()) |> pull(schoolsize) |> table()
 ```
 

@@ -98,6 +98,90 @@ ggsave("regression_pop.png", rp3, path = here::here(path_data), width = 9.2, hei
 
 ```
 
+
+# Revision sensitivity Analysis
+
+## No MZ
+
+### Read in data
+
+```{r}
+data <- readxl::read_xlsx(here::here(path_data, "coefficients_regression_EonG_nomz_sens.xlsx"), trim_ws = F) |> 
+        glimpse()
+
+```
+
+### Make `est` numeric and seperate `ci` into `lwr` and `upr`
+
+```{r}
+data <- data |> mutate(path = fct_rev(fct(path)),
+                       text = est,
+                       est = str_replace(est, "\\*$", ""),
+                       lwr = str_split_i(ci, "\\s~\\s", 1),
+                       upr = str_split_i(ci, "\\s~\\s", 2),
+                       across(c(est,lwr,upr),as.numeric),
+                       across(where(is.numeric), ~ round(., digits = 3)),
+                       level = factor(level,c("within", "between", "population"),c("Within Family", "Between Family", "Population")))
+```
+
+### Forest Plot - Shorten
+
+```{r}
+(rp2 <- ggplot(data |> filter(path != "PGS → SUB"& path != "PGS → ASB"), aes(y = est, ymin = lwr, ymax = upr, x = path, color = level, shape = level ,group = level)) +
+  geom_hline(yintercept = 0, color = "black", linewidth = .8, linetype = "dashed") +
+  geom_errorbar(position = position_dodge(-.7), linewidth = .8, width = .3) +
+  geom_point(position = position_dodge(-.7), size = 3, color = "black") +
+  geom_text(aes(label = text, vjust = -.8), position = position_dodge(-.7), color = "black") +
+  theme(axis.text.y = element_text(hjust=0)) + 
+  labs(x = "Path", y = "Estimate") + 
+  coord_flip(ylim = c(-.3, .3)) + 
+  scale_color_brewer(palette = "Set1"))
+
+ggsave("regression_short_nomz_sens.png", rp2, path = here::here(path_data), width = 9.2, height = 5.2, dpi = 600)
+
+```
+
+
+## EUR
+
+### Read in data
+
+```{r}
+data <- readxl::read_xlsx(here::here(path_data, "coefficients_regression_EonG_eur_sens.xlsx"), trim_ws = F) |> 
+        glimpse()
+
+```
+
+### Make `est` numeric and seperate `ci` into `lwr` and `upr`
+
+```{r}
+data <- data |> mutate(path = fct_rev(fct(path)),
+                       text = est,
+                       est = str_replace(est, "\\*$", ""),
+                       lwr = str_split_i(ci, "\\s~\\s", 1),
+                       upr = str_split_i(ci, "\\s~\\s", 2),
+                       across(c(est,lwr,upr),as.numeric),
+                       across(where(is.numeric), ~ round(., digits = 3)),
+                       level = factor(level,c("within", "between", "population"),c("Within Family", "Between Family", "Population")))
+```
+
+### Forest Plot - Shorten
+
+```{r}
+(rp2 <- ggplot(data |> filter(path != "PGS → SUB"& path != "PGS → ASB"), aes(y = est, ymin = lwr, ymax = upr, x = path, color = level, shape = level ,group = level)) +
+  geom_hline(yintercept = 0, color = "black", linewidth = .8, linetype = "dashed") +
+  geom_errorbar(position = position_dodge(-.7), linewidth = .8, width = .3) +
+  geom_point(position = position_dodge(-.7), size = 3, color = "black") +
+  geom_text(aes(label = text, vjust = -.8), position = position_dodge(-.7), color = "black") +
+  theme(axis.text.y = element_text(hjust=0)) + 
+  labs(x = "Path", y = "Estimate") + 
+  coord_flip(ylim = c(-.3, .3)) + 
+  scale_color_brewer(palette = "Set1"))
+
+ggsave("regression_short_eur_sens.png", rp2, path = here::here(path_data), width = 9.2, height = 5.2, dpi = 600)
+
+```
+
 # Mediation_GPE
 
 

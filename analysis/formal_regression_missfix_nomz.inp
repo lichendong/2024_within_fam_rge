@@ -2,14 +2,14 @@ TITLE:
         Causal rGE on differential parenting;
 
 DATA:   
-        FILE IS "c:\Repo\data_local\withinfamrGE_addh.csv";
+        FILE IS "c:\Repo\data_local\withinfamrGE_addh_missfix_nomz.csv";
 
 
 
 
 VARIABLE:
         Names are AID FAM GPAIRID GID GFAM 
-        pgs ANCESTRY sex age_1 age_3 
+        pgs ANCESTRY SCID sex age_1 age_3 
         white african native asian other hispanic 
         income par_ed par_age 
         par_sex par_marry 
