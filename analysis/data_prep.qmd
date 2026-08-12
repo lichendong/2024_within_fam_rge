@@ -910,6 +910,10 @@ data |> select(H1ED19:H1PR2) |> naniar::miss_case_table()
 ### Addressing School
 
 ```{r}
+data_within |> select(SCID) |> unique() |> nrow()
+
+data_within |> select(SCID) |> table() |> table()
+
 data_within |> group_by(FAMID) |> summarize(schoolsize = unique(SCID) |> length()) |> pull(schoolsize) |> table()
 ```
 
